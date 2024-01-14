@@ -19,7 +19,7 @@ t = f"{Fore.LIGHTYELLOW_EX}{ctime()}{Fore.RESET}"
 DATA_FILE = 'user_data.json'
 
 # ADMIN ID for the give command
-ADMIN_USER_ID = 819240318725128193
+ADMIN_USER_ID = 123456789 # YOUR USER ID HERE
 
 user_bank_balances = {}  # Holds users' bank 
 
