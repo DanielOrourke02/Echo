@@ -159,5 +159,5 @@ setup_crafting(bot)
 #######################################################################################################################################################
 
 
-token = "MTA3NTQzNDQ2MzIxNzA2NjAxNA.Gky-fz.xLidlFBZSynWuDanWP9JzorxooqiaOcacRsx0A"
+token = "YOUR_BOT_TOKEN_HERE"
 bot.run(token)
