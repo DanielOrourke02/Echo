@@ -1,13 +1,11 @@
 
 
-import sys
-sys.path.append('c:\\Users\\capta\\Documents\\School\\programming\\python\\discord\\mal-bot\\cogs')
-
 from libs import message_log, Fore, shop_items, user_balances,  ctime, discord, asyncio, random, time, json, os, t, DATA_FILE, ADMIN_USER_ID, user_bank_balances, cosmetics_items, save_user_data, get_bank_balance, get_user_balance, get_user_inventory, get_user_bank_balance, add_item_to_inventory, remove_item_from_inventory, update_bank_balance, update_user_balance, can_beg, can_claim_daily, can_scavenge, set_last_claim_time, log_purchase, log_sell, is_admin
 from discord.ext import commands
 from libs import message_log
 import requests
 import qrcode as qrc
+
 
 def setup_other(bot):
     @bot.command(name='generate_qr', aliases=['qr'])
@@ -38,7 +36,7 @@ def setup_other(bot):
 
     @bot.command(name='weather')
     async def weather(ctx, *, location: str):
-        api_key = '5271d85ea8484c3d8d203058240301'
+        api_key = '124ae1234546' # YOUR WEATHER API KEY HERE
         base_url = 'http://api.weatherapi.com/v1/current.json'  # Example API URL
         complete_url = f"{base_url}?key={api_key}&q={location}"
 
