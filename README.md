@@ -21,8 +21,14 @@ Just a discord bot I made in python (discord.py library). It contains a large am
 Locations
 - main.py - add your bot token at the bottom
 
-- cogs/libs.py - add your USER ID there (for admin commands)
+- cogs/libs.py - Line 22, add your USER ID there (for admin commands)
 
 - cogs/other.py - Line 39, add your weather api key
 
-2. run main.py `python main.py` or `python3 main.py` for linux users
+2. run main.py `python main.py` or `python3 main.py` for linux users. Requirements will auto be installed. Make sure you have python 3.12 installed with pip 3.12.
+
+3. You're finished! Your bot should ne running smoothly now.
+
+# KNOWN BUGS
+
+Economy game - Restarting the bot while users have crops planted WILL wipe all data of planted crops (users will loose all the crops they planted)
