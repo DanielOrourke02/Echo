@@ -6,7 +6,8 @@ from collections import Counter
 from colorama import Fore
 import sys, os
 
-# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# REPLACE WITH YOUR PATH TO THE COGS DIRECTORY HERE
+sys.path.append('c:\\path\\to\\cogs')
 
 def setup_economy(bot):
     @bot.command(name='inventory', aliases=['hotbar', 'inv'])
