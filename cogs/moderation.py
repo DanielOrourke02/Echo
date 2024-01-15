@@ -1,8 +1,5 @@
 
 
-import sys
-sys.path.append('c:\\Users\\capta\\Documents\\School\\programming\\python\\discord\\mal-bot\\cogs')
-
 from libs import Fore, discord, t
 from discord.ext import commands
 from libs import message_log
