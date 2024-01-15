@@ -23,4 +23,6 @@ Locations
 
 - cogs/libs.py - add your USER ID there (for admin commands)
 
+- cogs/other.py - Line 39, add your weather api key
+
 2. run main.py `python main.py` or `python3 main.py` for linux users
