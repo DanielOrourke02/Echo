@@ -19,11 +19,13 @@ Just a discord bot I made in python (discord.py library). It contains a large am
 2. IMPORTANT: add your discord token, weather api AND your user id:
 
 Locations
-- main.py - add your bot token at the bottom
+- main.py - add your bot token at the bottom (ESSENTIAL
 
-- cogs/libs.py - Line 22, add your USER ID there (for admin commands)
+- economy.py - add your PATH for the the cogs directory there (ESSENTIAL)
 
-- cogs/other.py - Line 39, add your weather api key
+- cogs/libs.py - Line 22, add your USER ID there (ESSENTIAL 4 ADMIN COMMANDS)
+
+- cogs/other.py - Line 39, add your weather api key (not essential but $weather wont work)
 
 2. run main.py `python main.py` or `python3 main.py` for linux users. Requirements will auto be installed. Make sure you have python 3.12 installed with pip 3.12.
 
