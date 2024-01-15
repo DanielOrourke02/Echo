@@ -32,3 +32,7 @@ Locations
 # KNOWN BUGS
 
 Economy game - Restarting the bot while users have crops planted WILL wipe all data of planted crops (users will loose all the crops they planted)
+
+# Features
+
+All commands:
