@@ -3,9 +3,6 @@ from colorama import Fore
 from time import ctime
 import discord
 
-import sys
-sys.path.append('/home/ubuntu/h/priviate-discord-bot-main/cogs')
-
 from libs import t
 
 cosmetics_items = {
