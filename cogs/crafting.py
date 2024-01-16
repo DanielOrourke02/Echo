@@ -1,4 +1,6 @@
-from libs import get_user_inventory, add_item_to_inventory, remove_item_from_inventory, DATA_FILE
+
+
+from libs import get_user_inventory, add_item_to_inventory, remove_item_from_inventory
 import discord
 from discord.ext import commands
 
