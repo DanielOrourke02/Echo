@@ -11,15 +11,12 @@ import json
 import sys
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.getcwd())
 
 
 t = f"{Fore.LIGHTYELLOW_EX}{ctime()}{Fore.RESET}"
 
 DATA_FILE = 'user_data.json'
-
-# ADMIN ID for the give command
-ADMIN_USER_ID = 123456789 # YOUR USER ID HERE
 
 user_bank_balances = {}  # Holds users' bank 
 
@@ -47,7 +44,7 @@ craftables = {
     "C4": {"name": "C4 BOMB", "sell": 25000},
     "Excalibur": {"name": "The Excalibur", "sell": 16000},
     "Assault_Rifle": {"name": "Assault Rifle", "sell": 23000},
-    "Comedy_Stick": {"name": "Stick of hell", "sell": 30000},
+    "Hell_Stick": {"name": "Stick of hell", "sell": 30000},
     "Infinity_Gauntlet": {"name": "Infinity  Gauntlet", "sell": 60000}
 }
 
@@ -55,11 +52,7 @@ shop_items = {
     "mute1d": {"name": "Mute someone (1d)", "cost": 100000},
     "mute15m": {"name": "Mute someone (15mins)", "cost": 50000},
     "mute10m": {"name": "Mute someone (10mins)", "cost": 35000},
-    "mute5m": {"name": "Mute someone (5mins)", "cost": 25000},
-    "role": {"name": "Get a Custom Role", "cost": 30000}
-    #"bank1": {"name": "Inc bank size by 50k", "cost": 50000},
-    #"bank2": {"name": "Inc bank size by 100k", "cost": 75000},
-    #"bank3": {"name": "Inc bank size by 100k", "cost": 100000}
+    "mute5m": {"name": "Mute someone (5mins)", "cost": 25000}
 }
 
 combined_items = {**cosmetics_items, **craftables}
@@ -172,14 +165,26 @@ def can_scavenge(user_id):
 
     return cooldown_remaining >= 5 * 60  # 5 minutes in seconds
 
+def can_fish(user_id):
+    last_fishing_time = user_balances.get(f"{user_id}_last_fishing", 0)
+    current_time = time.time()
+    cooldown_remaining = current_time - last_fishing_time
+
+    # print(f"Last fishing time: {last_fishing_time}")
+    # print(f"Current time: {current_time}")
+    # print(f"Cooldown remaining: {cooldown_remaining}")
+
+    return cooldown_remaining >= 5 * 60  # 5 minutes in seconds
+
+
 def can_beg(user_id):
     last_beg_time = user_balances.get(f"{user_id}_last_beg", 0)
     current_time = time.time()
     cooldown_remaining = current_time - last_beg_time
 
-    print(f"Last beg time: {last_beg_time}")
-    print(f"Current time: {current_time}")
-    print(f"Cooldown remaining: {cooldown_remaining}")
+    #print(f"Last beg time: {last_beg_time}")
+    #print(f"Current time: {current_time}")
+    #print(f"Cooldown remaining: {cooldown_remaining}")
 
     return cooldown_remaining >= 30  # 30 seconds
 
@@ -198,7 +203,3 @@ def log_purchase(user_id, mode ,username , item_name, item_cost):
 def log_sell(user_id, username , item_name, item_cost):
     with open("sell_log.txt", "a") as log_file:
         log_file.write(f"User {user_id} | {username} sell {item_name} for {item_cost} coins.\n")
-
-# Check if the user invoking the command is the admin
-def is_admin(ctx):
-    return ctx.author.id == ADMIN_USER_ID
