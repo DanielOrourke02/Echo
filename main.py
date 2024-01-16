@@ -12,30 +12,37 @@ except ModuleNotFoundError:
     os.system('pip install requests')
     os.system('pip install pillow')
     os.system('pip install qrcode[pil]')
+    os.system('pip install py-cord==2.4.0')
+    os.system('pip install asyncio')
+    os.system('pip install chat-exporter')
     #os.system('pip install ')
 
     # if program fails to auto install requirements
     # run this in your terminal
     # pip install -r requirements.txt
 
-from concurrent.futures import ThreadPoolExecutor
 from discord.ext import commands
 from colorama import Fore
+import json
 import os
 
-from cogs.libs import get_user_balance, update_user_balance
 from cogs.libs import message_log, t
 from cogs.economy import setup_economy
 from cogs.moderation import setup_moderation
 from cogs.shop_items import setup_shops
 from cogs.other import setup_other
-from cogs.bitcoin import setup_trading
 from cogs.farming import setup_farming
 from cogs.crafting import setup_crafting
+from cogs.ticket_system import Ticket_System
+from cogs.ticket_commands import Ticket_Command
 
+with open("config.json", mode="r") as config_file:
+    config = json.load(config_file)
 
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix='$', intents=intents, help_command=None)
+bot = commands.Bot(command_prefix=config["BOT_PREFIX"], intents=intents, help_command=None)
+
+token = config["bot_token"]
 
 #######################################################################################################################################################
             
@@ -83,7 +90,7 @@ async def on_ready():
 async def custom_help(ctx):
     embed = discord.Embed(
         title="Help - My Bot Commands",
-        description="List of available commands:\n\nMy prefix is `$`",
+        description=f"List of available commands:\n\nMy prefix is `{config["BOT_PREFIX"]}`",
         color=discord.Color.blue()
     )
 
@@ -103,12 +110,17 @@ async def custom_help(ctx):
     embed.add_field(name="inventory", value="Checks your inventory", inline=True)
     embed.add_field(name="qr <text/link>", value="Generate a QR code.", inline=True)
     embed.add_field(name="weather <location>", value="Get the current weather in a location", inline=True)
+    embed.add_field(name="ticket", value="Open a ticket panel", inline=True)
+    embed.add_field(name="delete", value="Delete a ticket", inline=True)
+    embed.add_field(name="add", value="add a user to a ticket", inline=True)
+    embed.add_field(name="remove", value="remove a user from a ticket", inline=True)
     #embed.add_field(name="", value="", inline=True)
 
     await ctx.send(embed=embed)
     message_log(ctx, 'help')
 
 ######################################################################################################################################################
+
 
 @bot.command(name='economy', aliases=['money', 'eco'])
 async def economy(ctx):
@@ -152,12 +164,12 @@ setup_shops(bot)
 setup_economy(bot)
 setup_moderation(bot)
 setup_other(bot)
-setup_trading(bot)
 setup_farming(bot)
 setup_crafting(bot)
 
 #######################################################################################################################################################
 
+bot.add_cog(Ticket_System(bot))
+bot.add_cog(Ticket_Command(bot))
 
-token = "YOUR_BOT_TOKEN_HERE"
 bot.run(token)
