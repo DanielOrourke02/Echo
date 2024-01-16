@@ -1,7 +1,8 @@
-from discord.ext import commands
-from colorama import Fore
-from time import ctime
+
+
 import discord
+from discord.ext import commands
+
 
 from libs import t
 
@@ -28,13 +29,10 @@ shop_items = {
     "mute1d": {"name": "Mute someone (1d)", "cost": 100000},
     "mute15m": {"name": "Mute someone (15mins)", "cost": 50000},
     "mute10m": {"name": "Mute someone (10mins)", "cost": 35000},
-    "mute5m": {"name": "Mute someone (5mins)", "cost": 25000},
-    "role": {"name": "Get a Custom Role", "cost": 30000}
+    "mute5m": {"name": "Mute someone (5mins)", "cost": 25000}
 }
 
-
 def setup_shops(bot):
-
 
     @bot.command(name='shop', help="View the shop")
     async def shop(ctx):
