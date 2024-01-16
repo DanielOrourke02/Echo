@@ -2,9 +2,10 @@
 
 from libs import Fore, discord, t
 from discord.ext import commands
-from libs import message_log
+
 
 def setup_moderation(bot):
+
     @bot.command(name="nuke", help="Nuke channel")
     @commands.has_permissions(manage_channels=True, manage_messages=True)
     async def nuke(ctx):
