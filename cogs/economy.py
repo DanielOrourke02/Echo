@@ -1,13 +1,12 @@
 
 
-from libs import shop_items, message_log, user_balances, combined_items, discord, asyncio, random, time, json, os, cosmetics_items, get_bank_balance, get_user_balance, get_user_inventory, get_user_bank_balance, add_item_to_inventory, remove_item_from_inventory, update_bank_balance, update_user_balance, can_beg, can_claim_daily, can_scavenge, set_last_claim_time, log_purchase, is_admin
+from libs import shop_items, message_log, can_fish, user_balances, combined_items, discord, asyncio, random, time, json, os, cosmetics_items, get_bank_balance, get_user_balance, get_user_inventory, get_user_bank_balance, add_item_to_inventory, remove_item_from_inventory, update_bank_balance, update_user_balance, can_beg, can_claim_daily, can_scavenge, set_last_claim_time, log_purchase, is_admin
 from discord.ext import commands
 from collections import Counter
 from colorama import Fore
 import sys, os
 
-# REPLACE WITH YOUR PATH TO THE COGS DIRECTORY HERE
-sys.path.append('c:\\path\\to\\cogs')
+sys.path.append(os.getcwd())
 
 def setup_economy(bot):
     @bot.command(name='inventory', aliases=['hotbar', 'inv'])
@@ -183,6 +182,51 @@ def setup_economy(bot):
         )
         await ctx.send(embed=embed)
 
+    @bot.command(name='fish', help="Cast your line and try your luck at fishing", aliases=['fishing'])
+    async def fish(ctx):
+        user_id = ctx.author.id
+
+        if not can_fish(user_id):
+            embed = discord.Embed(
+                title="Cooldown Active",
+                description="You've already fished in the past 5 minutes. Please wait for the cooldown.",
+                color=discord.Color.blue()
+            )
+            await ctx.send(embed=embed)
+            return
+
+        # Simulate catching a fish based on chances
+        caught_fish = random.choices(list(cosmetics_items.keys()), weights=[fish["chance"] for fish in cosmetics_items.values()], k=1)[0]
+
+        # Get the details of the caught fish
+        fish_details = cosmetics_items[caught_fish]
+
+        # Update user's last fishing time
+        user_balances[f"{user_id}_last_fish"] = time.time()
+
+        # Add the caught fish to the user's inventory
+        add_item_to_inventory(user_id, caught_fish)
+
+        embed = discord.Embed(
+            title="Fish Caught",
+            description=f"You found: {fish_details['name']}! Check your inventory with '$inventory'.",
+            color=discord.Color.blue()
+        )
+        await ctx.send(embed=embed)
+
+        amount = random.randint(400, 800)
+
+        user_balances[f"{user_id}_last_fish"] = time.time()
+        update_user_balance(ctx.author.id, amount)
+
+        embed = discord.Embed(
+            title="Coins Earned",
+            description=f"You found {amount}! coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
+            color=discord.Color.blue()
+        )
+        await ctx.send(embed=embed)
+
+
     @bot.command(name='sell', help='Sell items in your inventory')
     async def sell(ctx, item_id):
         user_id = ctx.author.id
@@ -306,8 +350,8 @@ def setup_economy(bot):
             await ctx.send("Invalid amount.")
             return
 
-        if get_bank_balance(ctx.author.id) + amount > 500000:  # Max bank limit
-            await ctx.send("Bank limit exceeded. Max storage is 500,000 coins.")
+        if get_bank_balance(ctx.author.id) + amount > 150000:  # Max bank limit
+            await ctx.send("Bank limit exceeded. Max storage is 150,000 coins.")
             return
 
         update_user_balance(ctx.author.id, -amount)
@@ -390,7 +434,7 @@ def setup_economy(bot):
 
         embed = discord.Embed(
             title="Balance",
-            description=f'Money On hand: {pocket_money} coins\nBank Balance: {bank_balance}/500000 coins',
+            description=f'Money On hand: {pocket_money} coins\nBank Balance: {bank_balance}/150000 coins',
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
