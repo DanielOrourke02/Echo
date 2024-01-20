@@ -12,6 +12,8 @@ Just a discord bot I made in python (discord.py library). It contains a large am
 
 # DISCLAIMER: This is in beta, there are still many bugs and updates to fix and to release.
 
+# bot probably DOES NOT WORK AS OF THIS MOMMENT
+
 # Installation
 
 1. `git clone https://github.com/DanielJones02/Echo` or download the latest release
