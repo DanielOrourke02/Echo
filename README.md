@@ -8,67 +8,60 @@
 
 # Echo Bot
 
-Just a discord bot I made in python (discord.py library). It contains a large amount of commands and features that you can use with a very fun and addictive economy game!
+A cool bot with lots and lots of commands and many different features. Scroll down to see the installation and the list of all the commands.
 
-# DISCLAIMER: This is in beta, there are still many bugs and updates to fix and to release.
+# SEE LIVE EXAMPLE
 
-# bot probably DOES NOT WORK AS OF THIS MOMMENT
+
 
 # Installation
 
 1. `git clone https://github.com/DanielJones02/Echo` or download the latest release
 
-2. IMPORTANT: add your discord token, weather api AND your user id:
+2. `cd Echo`
 
-Locations
-- main.py - add your bot token at the bottom (ESSENTIAL
+3. Open config.json and do the following:
 
-- economy.py - add your PATH for the the cogs directory there (ESSENTIAL)
+ - Add your bot token
 
-- cogs/libs.py - Line 22, add your USER ID there (ESSENTIAL 4 ADMIN COMMANDS)
+ - Add your user id for admin commands
 
-- cogs/other.py - Line 39, add your weather api key (not essential but $weather wont work)
+ - add your bot invite link (scroll down for all the permissions needed
 
-2. run main.py `python main.py` or `python3 main.py` for linux users. Requirements will auto be installed. Make sure you have python 3.12 installed with pip 3.12.
-
-3. You're finished! Your bot should ne running smoothly now.
+4. for windows simply run `win-run.bat` and for linux do the following `chmod +x linux-run.sh` then `./linux-run.sh` (untested I tink those commands work). All requirements will be installed (you can disable this by setting skip-installation to true)
 
 # KNOWN BUGS
 
 Economy game - Restarting the bot while users have crops planted WILL wipe all data of planted crops (users will loose all the crops they planted)
 
+Buttons - Buttons will no longer work after a bot restart (ticket button and verify button)
+
+
 ## General Commands
 
-| Command                | Description                                   |
-|------------------------|-----------------------------------------------|
-| `help`                 | Outputs a list of available commands.         |
-| `economy`              | Lists economy-related games and features.     |
-| `games`                | Lists games you can play.                     |
-| `ping`                 | Displays the bot's latency.                   |
-| `say <message>`        | Makes the bot repeat the specified message.   |
-| `membercount`          | Shows the current guild member count.         |
-| `coinflip <heads/tails>` | Initiates a 50/50 coin flip.                 |
-| `invite`               | Provides a bot invite link.                   |
-| `nuke`                 | Nukes the channel in which the command is used. |
-| `nuke_everything`      | Nukes all channels in the guild.              |
-| `delete`               | Deletes all channels in the guild.            |
-| `clear <amount>`       | Deletes a specified number of messages.       |
-| `inventory`            | Checks your inventory.                        |
-| `qr <text/link>`       | Generates a QR code from the given text or link. |
-| `weather <location>`   | Provides current weather information for a specified location. |
-| `ticket`               | Opens a ticket panel.                         |
-| `delete`               | Deletes a ticket.                             |
-| `add`                  | Adds a user to a ticket.                      |
-| `remove`               | Removes a user from a ticket.                 |
+| Command                   | Description                                      |
+|---------------------------|--------------------------------------------------|
+| `help`                    | Get help for commands.                           |
+| `economy`                 | List economy commands.                           |
+| `moderation`              | Get help for moderation commands (Admin only).   |
+| `ping`                    | Get the bot's current latency.                   |
+| `say <message>`           | Repeat a message.                                |
+| `coinflip`                | Flip a coin.                                     |
+| `dice`                    | Roll a six-sided die.                            |
+| `dailyquote`              | Get a daily quote from an API.                   |
+| `qr <text/link>`          | Generate a QR code from a link.                  |
+| `membercount`             | Get the member count of the server.              |
+| `calculator`              | Perform basic calculations.                      |
+| `joke`                    | Get a random joke.                               |
 
 ## Economy Commands
 
 | Command                  | Description                                           |
 |--------------------------|-------------------------------------------------------|
-| `bal`                    | Checks your current bank and pocket balance.          |
+| `balance`                | Checks your current bank and pocket balance.          |
 | `baltop`                 | Displays the richest people leaderboard.              |
 | `daily`                  | Claims your daily reward.                             |
-| `gamble <amount>`        | Gambles your money with a 50/50 chance of doubling it. |
+| `gamble <amount>`        | Gambles your money with a 1/3 chance of winning.      |
 | `shop`                   | Views available items in the shop.                    |
 | `cosmetics`              | Lists available cosmetics and their prices.           |
 | `buy <item_id>`          | Buys an item from the shop.                           |
@@ -85,3 +78,19 @@ Economy game - Restarting the bot while users have crops planted WILL wipe all d
 | `harvest`                | Harvest your planted crops.                           |
 | `craft <recipe_name>`    | Craft items.                                          |
 | `recipes`                | Shows craftable items and required materials.         |
+
+## Moderation Commands
+
+| Command             | Description                                      |
+|---------------------|--------------------------------------------------|
+| `kick`              | Kick a user from the server.                     |
+| `ban`               | Ban a user from the server.                      |
+| `mute`              | Mute a user in the server.                       |
+| `clear`             | Clear a specified number of messages in a channel. |
+| `ticketpanel`       | Create a ticket panel for support.              |
+| `setup-verify`      | Set up a verification panel.                     |
+| `lockchannel`       | Lock a channel for a specified duration.         |
+| `unlockchannel`     | Unlock a channel.                                |
+| `lockserver`        | Lock the entire server for a specified duration. |
+| `unlockserver`      | Unlock the entire server.                        |
+
