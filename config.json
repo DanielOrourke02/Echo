@@ -1,12 +1,29 @@
 {
-    "bot_token": "MTA3NTQzNDQ2MzIxNzA2NjAxNA.Gky-fz.xLidlFBZSynWuDanWP9JzorxooqiaOcacRsx0A",
-    "BOT_PREFIX": "$",
-    "guild_id": 123,
-    "ticket_channel_id": 123,
-    "category_id_1": 123,
-    "category_id_2": 123,
-    "team_role_id_1": 123,
-    "team_role_id_2": 123,
-    "log_channel_id": 123,
-    "timezone": "CET"
+    "TOKEN": "YOUR_BOT_TOKEN_HERE",
+
+    "bot_invite_link": "YOUR_BOT_INVITE_LINK_HERE",
+
+    "ADMIN_ID": 819240318725128193,
+
+    "member_join_message": "false",
+
+    "welcome_channel": 123456,
+
+    "welcome_message": "Welcome to the server {user}!",
+
+    "skip_installtion": "false",
+
+    "show_guilds": "true",
+
+    "carrot_plant_price": 100,
+
+    "carrot_sell_price": 110,
+
+    "max_carrots_planted": 250,
+
+    "carrot_growth_duration": 24,
+
+    "bank_size": 250000,
+
+    "max_gamble_amount": 15000
 }
