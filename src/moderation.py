@@ -9,7 +9,7 @@ class Moderation(commands.Cog):
         self.bot = bot
 
     # Ticket Panel Command
-    @commands.slash_command(name="ticketpanel", description="Create a ticket panel")
+    @commands.slash_command()
     async def ticket_panel(self, ctx):
         view = View()
         button = Button(label="Create Ticket", style=discord.ButtonStyle.green) 
@@ -33,7 +33,7 @@ class Moderation(commands.Cog):
 
 
     # Verification Setup Command
-    @commands.slash_command(name="setup-verify", description="Set up a verification panel")
+    @commands.slash_command()
     async def setup_verify(self, ctx, role: str, message: str):
         view = View()
         button = Button(label="Verify", style=discord.ButtonStyle.green)
@@ -58,7 +58,7 @@ class Moderation(commands.Cog):
         await ctx.respond(embed=embed, view=view)
 
 
-    @commands.slash_command(name="kick", description="Kick a user from the server")
+    @commands.slash_command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: Option(discord.Member, "User to kick"), reason: Option(str, "Reason for kick", default="No reason provided")):
         try:
@@ -69,7 +69,7 @@ class Moderation(commands.Cog):
             await ctx.respond("I do not have permission to kick this user.") 
 
 
-    @commands.slash_command(name="ban", description="Ban a user from the server")
+    @commands.slash_command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: Option(discord.Member, "User to ban"), reason: Option(str, "Reason for ban", default="No reason provided")):
         try:
@@ -80,7 +80,7 @@ class Moderation(commands.Cog):
             await ctx.respond("I do not have permission to ban this user.") 
 
 
-    @commands.slash_command(name="mute", description="Mute a user in the server")
+    @commands.slash_command()
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, member: Option(discord.Member, "User to mute"), reason: Option(str, "Reason for mute", default="No reason provided")):
         mute_role = discord.utils.get(ctx.guild.roles, name="Muted")
@@ -105,13 +105,13 @@ class Moderation(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="clear", description="Clear a specified number of messages in a text channel")
+    @commands.slash_command()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: Option(int, "Number of messages to clear")):
         await ctx.channel.purge(limit=amount + 1) 
 
 
-    @commands.slash_command(name="lockchannel", description="Lock a channel for a specified duration")
+    @commands.slash_command()
     @commands.has_permissions(manage_channels=True)
     async def lock_channel(self, ctx, channel: Option(discord.TextChannel, "Channel to lock"), duration: Option(str, "Duration (s/m/h/d)"), reason: Option(str, "Reason for lock", default="No reason provided")):
         # Convert duration to seconds
@@ -140,7 +140,7 @@ class Moderation(commands.Cog):
             await channel.respond(f"Channel unlocked automatically after {duration}.")
 
 
-    @commands.slash_command(name="unlockchannel", description="Unlock a channel")
+    @commands.slash_command()
     @commands.has_permissions(manage_channels=True)
     async def unlock_channel(self, ctx, channel: Option(discord.TextChannel, "Channel to unlock")):
         await channel.set_permissions(ctx.guild.default_role, respond_messages=True)
@@ -150,7 +150,7 @@ class Moderation(commands.Cog):
         await ctx.respond(f"Channel {channel.mention} unlocked.")
 
 
-    @commands.slash_command(name="lockserver", description="Lock the entire server for a specified duration")
+    @commands.slash_command()
     @commands.has_permissions(administrator=True)
     async def lock_server(self, ctx, duration: Option(str, "Duration (s/m/h/d)"), reason: Option(str, "Reason for lock", default="No reason provided")):
         seconds = convert_to_seconds(duration)
@@ -177,7 +177,7 @@ class Moderation(commands.Cog):
         await ctx.respond("Server unlocked automatically after the duration.")
 
 
-    @commands.slash_command(name="unlockserver", description="Unlock the entire server")
+    @commands.slash_command()
     @commands.has_permissions(administrator=True)
     async def unlock_server(self, inter):
         for channel in inter.guild.text_channels:
