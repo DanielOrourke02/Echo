@@ -10,7 +10,7 @@ class Help(commands.Cog):
         self.bot = bot
 
 
-    @commands.slash_command(name="help", description="Get help for commands")
+    @commands.slash_command()
     async def help_command(self, ctx, command: Option(str, "Enter a command to get help on", required=False, default=None)):
         # Command descriptions
         command_descriptions = {
@@ -44,7 +44,7 @@ class Help(commands.Cog):
             await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="moderation", description="Get help for moderation commands")
+    @commands.slash_command()
     @commands.has_permissions(manage_guild=True)
     async def moderation_command(self, ctx, command: Option(str, "Enter a moderation command to get help on", required=False, default=None)):
         # Moderation command descriptions
@@ -78,27 +78,29 @@ class Help(commands.Cog):
             await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="economy", description="Get help for economy commands")
+    @commands.slash_command()
     async def economy(self, ctx, command: Option(str, "Enter an economy command to get help on", required=False, default=None)):
         # Check if a specific command is asked for
         economy_command_descriptions = {
-            "bal": "Check your current bank and pocket balance.",
+            "balance": "Check your current bank and pocket balance.",
             "baltop": "Leaderboard of the richest people",
             "daily": "Claim your daily reward.",
-            "gamble <amount>": "Gamble your money with a 50/50 chance of 2x it.",
+            "gamble <amount>": "Gamble your money with 1/3 chance of winning (max 15k)",
             "shop": "View the available items in the shop.",
-            "cosmetics": "Lists findable cosmetics/their prices with $scrap.",
+            "cosmetics": "Lists all findable items and their sell prices.",
             "buy <item_id>": "Buy an item from the shop.",
             "sell <item_id>": "Sells item for its value",
             "beg": "Beg the kind people for money.",
             "scrap": "Find cosmetics and money",
+            "dig": "Dig for cosmetics and money (shovel needed)",
+            "hunt": "hunt for cosmetics and money (bow needed)",
             "inventory": "Lists items inside your inventory.",
             "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
             "pay <amount>": "Pay someone money",
-            "deposit": "Deposit money into your bank (GAINS INTEREST)",
+            "deposit": "Deposit money into your bank (GAINS 10% every 24h)",
             "withdraw": "Withdraw money from your bank",
             "rob <@example>": "Rob a user and potentially steal 20% of their On Hand Money. But if you fail you lose 20% of your money",
-            "plant <amount/max>": "Plant crops (100 each), max 100 planted at a time. After harvest, crops sell for 150 each.",
+            "plant <amount/max>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
             "harvest": "Harvest your planted crops.",
             "craft <recipe_name>": "Craft items.",
             "recipes": "Shows craftable items and what you need for it."
