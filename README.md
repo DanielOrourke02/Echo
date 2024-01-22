@@ -67,6 +67,8 @@ Buttons - Buttons will no longer work after a bot restart (ticket button and ver
 | `buy <item_id>`          | Buys an item from the shop.                           |
 | `sell <item_id>`         | Sells an item for its value.                          |
 | `beg`                    | Beg for money.                                        |
+| `hunt`                    | hunt for cosmetics and money. (with a bow)           |
+| `dig`                    | Dig for cosmetics and money. (with a shovel)          |
 | `scrap`                  | Find cosmetics and money.                             |
 | `inventory`              | Lists items in your inventory.                        |
 | `lottery`                | Participate in a lottery for a chance to win money.   |
