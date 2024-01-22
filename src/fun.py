@@ -9,7 +9,7 @@ class Fun(commands.Cog):
         self.bot = bot
 
     # Ping Command
-    @commands.slash_command(name="ping", description="Get the bot's current latency")
+    @commands.slash_command()
     async def ping(self, ctx):
         latency = round(self.bot.latency * 1000)  # Latency in milliseconds
         embed = discord.Embed(title="Ping", description=f"Pong! Latency is {latency}ms", color=embed_colour)
@@ -17,20 +17,20 @@ class Fun(commands.Cog):
 
 
     # Say Command
-    @commands.slash_command(name="say", description="Repeat a message")
+    @commands.slash_command()
     async def say(self, ctx, message: Option(str, "Message to repeat")):
         embed = discord.Embed(title="Say", description=message, color=embed_colour)
         await ctx.respond(embed=embed)
 
 
     # Invite Command
-    @commands.slash_command(name="invite", description="Invite the bot to your server")
+    @commands.slash_command()
     async def invite(self, ctx):
-        embed = discord.Embed(title="Say", description=bot_invite, color=embed_colour)
+        embed = discord.Embed(title="Invite", description=bot_invite, color=embed_colour)
         await ctx.respond(embed=embed) 
 
 
-    @commands.slash_command(name="serverinfo", description="Get information about the server")
+    @commands.slash_command()
     async def server_info(self, ctx):
         guild = ctx.guild
         embed = discord.Embed(title="Server Information", color=embed_colour)
@@ -44,7 +44,7 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="userinfo", description="Get information about a user")
+    @commands.slash_command()
     async def user_info(self, ctx, user: Option(discord.Member, "User to get information about", default=None)):
         user = user or ctx.author # if user is blank (no data parsed) it will show the info of the user running the command
         embed = discord.Embed(title="User Information", color=embed_colour)
@@ -56,7 +56,7 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed) 
 
 
-    @commands.slash_command(name="avatar", description="Get the avatar of a user")
+    @commands.slash_command()
     async def avatar(self, ctx, user: Option(discord.Member, "User to get avatar for", default=None)):
         user = user or ctx.author
 
@@ -77,7 +77,7 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="8ball", description="Ask the Magic 8-Ball a question")
+    @commands.slash_command()
     async def eight_ball(self, ctx, *, question: str):
         responses = ["It is certain.", "Without a doubt.", "Yes, definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."]
         answer = random.choice(responses)
@@ -85,7 +85,7 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed)
     
 
-    @commands.slash_command(name="generate_qr", description="Generate a QR code from a provided link.")
+    @commands.slash_command()
     async def generate_qr(self, ctx, link: str):
         # Generate QR code
         qr = qrcode.QRCode(
@@ -108,7 +108,7 @@ class Fun(commands.Cog):
             await ctx.respond("Here's your QR code:", file=file)
     
 
-    @commands.slash_command(name="membercount", description="Get the member count of the server")
+    @commands.slash_command()
     async def membercount(self, ctx):
         guild = ctx.guild
         member_count = guild.member_count
@@ -120,7 +120,7 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="diceroll", description="Roll a six-sided dice.")
+    @commands.slash_command()
     async def diceroll(self, ctx):
         result = random.randint(1, 6)
 
@@ -131,7 +131,7 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="dailyquote", description="Get a random daily quote.")
+    @commands.slash_command()
     async def dailyquote(self, ctx):
         # Fetch a random quote from the Quotable API
         response = requests.get("https://api.quotable.io/random")
@@ -150,7 +150,7 @@ class Fun(commands.Cog):
             await ctx.respond("Failed to fetch the daily quote. Try again later.")
 
 
-    @commands.slash_command(name="calculator", description="Perform basic calculations")
+    @commands.slash_command()
     async def calculator(self, ctx, expression: Option(str, "Mathematical expression")):
         try:
             result = eval(expression)
@@ -168,7 +168,7 @@ class Fun(commands.Cog):
             await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="joke", description="Tell a random joke")
+    @commands.slash_command()
     async def joke(self, ctx):
         try:
             response = requests.get("https://official-joke-api.appspot.com/random_joke")
@@ -188,7 +188,7 @@ class Fun(commands.Cog):
 
 
 
-    @commands.slash_command(name="coinflip", description="Flip a coin")
+    @commands.slash_command()
     async def coinflip(self, ctx):
         result = random.choice(["Heads", "Tails"])
         embed = discord.Embed(title="Coinflip", description=f"The coin landed on: {result}", color=embed_colour)
