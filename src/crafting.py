@@ -19,8 +19,11 @@ class Crafting(commands.Cog):
         
 
     @commands.slash_command()
-    async def craft(self, ctx, item_name):
+    async def craft(self, ctx, item_name: str):
         user_id = ctx.author.id
+
+        item_name = item_name.lower # prevent case errors
+
         if item_name in crafting_recipes:
             recipe = crafting_recipes[item_name]
             inventory = get_user_inventory(user_id)
