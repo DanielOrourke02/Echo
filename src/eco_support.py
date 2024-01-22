@@ -12,32 +12,45 @@ user_bank_balances = {}  # Holds users' bank
 
 last_planting_time = {}
 
+
+# List of all cosmetics
 cosmetics_items = {
-    "C.sword": {"name": "Common Sword", "sell": 1000, "chance": 50},
-    "Un.sword": {"name": "Uncommon Sword", "sell": 1500, "chance": 30},
-    "paper/roll": {"name": "Roll paper for weed", "sell": 1500, "chance": 30},
-    "R.sword": {"name": "Rare Sword", "sell": 2500, "chance": 25},
+    # Swords
+    "c.sword": {"name": "Common Sword", "sell": 1000, "chance": 50},
+    "un.sword": {"name": "Uncommon Sword", "sell": 1500, "chance": 30},
+    "r.sword": {"name": "Rare Sword", "sell": 2500, "chance": 25},
+    "leg.sword": {"name": "Legendary Sword", "sell": 5000, "chance": 15},
+    "mythical_sword": {"name": "Mythical sword", "sell": 12500, "chance": 5},
+
+    # Tools
+    "shovel": {"name": "Shovel used for digging", "sell": 1000, "chance": 30},
+    "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 35},
+    
+    # Other items (High to low chance)
+    "infinity": {"name": "Infinity Gauntlet", "sell": 25000, "chance": 1},
+    "david4": {"name": "David's 4th ball", "sell": 15000, "chance": 2},
+    "stick": {"name": "Stick", "sell": 10000, "chance": 10},
+    "gun": {"name": "Glock-18", "sell": 8000, "chance": 15},
+    "tech": {"name": "Electronics", "sell": 1000, "chance": 20},
     "weed": {"name": "Weed", "sell": 5000, "chance": 25},
-    "Leg.sword": {"name": "Legendary Sword", "sell": 5000, "chance": 15},
-    "Gun": {"name": "Glock-18", "sell": 8000, "chance": 15},
-    "Stick": {"name": "Dildo", "sell": 10000, "chance": 10},
-    "Sulphur": {"name": "Sulphur", "sell": 500, "chance": 40},
-    "Charcoal": {"name": "Charcoal", "sell": 300, "chance": 50},
-    "Duct_Tape": {"name": "Duct Tape", "sell": 200, "chance": 60},
-    "Alarm_Clock": {"name": "Alarm Clock", "sell": 700, "chance": 30},
-    "Potato": {"name": "Potato", "sell": 100, "chance": 70},
-    "Electronics": {"name": "Electronics", "sell": 1000, "chance": 20},
-    "David4": {"name": "David's 4th ball", "sell": 15000, "chance": 2},
-    "infinity": {"name": "Infinity Gauntlet", "sell": 25000, "chance": 1}
+    "sulphur": {"name": "Sulphur", "sell": 500, "chance": 40},
+    "charcoal": {"name": "Charcoal", "sell": 300, "chance": 50},
+    "tape": {"name": "Tape", "sell": 200, "chance": 60},
+    "clock": {"name": "Alarm Clock", "sell": 700, "chance": 30},
+    "roll": {"name": "Roll paper for weed", "sell": 1500, "chance": 30},
+    "potato": {"name": "Potato", "sell": 100, "chance": 70},
 }
 
+
+# List of all items you can craft
 craftables = {
-    "Joint": {"name": "Weed rolled in paper", "sell": 10000},
-    "C4": {"name": "C4 BOMB", "sell": 25000},
-    "Excalibur": {"name": "The Excalibur", "sell": 16000},
-    "M4A1": {"name": "Assault Rifle", "sell": 30000},
+    "joint": {"name": "Weed rolled in paper", "sell": 10000},
+    "c4": {"name": "C4 BOMB", "sell": 25000},
+    "excalibur": {"name": "The Excalibur", "sell": 35000},
+    "m4a1": {"name": "Assault Rifle", "sell": 30000},
+    "excalibur": {"name": "Excalibur", "sell": 30000},
     "8_incher": {"name": "Long hard Stick", "sell": 40000},
-    "Complete_Gauntlet": {"name": "Infinity  Gauntlet", "sell": 60000}
+    "complete_gauntlet": {"name": "Infinity  Gauntlet", "sell": 60000}
 }
 
 
@@ -47,6 +60,7 @@ shop_items = {
     "upper": {"name": "Upper class elite (role)", "cost": 100000},
     "protagonist": {"name": "THE PROTAGONIST (role)", "cost": 500000}
 }
+
 
 role_colors = {
     "Working class slave": discord.Color.light_grey(),  # grey
@@ -59,46 +73,43 @@ role_colors = {
 combined_items = {**cosmetics_items, **craftables}
 
 
+# crafting recipes
 crafting_recipes = {
-    "Excalibur": {
-        "Gun": 1,
-        "Leg.sword": 1,
-        "result": "Excalibur"  # A powerful sword
+    "excalibur": {
+        "gun": 2,
+        "mythical_sword": 1,
+        "result": "excalibur"  # A powerful sword that only the one can handle
     },
-    "M4A1": {
-        "Gun": 2,
-        "Stick": 1,
-        "result": "M4A1"  # An advanced firearm
+    "m4a1": {
+        "gun": 2,
+        "stick": 1,
+        "result": "m4a1"  # Shoot down your enemies
     },
     "8_incher": {
-        "Stick": 1,
-        "David4": 1,
-        "result": "8_incher"  # A unique and humorous item
+        "stick": 1,
+        "david4": 1,
+        "result": "8_incher"  # A unique and 8 inch weapon
     },
-    "Complete_Gauntlet": {
+    "complete_gauntlet": {
         "infinity": 1,
-        "Leg.sword": 1,
-        "David4": 1,
-        "result": "Complete_Gauntlet"  # The most powerful item in the game
+        "leg.sword": 1,
+        "david4": 1,
+        "result": "complete_gauntlet"  # The most powerful item in the game
+    },
+    "c4": {
+        "sulphur": 2,
+        "charcoal": 1,
+        "tape": 3,
+        "clock": 1,
+        "potato": 5,  # Because why not?
+        "tech": 2,
+        "result": "c4" # C4 Bomb for bombing kids
+    },
+    "joint": {
+        "roll": 1,
+        "weed": 1,
+        "result": "joint" # Get high asf 
     }
-}
-
-# Adding the C4 recipe
-crafting_recipes["C4"] = {
-    "Sulphur": 2,
-    "Charcoal": 1,
-    "Duct_Tape": 3,
-    "Alarm_Clock": 1,
-    "Potato": 5,  # Because why not?
-    "Electronics": 2,
-    "result": "C4"  # The crafted item
-}
-
-# Adding the C4 recipe
-crafting_recipes["Joint"] = {
-    "paper/roll": 1,
-    "weed": 1,
-    "result": "Joint"  # The crafted item
 }
 
 
@@ -224,6 +235,30 @@ def can_claim_daily(user_id):
     #print(f"Cooldown remaining: {cooldown_remaining}")
 
     return cooldown_remaining >= 24 * 3600  # 24 hours in seconds
+
+
+def can_dig(user_id):
+    last_dig_time = user_balances.get(f"{user_id}_last_dig", 0)
+    current_time = time.time()
+    cooldown_remaining = current_time - last_dig_time
+
+    #print(f"Last dig time: {last_dig_time}")
+    #print(f"Current time: {current_time}")
+    #print(f"Cooldown remaining: {cooldown_remaining}")
+
+    return cooldown_remaining >= 15 * 60  # 15 minutes in seconds
+    
+
+def can_hunt(user_id):
+    last_hunt_time = user_balances.get(f"{user_id}_last_hunt", 0)
+    current_time = time.time()
+    cooldown_remaining = current_time - last_hunt_time
+
+    #print(f"Last hunt time: {last_hunt_time}")
+    #print(f"Current time: {current_time}")
+    #print(f"Cooldown remaining: {cooldown_remaining}")
+
+    return cooldown_remaining >= 10 * 60  # 10 minutes in seconds
 
 
 def can_scavenge(user_id):
