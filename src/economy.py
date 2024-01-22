@@ -27,9 +27,9 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
 
     
-    # Command to give money to a user
+    # Command to give money to a user (TO REMOVE DO /GIVE <USER> -<amount>)
     @commands.slash_command(name='give')
-    @commands.check(is_admin)
+    @commands.check(is_admin) # Only one user can do this (put the id in config.json)
     async def give(self, ctx, user: commands.MemberConverter, amount: int):
         update_user_balance(user.id, amount)
         embed = discord.Embed(
@@ -41,9 +41,10 @@ class Economy(commands.Cog):
         # Send the embed
         await ctx.respond(embed=embed)
 
-    # Command to give money to a user
+
+    # Command to remove items from a users inventory
     @commands.slash_command(name='remove_item')
-    @commands.check(is_admin)
+    @commands.check(is_admin) # Only one user can do this (put the id in config.json)
     async def remove_item(self, ctx, user: commands.MemberConverter, item: str):
         remove_item_from_inventory(user.id, item)
         embed = discord.Embed(
@@ -69,6 +70,7 @@ class Economy(commands.Cog):
             await ctx.respond(embed=embed)
     
 
+    # pay another user money
     @commands.slash_command(name='pay', help="Pay another user")
     async def pay(self, ctx, user: commands.MemberConverter, amount: int):
         if amount is None or amount <= 0:
@@ -83,7 +85,7 @@ class Economy(commands.Cog):
         payer_id = str(ctx.author.id)
         user_id = str(user.id)
 
-        if payer_id == user_id:
+        if payer_id == user_id: # check if they tried to pay themself
             embed = discord.Embed(
                 title="Payment Error",
                 description="You can't pay yourself.",
@@ -92,7 +94,7 @@ class Economy(commands.Cog):
             await ctx.respond(embed=embed)
             return
 
-        if amount > get_user_balance(payer_id):
+        if amount > get_user_balance(payer_id): # if they dont have enough money
             embed = discord.Embed(
                 title="Insufficient Balance",
                 description="You don't have enough coins to make that payment.",
@@ -102,8 +104,8 @@ class Economy(commands.Cog):
             return
 
         # Assuming update_user_balance and get_user_balance are defined elsewhere
-        update_user_balance(payer_id, -amount)
-        update_user_balance(user_id, amount)
+        update_user_balance(payer_id, -amount) # reduce the mount they paid
+        update_user_balance(user_id, amount) # add it to the reciver
 
         embed = discord.Embed(
             title="Payment Successful",
@@ -113,6 +115,7 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
 
 
+    # buy items from the list of items
     @commands.slash_command(name='buy', help="Buy item from the shop")
     async def buy(self, ctx, item_name: str):
         if item_name not in shop_items:
@@ -123,6 +126,8 @@ class Economy(commands.Cog):
             )
             await ctx.respond(embed=embed)
             return
+
+        item_name = item_name.lower() # make it lower case (prevent stuff like eXaMPLE by changing to to example)
 
         user = ctx.author
 
@@ -143,7 +148,8 @@ class Economy(commands.Cog):
         log_purchase(user.id, 1, user.name, shop_items[item_name]['name'], item_cost)
 
         # Check if the item has (role) in its name and assign the role
-        if "(role)" in shop_items[item_name]['name'].lower():
+        # Role values and colours are in 'eco_support.py'
+        if "(role)" in shop_items[item_name]['name'].lower(): 
             role_name = shop_items[item_name]['name'].split(" (")[0]  # Extract role name
             await assign_role_to_user(ctx, role_name)
 
@@ -155,7 +161,120 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name='scrap', help="scavenge for money and items")
+    @commands.slash_command()
+    async def dig(self, ctx):
+        user_id = ctx.author.id
+
+        # Check if the user has a 'shovel' in their inventory
+        user_inventory = get_user_inventory(user_id)
+        if 'shovel' not in user_inventory:
+            embed = discord.Embed(
+                title="Unable to Dig",
+                description="You need a shovel to dig! Acquire a shovel and try again.",
+                color=discord.Color.red()
+            )
+            await ctx.respond(embed=embed)
+            return
+
+        if not can_dig(user_id):
+            embed = discord.Embed(
+                title="Cooldown Active",
+                description="You've already gone digging in the past 15 minutes. Please wait for the cooldown.",
+                color=discord.Color.orange()
+            )
+            await ctx.respond(embed=embed)
+            return
+
+        # Simulate winning an item based on chances
+        chosen_item = random.choices(list(cosmetics_items.keys()), weights=[item["chance"] for item in cosmetics_items.values()], k=1)[0]
+
+        # Get the details of the won item
+        won_item = cosmetics_items[chosen_item]
+
+        # Update user's last dig time
+        user_balances[f"{user_id}_last_dig"] = time.time()
+
+        # Add the won item to the user's inventory
+        add_item_to_inventory(user_id, chosen_item)
+
+        embed = discord.Embed(
+            title="Item Found",
+            description=f"You found: {won_item['name']}! Check your inventory with '/inventory'.",
+            color=discord.Color.orange()
+        )
+        await ctx.respond(embed=embed)
+
+        amount = random.randint(1000, 1600)
+
+        user_balances[f"{user_id}_last_dig"] = time.time()
+        update_user_balance(ctx.author.id, amount)
+
+        embed = discord.Embed(
+            title="Coins Found",
+            description=f"You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
+            color=discord.Color.orange()
+        )
+        await ctx.respond(embed=embed)
+
+
+    @commands.slash_command()
+    async def hunt(self, ctx):
+        user_id = ctx.author.id
+
+        # Check if the user has a 'bow' in their inventory
+        # if not dont let them run the hunt command
+        user_inventory = get_user_inventory(user_id)
+        if 'bow' not in user_inventory:
+            embed = discord.Embed(
+                title="Unable to Hunt",
+                description="You need a bow to hunt! Find one using /scrap!",
+                color=discord.Color.red()
+            )
+            await ctx.respond(embed=embed)
+            return
+
+        if not can_hunt(user_id):
+            embed = discord.Embed(
+                title="Cooldown Active",
+                description="You've already hunted in the past 10 minutes. Please wait for the cooldown.",
+                color=discord.Color.orange()
+            )
+            await ctx.respond(embed=embed)
+            return
+
+        # Simulate winning an item based on chances
+        chosen_item = random.choices(list(cosmetics_items.keys()), weights=[item["chance"] for item in cosmetics_items.values()], k=1)[0]
+
+        # Get the details of the won item
+        won_item = cosmetics_items[chosen_item]
+
+        # Update user's last hunt time
+        user_balances[f"{user_id}_last_hunt"] = time.time()
+
+        # Add the won item to the user's inventory
+        add_item_to_inventory(user_id, chosen_item)
+
+        embed = discord.Embed(
+            title="Item Found",
+            description=f"You found: {won_item['name']}! Check your inventory with '/inventory'.",
+            color=discord.Color.orange()
+        )
+        await ctx.respond(embed=embed)
+
+        amount = random.randint(600, 1300)
+
+        user_balances[f"{user_id}_last_hunt"] = time.time()
+        update_user_balance(ctx.author.id, amount)
+
+        embed = discord.Embed(
+            title="Coins Found",
+            description=f"You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
+            color=discord.Color.orange()
+        )
+        await ctx.respond(embed=embed)
+
+
+    @commands.slash_command()
     async def scrap(self, ctx):
         user_id = ctx.author.id
 
@@ -200,9 +319,67 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
 
 
+    @commands.slash_command(name='beg', help='beg for money', aliases=['bed', 'begger', 'begging'])
+    async def beg(self, ctx):
+        user_id = ctx.author.id
+
+        if not can_beg(user_id):
+            embed = discord.Embed(
+                title="Cooldown Active",
+                description="You begged in the past 30s. Wait the cooldown.",
+                color=discord.Color.orange()
+            )
+            await ctx.respond(embed=embed)
+            return
+
+        amount = random.randint(100, 200)
+
+        update_user_balance(user_id, amount)
+
+        embed = discord.Embed(
+            title="Successful Begging",
+            description=f'You begged and some idiot gave you {amount}.',
+            color=discord.Color.orange()
+        )
+        await ctx.respond(embed=embed)
+
+        # Correctly update the last beg time
+        user_balances[f"{user_id}_last_beg"] = time.time()
+
+
+    @commands.slash_command(name='daily', help="Daily reward", aliases=['dail'])
+    async def daily(self, ctx):
+        user_id = ctx.author.id
+
+        if not can_claim_daily(user_id):
+            embed = discord.Embed(
+                title="Daily Reward Already Claimed",
+                description="You've already claimed your daily reward. Please wait for the cooldown.",
+                color=discord.Color.orange()
+            )
+            await ctx.respond(embed=embed)
+            return
+
+        amount = 1000  # Daily reward amount
+        update_user_balance(user_id, amount)
+        set_last_claim_time(user_id)
+
+        embed = discord.Embed(
+            title="Daily Reward Claimed",
+            description=f'You have claimed your daily reward of {amount} coins!',
+            color=discord.Color.orange()
+        )
+        await ctx.respond(embed=embed)
+
+        # Update user's last claim time (if needed)
+        user_balances[f"{user_id}_last_daily"] = time.time()
+
+
     @commands.slash_command(name='sell', help='Sell items in your inventory')
     async def sell(self, ctx, item_id):
         user_id = ctx.author.id
+
+        item_id = item_id.lower() # make it lower to prevent stuff like LeG.SwoRD 
 
         if item_id not in combined_items:
             embed = discord.Embed(
@@ -416,63 +593,6 @@ class Economy(commands.Cog):
             color=discord.Color.orange()
         )
         await ctx.respond(embed=embed)
-
-
-
-    @commands.slash_command(name='beg', help='beg for money', aliases=['bed', 'begger', 'begging'])
-    async def beg(self, ctx):
-        user_id = ctx.author.id
-
-        if not can_beg(user_id):
-            embed = discord.Embed(
-                title="Cooldown Active",
-                description="You begged in the past 30s. Wait the cooldown.",
-                color=discord.Color.orange()
-            )
-            await ctx.respond(embed=embed)
-            return
-
-        amount = random.randint(100, 200)
-
-        update_user_balance(user_id, amount)
-
-        embed = discord.Embed(
-            title="Successful Begging",
-            description=f'You begged and some idiot gave you {amount}.',
-            color=discord.Color.orange()
-        )
-        await ctx.respond(embed=embed)
-
-        # Correctly update the last beg time
-        user_balances[f"{user_id}_last_beg"] = time.time()
-
-
-    @commands.slash_command(name='daily', help="Daily reward", aliases=['dail'])
-    async def daily(self, ctx):
-        user_id = ctx.author.id
-
-        if not can_claim_daily(user_id):
-            embed = discord.Embed(
-                title="Daily Reward Already Claimed",
-                description="You've already claimed your daily reward. Please wait for the cooldown.",
-                color=discord.Color.orange()
-            )
-            await ctx.respond(embed=embed)
-            return
-
-        amount = 1000  # Daily reward amount
-        update_user_balance(user_id, amount)
-        set_last_claim_time(user_id)
-
-        embed = discord.Embed(
-            title="Daily Reward Claimed",
-            description=f'You have claimed your daily reward of {amount} coins!',
-            color=discord.Color.orange()
-        )
-        await ctx.respond(embed=embed)
-
-        # Update user's last claim time (if needed)
-        user_balances[f"{user_id}_last_daily"] = time.time()
 
 
     global robbery_cooldown
