@@ -8,7 +8,7 @@ class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.slash_command(name='inventory', aliases=['hotbar', 'inv'])
+    @commands.slash_command()
     async def inventory(self, ctx):
         user_id = ctx.author.id
         inventory = get_user_inventory(user_id)
@@ -28,7 +28,7 @@ class Economy(commands.Cog):
 
     
     # Command to give money to a user (TO REMOVE DO /GIVE <USER> -<amount>)
-    @commands.slash_command(name='give')
+    @commands.slash_command()
     @commands.check(is_admin) # Only one user can do this (put the id in config.json)
     async def give(self, ctx, user: commands.MemberConverter, amount: int):
         update_user_balance(user.id, amount)
@@ -43,7 +43,7 @@ class Economy(commands.Cog):
 
 
     # Command to remove items from a users inventory
-    @commands.slash_command(name='remove_item')
+    @commands.slash_command()
     @commands.check(is_admin) # Only one user can do this (put the id in config.json)
     async def remove_item(self, ctx, user: commands.MemberConverter, item: str):
         remove_item_from_inventory(user.id, item)
@@ -71,7 +71,7 @@ class Economy(commands.Cog):
     
 
     # pay another user money
-    @commands.slash_command(name='pay', help="Pay another user")
+    @commands.slash_command()
     async def pay(self, ctx, user: commands.MemberConverter, amount: int):
         if amount is None or amount <= 0:
             embed = discord.Embed(
@@ -116,7 +116,7 @@ class Economy(commands.Cog):
 
 
     # buy items from the list of items
-    @commands.slash_command(name='buy', help="Buy item from the shop")
+    @commands.slash_command()
     async def buy(self, ctx, item_name: str):
         if item_name not in shop_items:
             embed = discord.Embed(
@@ -319,7 +319,7 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name='beg', help='beg for money', aliases=['bed', 'begger', 'begging'])
+    @commands.slash_command()
     async def beg(self, ctx):
         user_id = ctx.author.id
 
@@ -347,7 +347,7 @@ class Economy(commands.Cog):
         user_balances[f"{user_id}_last_beg"] = time.time()
 
 
-    @commands.slash_command(name='daily', help="Daily reward", aliases=['dail'])
+    @commands.slash_command()
     async def daily(self, ctx):
         user_id = ctx.author.id
 
@@ -375,7 +375,7 @@ class Economy(commands.Cog):
         user_balances[f"{user_id}_last_daily"] = time.time()
 
 
-    @commands.slash_command(name='sell', help='Sell items in your inventory')
+    @commands.slash_command()
     async def sell(self, ctx, item_id):
         user_id = ctx.author.id
 
@@ -431,7 +431,7 @@ class Economy(commands.Cog):
     entry_fee = 1000
     refund_timer = 30  # seconds
 
-    @commands.slash_command(name='enterlottery', help='Enter the lottery for a chance to win big!', aliases=['lottery'])
+    @commands.slash_command()
     async def enterlottery(self, ctx):
         user_id = str(ctx.author.id)
 
@@ -490,7 +490,7 @@ class Economy(commands.Cog):
         print("Refunded lottery tickets.")
 
 
-    @commands.slash_command(name='deposit', help='Deposit coins into your bank account')
+    @commands.slash_command()
     async def deposit(self, ctx, amount=None):
         if amount == 'all':
             amount = get_user_balance(ctx.author.id)
@@ -521,7 +521,7 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name='withdraw', help='Withdraw coins from your bank account')
+    @commands.slash_command()
     async def withdraw(self, ctx, amount=None):
         if amount == 'all':
             amount = get_bank_balance(ctx.author.id)
@@ -548,7 +548,7 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name='baltop', aliases=['topbalance', 'richest', 'topbal', 'balancetop'])
+    @commands.slash_command()
     async def baltop(self, ctx):
         # Check if the file exists and is not empty
         if not os.path.exists('user_data.json') or os.path.getsize('user_data.json') == 0:
@@ -581,7 +581,7 @@ class Economy(commands.Cog):
 
 
 
-    @commands.slash_command(name='balance', help="Check your balance", aliases=['bal'])
+    @commands.slash_command()
     async def balance(self, ctx):
         user_id = ctx.author.id
         pocket_money = get_user_balance(user_id)
@@ -598,7 +598,7 @@ class Economy(commands.Cog):
     global robbery_cooldown
     robbery_cooldown = {}  # Dictionary to track cooldowns
 
-    @commands.slash_command(name='rob', help="Attempt to rob another user")
+    @commands.slash_command()
     async def rob(self, ctx, victim: commands.MemberConverter):
         robber_id = str(ctx.author.id)
         victim_id = str(victim.id)
@@ -641,12 +641,12 @@ class Economy(commands.Cog):
         await ctx.respond(embed=embed)
     
 
-    @commands.slash_command(name='gamble', help="Gamble your money 1/3 chance")
+    @commands.slash_command()
     async def gamble(self, ctx, amount: str = None):
         if amount is None:
             embed = discord.Embed(
                 title="Gamble Command",
-                description="Please specify an amount to gamble. Usage: `$gamble <amount>`",
+                description="Please specify an amount to gamble. Usage: `/gamble <amount>`",
                 color=discord.Color.orange()
             )
             await ctx.respond(embed=embed)
