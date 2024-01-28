@@ -16,9 +16,8 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed) 
 
 
-    # Say Command
     @commands.slash_command()
-    async def say(self, ctx, message: Option(str, "Message to repeat")):
+    async def say(self, ctx, message: str):
         embed = discord.Embed(title="Say", description=message, color=embed_colour)
         await ctx.respond(embed=embed)
 
@@ -34,7 +33,7 @@ class Fun(commands.Cog):
     async def server_info(self, ctx):
         guild = ctx.guild
         embed = discord.Embed(title="Server Information", color=embed_colour)
-        embed.set_thumbnail(url=guild.icon_url)
+        embed.set_thumbnail(url=guild.icon.url if guild.icon else None)
         embed.add_field(name="Server Name", value=guild.name, inline=True)
         embed.add_field(name="Server ID", value=guild.id, inline=True)
         embed.add_field(name="Members", value=guild.member_count, inline=True)
@@ -45,34 +44,29 @@ class Fun(commands.Cog):
 
 
     @commands.slash_command()
-    async def user_info(self, ctx, user: Option(discord.Member, "User to get information about", default=None)):
-        user = user or ctx.author # if user is blank (no data parsed) it will show the info of the user running the command
+    async def user_info(self, ctx, user: commands.MemberConverter = None):
+        user = user or ctx.author  # If user is None, use the author of the command
         embed = discord.Embed(title="User Information", color=embed_colour)
-        embed.set_thumbnail(url=user.avatar_url)
+        embed.set_thumbnail(url=user.avatar.url)
         embed.add_field(name="Username", value=user.display_name, inline=True)
         embed.add_field(name="User ID", value=user.id, inline=True)
         embed.add_field(name="Joined Server", value=user.joined_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
         embed.add_field(name="Account Created", value=user.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
-        await ctx.respond(embed=embed) 
+        await ctx.respond(embed=embed)
 
 
     @commands.slash_command()
-    async def avatar(self, ctx, user: Option(discord.Member, "User to get avatar for", default=None)):
+    async def avatar(self, ctx, user: commands.MemberConverter = None):
         user = user or ctx.author
 
-        if isinstance(user, discord.Member):
-            embed = discord.Embed(title=f"{user.display_name}'s Avatar", color=embed_colour)
+        embed = discord.Embed(title=f"{user.display_name}'s Avatar", color=embed_colour)
 
-            if user.avatar:
-                # User has an avatar, include the URL in the embed
-                embed.set_image(url=user.avatar.url)
-            else:
-                # User doesn't have an avatar, provide a default image or message
-                embed.description = "This user does not have an avatar."
+        if user.avatar:
+            # User has an avatar, include the URL in the embed
+            embed.set_image(url=user.avatar.url)
         else:
-            # Handle the case where user is not a Member
-            embed = discord.Embed(title="User Avatar", color=embed_error)
-            embed.description = "Invalid user provided."
+            # User doesn't have an avatar, provide a default image or message
+            embed.description = "This user does not have an avatar."
 
         await ctx.respond(embed=embed)
 
@@ -151,7 +145,13 @@ class Fun(commands.Cog):
 
 
     @commands.slash_command()
-    async def calculator(self, ctx, expression: Option(str, "Mathematical expression")):
+    async def calculator(self, ctx, expression: str = None):
+        if expression is None:
+            # Handle the case where no expression is provided
+            embed = discord.Embed(title="Error", description="You need to provide a mathematical expression.", color=embed_error)
+            await ctx.respond(embed=embed)
+            return
+
         try:
             result = eval(expression)
 
