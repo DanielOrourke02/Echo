@@ -9,7 +9,6 @@ import time
 import os
 
 from discord.ui import Button, View
-from discord.commands import Option
 from collections import Counter
 from io import BytesIO
 from discord.ext import commands
