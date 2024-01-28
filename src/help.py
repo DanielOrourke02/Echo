@@ -11,8 +11,7 @@ class Help(commands.Cog):
 
 
     @commands.slash_command()
-    async def help_command(self, ctx, command: Option(str, "Enter a command to get help on", required=False, default=None)):
-        # Command descriptions
+    async def help(self, ctx):
         command_descriptions = {
             "moderation": "List moderator commands.",
             "economy": "List economy commands.",
@@ -24,30 +23,21 @@ class Help(commands.Cog):
             "qr": "Generate a QR code from a link.",
             "membercount": "Get the member count of the server.",
             "calculator": "Perform basic calculations.",
-            "joke": "Get a random joke."
+            "joke": "Get a random joke.",
+            "user_info": "Get user on a user.",
+            "server_info": "Get the server info."
         }
 
+        embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=discord.Color.green())
+        for cmd, desc in command_descriptions.items():
+            embed.add_field(name=f"/{cmd}", value=desc, inline=True)
 
-        # Check if a specific command is asked for
-        if command:
-            if command.lower() in command_descriptions:
-                description = command_descriptions[command.lower()]
-                embed = discord.Embed(title=f"/{command}", description=description, color=embed_colour)
-                await ctx.respond(embed=embed)
-            else:
-                await ctx.respond(f"Command '{command}' not found.")
-        else:
-            # List all commands if no specific command is asked for
-            embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=embed_colour)
-            for cmd, desc in command_descriptions.items():
-                embed.add_field(name=f"/{cmd}", value=desc, inline=True)
-            await ctx.respond(embed=embed)
+        await ctx.respond(embed=embed)
 
 
     @commands.slash_command()
     @commands.has_permissions(manage_guild=True)
-    async def moderation_command(self, ctx, command: Option(str, "Enter a moderation command to get help on", required=False, default=None)):
-        # Moderation command descriptions
+    async def moderation(self, ctx):
         moderation_descriptions = {
             "kick": "Kick a user from the server.",
             "ban": "Ban a user from the server.",
@@ -61,26 +51,15 @@ class Help(commands.Cog):
             "unlockserver": "Unlock the entire server."
         }
 
-        # Check if a specific moderation command is asked for
-        if command:
-            command_key = command.lower()  # Ensure command is treated as a string
-            if command_key in moderation_descriptions:
-                description = moderation_descriptions[command_key]
-                embed = discord.Embed(title=f"/{command}", description=description, color=discord.Color.green())
-                await ctx.respond(embed=embed)
-            else:
-                await ctx.respond(f"Moderation command '{command}' not found.")
-        else:
-            # List all moderation commands if no specific command is asked for
-            embed = discord.Embed(title="Moderation Commands", description="List of available moderation commands:", color=discord.Color.green())
-            for cmd, desc in moderation_descriptions.items():
-                embed.add_field(name=f"/{cmd}", value=desc, inline=True)
-            await ctx.respond(embed=embed)
+        embed = discord.Embed(title="Moderation Commands", description="List of available moderation commands:", color=discord.Color.green())
+        for cmd, desc in moderation_descriptions.items():
+            embed.add_field(name=f"/{cmd}", value=desc, inline=True)
+
+        await ctx.respond(embed=embed)
 
 
     @commands.slash_command()
-    async def economy(self, ctx, command: Option(str, "Enter an economy command to get help on", required=False, default=None)):
-        # Check if a specific command is asked for
+    async def economy(self, ctx):
         economy_command_descriptions = {
             "balance": "Check your current bank and pocket balance.",
             "baltop": "Leaderboard of the richest people",
@@ -93,7 +72,7 @@ class Help(commands.Cog):
             "beg": "Beg the kind people for money.",
             "scrap": "Find cosmetics and money",
             "dig": "Dig for cosmetics and money (shovel needed)",
-            "hunt": "hunt for cosmetics and money (bow needed)",
+            "hunt": "Hunt for cosmetics and money (bow needed)",
             "inventory": "Lists items inside your inventory.",
             "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
             "pay <amount>": "Pay someone money",
@@ -106,23 +85,11 @@ class Help(commands.Cog):
             "recipes": "Shows craftable items and what you need for it."
         }
 
+        embed = discord.Embed(title="Economy Commands", description="List of available economy commands:", color=discord.Color.green())
+        for cmd, desc in economy_command_descriptions.items():
+            embed.add_field(name=f"/{cmd}", value=desc, inline=True)
 
-        if command:
-            command_key = command.lower()  # Ensure command is treated as a string
-            if command_key in economy_command_descriptions:
-                description = economy_command_descriptions[command_key]
-                embed = discord.Embed(title=f"/{command}", description=description, color=embed_colour)
-                await ctx.respond(embed=embed)
-            else:
-                await ctx.respond(f"Economy command '{command}' not found.")
-        else:
-            # List all economy commands if no specific command is asked for
-            embed = discord.Embed(title="Economy Commands", description="List of available economy commands:", color=discord.Color.blue())
-            # Add fields for each economy command
-            # You can use the same dictionary as in your original command
-            for cmd, desc in economy_command_descriptions.items():
-                embed.add_field(name=f"/{cmd}", value=desc, inline=True)
-            await ctx.respond(embed=embed)
+        await ctx.respond(embed=embed)
 
 
     @commands.slash_command()
