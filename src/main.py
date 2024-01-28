@@ -9,22 +9,14 @@ intents.messages = True
 
 bot = commands.Bot(command_prefix="/", intents=intents) 
 
-
-# MY STUPID FUCKING TODO LIST:
-    
-# ADD COMMAND COOLDOWNS
-# ADD DASHBOARD (TK OR GRADIO/HTML,CSS,JS)
-
-
 @bot.event
 async def on_ready():
     await lock_function(bot, save_locked_channels, unlock_channel_after_delay)
 
     print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}")
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help")) # Lisening to /help (status)
-    #await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="/help")) # Wating /help (status) 
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
 
-    guilds(bot) # output guilds (if enabled)
+    guilds(bot)
 
 
 @bot.event
