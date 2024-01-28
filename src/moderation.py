@@ -60,29 +60,29 @@ class Moderation(commands.Cog):
 
     @commands.slash_command()
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member: Option(discord.Member, "User to kick"), reason: Option(str, "Reason for kick", default="No reason provided")):
+    async def kick(self, ctx, member: discord.Member, reason: str = "No reason provided"):
         try:
             await member.kick(reason=reason)
-            embed = discord.Embed(title="Kick", description=f"{member.mention} has been kicked.\nReason: {reason}", color=embed_error)
+            embed = discord.Embed(title="Kick", description=f"{member.mention} has been kicked.\nReason: {reason}", color=discord.Color.red())
             await ctx.respond(embed=embed)
         except discord.Forbidden:
-            await ctx.respond("I do not have permission to kick this user.") 
+            await ctx.respond("I do not have permission to kick this user.")
 
 
     @commands.slash_command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: Option(discord.Member, "User to ban"), reason: Option(str, "Reason for ban", default="No reason provided")):
+    async def ban(self, ctx, member: discord.Member, reason: str = "No reason provided"):
         try:
             await member.ban(reason=reason)
-            embed = discord.Embed(title="Ban", description=f"{member.mention} has been banned.\nReason: {reason}", color=embed_error)
+            embed = discord.Embed(title="Ban", description=f"{member.mention} has been banned.\nReason: {reason}", color=discord.Color.red())
             await ctx.respond(embed=embed)
         except discord.Forbidden:
-            await ctx.respond("I do not have permission to ban this user.") 
+            await ctx.respond("I do not have permission to ban this user.")
 
 
     @commands.slash_command()
     @commands.has_permissions(manage_roles=True)
-    async def mute(self, ctx, member: Option(discord.Member, "User to mute"), reason: Option(str, "Reason for mute", default="No reason provided")):
+    async def mute(self, ctx, member: discord.Member, reason: str = "No reason provided"):
         mute_role = discord.utils.get(ctx.guild.roles, name="Muted")
 
         if not mute_role:
@@ -97,7 +97,7 @@ class Moderation(commands.Cog):
         await member.add_roles(mute_role, reason=f"Muted by {ctx.author} for reason: {reason}")
 
         # Create an embed for the confirmation message
-        embed = discord.Embed(title="User Muted", description=f"{member.mention} has been muted.", color=embed_error)
+        embed = discord.Embed(title="User Muted", description=f"{member.mention} has been muted.", color=discord.Color.red())
         embed.add_field(name="Reason", value=reason)
         embed.set_footer(text=f"Muted by {ctx.author}")
 
@@ -107,22 +107,39 @@ class Moderation(commands.Cog):
 
     @commands.slash_command()
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx, amount: Option(int, "Number of messages to clear")):
-        await ctx.channel.purge(limit=amount + 1) 
+    async def clear(self, ctx, amount: int = None):
+        if amount is None:
+            embed = discord.Embed(title="Error", description="You need to specify the number of messages to clear.", color=0xff0000)  # Red color for error
+            await ctx.respond(embed=embed, ephemeral=True)
+            return
+
+        if amount > 100:
+            embed = discord.Embed(title="Error", description="You can only clear up to 100 messages at a time.", color=0xff0000)  # Red color for error
+            await ctx.respond(embed=embed, ephemeral=True)
+            return
+
+        await ctx.channel.purge(limit=amount + 1)
+        embed = discord.Embed(title="Messages Cleared", description=f"{amount} messages have been cleared.", color=0x00ff00)  # Green color for success
+        await ctx.respond(embed=embed, ephemeral=True)
 
 
     @commands.slash_command()
     @commands.has_permissions(manage_channels=True)
-    async def lock_channel(self, ctx, channel: Option(discord.TextChannel, "Channel to lock"), duration: Option(str, "Duration (s/m/h/d)"), reason: Option(str, "Reason for lock", default="No reason provided")):
+    async def lock_channel(self, ctx, channel: discord.TextChannel = None, duration: str = None, reason: str = "No reason provided"):
+        # If channel is not provided, use the current channel
+        channel = channel or ctx.channel
+
         # Convert duration to seconds
         seconds = convert_to_seconds(duration)
         if seconds is None:
-            await ctx.respond("Invalid duration format. Use s, m, h, or d.")
+            embed = discord.Embed(title="Error", description="Invalid duration format. Use s, m, h, or d.", color=0xff0000)  # Red color for error
+            await ctx.respond(embed=embed, ephemeral=True)
             return
 
         # Change channel permissions
-        await channel.set_permissions(ctx.guild.default_role, respond_messages=False)
-        await ctx.respond(f"Channel {channel.mention} locked for {duration}. Reason: {reason}")
+        await channel.set_permissions(ctx.guild.default_role, send_messages=False)
+        embed = discord.Embed(title="Channel Locked", description=f"{channel.mention} locked for {duration}. Reason: {reason}", color=0x00ff00)  # Green color for success
+        await ctx.respond(embed=embed, ephemeral=True)
 
         # Convert datetime to string before including it in a serializable context
         unlock_time_str = (datetime.datetime.now() + datetime.timedelta(seconds=seconds)).strftime("%Y-%m-%d %H:%M:%S")
@@ -134,7 +151,7 @@ class Moderation(commands.Cog):
         # Schedule unlock after duration
         await asyncio.sleep(seconds)
         if channel.id in locked_channels:  # Check if still locked
-            await channel.set_permissions(ctx.guild.default_role, respond_messages=True)
+            await channel.set_permissions(ctx.guild.default_role, send_messages=True)
             del locked_channels[channel.id]
             save_locked_channels()
             await channel.respond(f"Channel unlocked automatically after {duration}.")
@@ -142,27 +159,35 @@ class Moderation(commands.Cog):
 
     @commands.slash_command()
     @commands.has_permissions(manage_channels=True)
-    async def unlock_channel(self, ctx, channel: Option(discord.TextChannel, "Channel to unlock")):
-        await channel.set_permissions(ctx.guild.default_role, respond_messages=True)
+    async def unlock_channel(self, ctx, channel: discord.TextChannel = None):
+        if not channel:
+            await ctx.respond("Please mention the channel you want to unlock.")
+            return
+
+        await channel.set_permissions(ctx.guild.default_role, send_messages=True)
         if channel.id in locked_channels:
             del locked_channels[channel.id]
             save_locked_channels()
+
         await ctx.respond(f"Channel {channel.mention} unlocked.")
 
 
     @commands.slash_command()
     @commands.has_permissions(administrator=True)
-    async def lock_server(self, ctx, duration: Option(str, "Duration (s/m/h/d)"), reason: Option(str, "Reason for lock", default="No reason provided")):
+    async def lock_server(self, ctx, duration: str = None, reason: str = "No reason provided"):
+        if not duration:
+            await ctx.respond("Please specify a duration for the lock. Use s, m, h, or d.")
+            return
+
         seconds = convert_to_seconds(duration)
         if seconds is None:
             await ctx.respond("Invalid duration format. Use s, m, h, or d.")
             return
 
         for channel in ctx.guild.text_channels:
-            await channel.set_permissions(ctx.guild.default_role, respond_messages=False)
+            await channel.set_permissions(ctx.guild.default_role, send_messages=False)
             locked_channels[channel.id] = {"unlock_time": datetime.datetime.now() + datetime.timedelta(seconds=seconds)}
-            await ctx.respond(f"Channel {channel.mention} locked for {duration}. Reason: {reason}")
-        
+
         save_locked_channels()
         await ctx.respond(f"Server locked for {duration}. Reason: {reason}")
 
@@ -170,9 +195,9 @@ class Moderation(commands.Cog):
         for channel_id in list(locked_channels.keys()):
             channel = ctx.guild.get_channel(channel_id)
             if channel:
-                await channel.set_permissions(ctx.guild.default_role, respond_messages=True)
+                await channel.set_permissions(ctx.guild.default_role, send_messages=True)
                 del locked_channels[channel_id]
-        
+
         save_locked_channels()
         await ctx.respond("Server unlocked automatically after the duration.")
 
