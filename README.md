@@ -47,12 +47,15 @@ Buttons - Buttons will no longer work after a bot restart (ticket button and ver
 | `ping`                    | Get the bot's current latency.                   |
 | `say <message>`           | Repeat a message.                                |
 | `coinflip`                | Flip a coin.                                     |
+| `avatar`                  | Output a users avatar                            |
 | `dice`                    | Roll a six-sided die.                            |
 | `dailyquote`              | Get a daily quote from an API.                   |
 | `qr <text/link>`          | Generate a QR code from a link.                  |
 | `membercount`             | Get the member count of the server.              |
 | `calculator`              | Perform basic calculations.                      |
 | `joke`                    | Get a random joke.                               |
+| `user_info`               | Get info on a user                               |
+| `server_info`             | Get the servers info                             |
 
 ## Economy Commands
 
