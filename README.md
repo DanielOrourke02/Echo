@@ -10,9 +10,7 @@
 
 A cool bot with lots and lots of commands and many different features. Scroll down to see the installation and the list of all the commands.
 
-# SEE LIVE EXAMPLE
-
-
+# MAJOR UPDATE COMMING SOON (BUG FIXES)
 
 # Installation
 
