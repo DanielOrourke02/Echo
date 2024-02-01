@@ -10,11 +10,12 @@ class Help(commands.Cog):
         self.bot = bot
 
 
-    @commands.slash_command()
+    @commands.command()
     async def help(self, ctx):
         command_descriptions = {
             "moderation": "List moderator commands.",
             "economy": "List economy commands.",
+            "invite": "Invite the bot to your server.",
             "ping": "Get the bot's current latency.",
             "say": "Repeat a message.",
             "coinflip": "Flip a coin.",
@@ -25,26 +26,25 @@ class Help(commands.Cog):
             "calculator": "Perform basic calculations.",
             "joke": "Get a random joke.",
             "user_info": "Get user on a user.",
-            "server_info": "Get the server info."
+            "server_info": "Get the server info.",
+            "avatar": "Get someones avatar"
         }
 
         embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=discord.Color.green())
         for cmd, desc in command_descriptions.items():
-            embed.add_field(name=f"/{cmd}", value=desc, inline=True)
+            embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
 
-        await ctx.respond(embed=embed)
+        await ctx.send(embed=embed)
 
 
-    @commands.slash_command()
+    @commands.command()
     @commands.has_permissions(manage_guild=True)
     async def moderation(self, ctx):
         moderation_descriptions = {
-            "kick": "Kick a user from the server.",
-            "ban": "Ban a user from the server.",
-            "mute": "Mute a user in the server.",
-            "clear": "Clear a specified number of messages in a text channel.",
-            "ticketpanel": "Create a ticket panel for support.",
-            "setup-verify": "Set up a verification panel.",
+            "kick <@user> <reason>": "Kick a user from the server.",
+            "ban <@user> <reason>": "Ban a user from the server.",
+            "mute <@user> <reason>": "Mute a user in the server.",
+            "clear <amount>": "Clear a specified number of messages in a text channel.",
             "lockchannel": "Lock a channel for a specified duration.",
             "unlockchannel": "Unlock a channel.",
             "lockserver": "Lock the entire server for a specified duration.",
@@ -53,12 +53,12 @@ class Help(commands.Cog):
 
         embed = discord.Embed(title="Moderation Commands", description="List of available moderation commands:", color=discord.Color.green())
         for cmd, desc in moderation_descriptions.items():
-            embed.add_field(name=f"/{cmd}", value=desc, inline=True)
+            embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
 
-        await ctx.respond(embed=embed)
+        await ctx.send(embed=embed)
 
 
-    @commands.slash_command()
+    @commands.command()
     async def economy(self, ctx):
         economy_command_descriptions = {
             "balance": "Check your current bank and pocket balance.",
@@ -82,17 +82,19 @@ class Help(commands.Cog):
             "plant <amount/max>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
             "harvest": "Harvest your planted crops.",
             "craft <recipe_name>": "Craft items.",
-            "recipes": "Shows craftable items and what you need for it."
+            "recipes": "Shows craftable items and what you need for it.",
+            "blackjacks <amount>": "Play a cool interactive blackjacks game.",
+            "slots <amount>": "Gamble away your money without a chance of winning."
         }
 
         embed = discord.Embed(title="Economy Commands", description="List of available economy commands:", color=discord.Color.green())
         for cmd, desc in economy_command_descriptions.items():
-            embed.add_field(name=f"/{cmd}", value=desc, inline=True)
+            embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
 
-        await ctx.respond(embed=embed)
+        await ctx.send(embed=embed)
 
 
-    @commands.slash_command()
+    @commands.command()
     async def shop(self, ctx):
         embed = discord.Embed(
             title="Item Shop",
@@ -103,10 +105,10 @@ class Help(commands.Cog):
         for item_id, item_info in shop_items.items():
             embed.add_field(name=f"{item_info['name']} (ID: {item_id})", value=f"Cost: {item_info['cost']} coins", inline=False)
 
-        await ctx.respond(embed=embed)
+        await ctx.send(embed=embed)
 
 
-    commands.slash_command()
+    @commands.command()
     async def cosmetics(self, ctx):
         embed = discord.Embed(title="Available Cosmetics", color=discord.Color.blue())
 
@@ -117,7 +119,7 @@ class Help(commands.Cog):
 
             embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price} | Chance: {chance}%", inline=True)
 
-        await ctx.respond(embed=embed)
+        await ctx.send(embed=embed)
 
 
     @commands.Cog.listener()
@@ -125,5 +127,5 @@ class Help(commands.Cog):
         print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Help Cog Loaded! {Fore.RESET}')
 
 
-def setup(bot):
+def help_setup(bot):
     bot.add_cog(Help(bot))
