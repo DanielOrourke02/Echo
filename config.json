@@ -1,15 +1,11 @@
 {
-    "TOKEN": "YOUR_BOT_TOKEN_HERE",
+    "TOKEN": "",
 
     "bot_invite_link": "YOUR_BOT_INVITE_LINK_HERE",
 
+    "prefix": ".",
+
     "ADMIN_ID": 123456,
-
-    "member_join_message": "false",
-
-    "welcome_channel": 123456,
-
-    "welcome_message": "Welcome to the server {user}!",
 
     "skip_installtion": "false",
 
@@ -27,3 +23,4 @@
 
     "max_gamble_amount": 15000
 }
+
