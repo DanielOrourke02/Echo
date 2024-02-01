@@ -9,8 +9,8 @@ class Farming(commands.Cog):
         self.bot = bot
 
     # Command to plant carrots
-    @commands.slash_command()
-    async def plant(self, ctx, amount: int):
+    @commands.command()
+    async def plant(self, ctx, amount: int=None):
         user_id = ctx.author.id
         user_balance = get_user_balance(user_id)
 
@@ -25,7 +25,7 @@ class Farming(commands.Cog):
                 if time_since_last_plant < datetime.timedelta(hours=1):
                     embed.title = "Wait a Little Longer"
                     embed.description = "You can only plant carrots once every 24hrs. Please wait a bit longer before planting again."
-                    await ctx.respond(embed=embed)
+                    await ctx.send(embed=embed)
                     return
 
             if user_balance < total_cost:
@@ -37,14 +37,18 @@ class Farming(commands.Cog):
                 embed.title = "Carrots Planted"
                 embed.description = f"You have planted {amount} carrots."
 
-            await ctx.respond(embed=embed)
+            await ctx.send(embed=embed)
         elif amount > max_carrot_planted:
             embed.title = "Too much carrots"
             embed.description = f"You cannot plant more than {max_carrot_planted}."
-            await ctx.respond(embed=embed)
+            await ctx.send(embed=embed)
+        elif amount == None:
+            embed = discord.Embed(color=embed_error)
+            embed.title = "Incorrect usage"
+            embed.description = f"Please enter the amount you want to plant. Correct usage: {prefix}plant <amount>"
 
 
-    @commands.slash_command()
+    @commands.command(aliases=['har'])
     async def harvest(self, ctx):
         user_id = ctx.author.id
         plantation = user_carrot_plantations.get(str(user_id))
@@ -62,10 +66,10 @@ class Farming(commands.Cog):
                 del user_carrot_plantations[str(user_id)]  # Removing the plantation record
 
                 embed = discord.Embed(title="Success", description=f"You have successfully harvested {harvested_amount} carrots and earned ${total_profit}.", color=discord.Colour.green())
-                await ctx.respond(embed=embed)
+                await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Info", description=f"Your carrots are not ready yet. They are {int(growth_percentage)}% grown.", color=discord.Colour.orange())
-                await ctx.respond(embed=embed)
+                await ctx.send(embed=embed)
         else:
             embed = discord.Embed(title="Error", description="You don't have any crops planted.", color=embed_error)
 
@@ -75,5 +79,5 @@ class Farming(commands.Cog):
         print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Farming Cog Loaded! {Fore.RESET}')
 
 
-def setup(bot):
+def farming_setup(bot):
     bot.add_cog(Farming(bot))
