@@ -12,6 +12,20 @@ A cool bot with lots and lots of commands and many different features. Scroll do
 
 # MAJOR UPDATE COMMING SOON (BUG FIXES)
 
+### todo
+
+save planted crops to a json file
+
+make code much neater and remove all DRY (dont repeat yourself)
+
+fix embedding
+
+debug code
+
+make code more flexible and robust
+
+add unmute command
+
 # Installation
 
 1. `git clone https://github.com/DanielJones02/Echo` or download the latest release
