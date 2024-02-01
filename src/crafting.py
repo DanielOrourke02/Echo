@@ -8,17 +8,17 @@ class Crafting(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
 
-    @commands.slash_command()
+    @commands.command()
     async def recipes(self, ctx):
         embed = discord.Embed(title="Crafting Recipes", color=discord.Colour.green())
         for recipe_name, ingredients in crafting_recipes.items():
             recipe_text = ', '.join([f"{count}x {item}" for item, count in ingredients.items() if item != 'result'])
             embed.add_field(name=recipe_name, value=recipe_text, inline=False)
 
-        await ctx.respond(embed=embed)
+        await ctx.send(embed=embed)
         
 
-    @commands.slash_command()
+    @commands.command()
     async def craft(self, ctx, item_name: str):
         user_id = ctx.author.id
 
@@ -38,7 +38,7 @@ class Crafting(commands.Cog):
             if missing_items:
                 missing_items_text = ', '.join([f"{count}x {item}" for item, count in missing_items.items()])
                 embed = discord.Embed(title="Missing Items", description=f"You are missing {missing_items_text} for crafting {item_name}.", color=discord.Colour.red())
-                await ctx.respond(embed=embed)
+                await ctx.send(embed=embed)
             else:
                 # Remove used items from inventory and add crafted item
                 for ingredient, count in recipe.items():
@@ -47,15 +47,16 @@ class Crafting(commands.Cog):
                             remove_item_from_inventory(user_id, ingredient)
                 add_item_to_inventory(user_id, recipe['result'])
                 embed = discord.Embed(title="Crafting Successful", description=f"You have crafted {recipe['result']}.", color=discord.Colour.green())
-                await ctx.respond(embed=embed)
+                await ctx.send(embed=embed)
         else:
             embed = discord.Embed(title="Error", description="This item cannot be crafted or does not exist.", color=discord.Colour.red())
-            await ctx.respond(embed=embed)
+            await ctx.send(embed=embed)
 
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Crafting Cog Loaded! {Fore.RESET}')
 
-def setup(bot):
+
+def crafting_setup(bot):
     bot.add_cog(Crafting(bot))
