@@ -55,16 +55,20 @@ craftables = {
 
 
 shop_items = {
-    "working": {"name": "Working class slave (role)", "cost": 25000},
-    "middle": {"name": "Middle class noob (role)", "cost": 50000},
+    "slave": {"name": "Slave (role)", "cost": 5000},
+    "poor": {"name": "Poor (role)", "cost": 10000},
+    "working": {"name": "Working class (role)", "cost": 25000},
+    "middle": {"name": "Middle class (role)", "cost": 50000},
     "upper": {"name": "Upper class elite (role)", "cost": 100000},
     "protagonist": {"name": "THE PROTAGONIST (role)", "cost": 500000}
 }
 
 
 role_colors = {
-    "Working class slave": discord.Color.light_grey(),  # grey
-    "Middle class noob": discord.Color.green(),         # green
+    "slave": discord.Color.light_grey(),                # grey
+    "poor": discord.Color.dark_blue(),                  # Dark Blue
+    "Working class": discord.Color.orange(),            # orange
+    "Middle class": discord.Color.green(),              # green
     "Upper class elite": discord.Color.purple(),        # purple
     "THE PROTAGONIST": discord.Color.gold()             # gold/yellow
 }
@@ -72,6 +76,7 @@ role_colors = {
 
 combined_items = {**cosmetics_items, **craftables}
 
+ABS_PATH = os.path.abspath(os.path.dirname(__file__))
 
 # crafting recipes
 crafting_recipes = {
@@ -314,7 +319,6 @@ def log_purchase(user_id, mode ,username , item_name, item_cost):
 def log_sell(user_id, username , item_name, item_cost):
     with open("sell_log.txt", "a") as log_file:
         log_file.write(f"User {user_id} | {username} sell {item_name} for {item_cost} coins.\n")
-
 
 # Check if the user invoking the command is the admin
 def is_admin(ctx):
