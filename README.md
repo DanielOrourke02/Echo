@@ -26,6 +26,8 @@ make code more flexible and robust
 
 add unmute command
 
+update list of commands on this page
+
 # Installation
 
 1. `git clone https://github.com/DanielJones02/Echo` or download the latest release
