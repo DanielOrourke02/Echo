@@ -1,19 +1,25 @@
+from typing import List, Tuple, Union
+from discord.ext import commands
+from discord.ui import Button, View
+from discord import Interaction
+from collections import Counter
+from colorama import Fore
+from io import BytesIO
+from time import ctime
+from card import Card
+from helpers import *
+from PIL import Image
+
 import datetime
-import requests 
-import asyncio
+import requests
 import discord
+import asyncio
 import random
+import bisect
 import qrcode
 import json
 import time
 import os
-
-from discord.ui import Button, View
-from collections import Counter
-from io import BytesIO
-from discord.ext import commands
-from colorama import Fore
-from time import ctime
 
 
 # Placeholder storage for buttons
@@ -44,6 +50,9 @@ token = config.get("TOKEN")
 
 # Bot invite
 bot_invite = config.get("bot_invite_link")
+
+# prefix
+prefix = config.get('prefix')
 
 # show guilds the bot is in at launch
 show_guilds = config.get("show_guilds")
@@ -160,30 +169,6 @@ async def lock_function(bot, save_locked_channels, unlock_channel_after_delay):
 
 
 # --------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------------------------------------------------------USER WELCOME LOGIC----------------------------------------------------------
-
-
-async def user_join(bot, member, member_join, welcome_channel_id, welcome_message):
-    # Check if the welcome feature is enabled
-    if member_join == "true":
-        if welcome_channel_id and welcome_message:  # make sure both variables are defined (1 cannot live without the other)
-            try:
-                welcome_channel = bot.get_channel(welcome_channel_id)
-                if welcome_channel:
-                    welcome_embed = discord.Embed(
-                        title="Welcome!",
-                        description=welcome_message.format(user=member.mention),  # format the message {user} turns into a user mention
-                        color=embed_colour
-                    )
-                    await welcome_channel.respond(embed=welcome_embed)
-                else:
-                    print(f"Welcome channel with ID {welcome_channel_id} not found.")
-            except Exception as e:
-                print(f"Error responding welcome message: {e}")
-    else:
-        pass  # runs if disabled in config (default it is)
 
 
 # --------------------------------------------------------------------------------------------------------------------------
