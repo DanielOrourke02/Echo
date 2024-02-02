@@ -3,7 +3,21 @@
 from utilities import *
 
 
-# ALL OF THE MAIN FUNCTIONS FOR THE ECONOMY GAME
+"""
+
+THIS IS SO MESSY OMG
+
+IK ITS SO BAD
+
+IM SORRY FOR ALL PEOPLE TRYING TO UNDERSTAND MY ECONOMY GAME
+
+This contains all the main functions, variables, array etc for all economy game
+related content.
+
+Its very messy I know but I will tidy it up.
+
+"""
+
 
 
 DATA_FILE = 'user_data.json'
@@ -12,6 +26,13 @@ user_bank_balances = {}  # Holds users' bank
 
 last_planting_time = {}
 
+robbery_cooldown = {}  # Dictionary to track cooldowns
+
+lottery_pool = set()
+required_participants = 5 # chance = code break
+entry_fee = config.get('entry_fee')
+refund_timer = config.get('lottery_cooldown') # seconds
+daily_reward = config.get('daily_reward')
 
 # List of all cosmetics
 cosmetics_items = {
@@ -156,10 +177,48 @@ async def assign_role_to_user(ctx, role_name):
     await ctx.author.add_roles(role)
 
 
+def load_user_plants():
+    try:
+        with open('user_plants.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
+def save_user_plants(data):
+    with open('user_plants.json', 'w') as f:
+        json.dump(data, f, indent=4)
+
+
 def save_user_data():
     with open(DATA_FILE, 'w') as f:
         json.dump({'user_balances': user_balances, 'user_bank_balances': user_bank_balances}, f)
 
+
+def user_has_plants(user_id):
+    user_plantations = load_user_plants()
+    return str(user_id) in user_plantations
+
+def update_plants():
+    global user_carrot_plantations
+    loaded_data = load_user_plants()
+    
+    for user_id, plantation_data in loaded_data.items():
+        current_time = datetime.now().timestamp()
+        time_left_seconds = max(0, plantation_data[0] - current_time)
+        if time_left_seconds <= 0:
+            # Harvest the crops if the growth time has passed
+            harvested_amount = plantation_data[1]
+            total_profit = harvested_amount * carrot_sell
+            update_user_balance(user_id, total_profit)
+            del user_carrot_plantations[user_id]  # Removing the plantation record
+        else:
+            # Update the time left in the percentage
+            growth_percentage = min(100, ((growth_duration - time_left_seconds) / growth_duration) * 100)
+            user_carrot_plantations[user_id] = (current_time + growth_duration, plantation_data[1])
+
+    # Save the updated data
+    save_user_plants(user_carrot_plantations)
 
 def update_bank_interest(user_id):
     # Retrieve last interest update time for the user
@@ -292,14 +351,21 @@ def can_beg(user_id):
 
 def plant_carrots(user_id, amount):
     current_time = time.time()
-    grow_duration = 3600 * 24  # 2 hours in seconds
+    grow_duration = 3600 * 24  # 24 hours in seconds
     cost_per_carrot = 100
     total_cost = amount * cost_per_carrot
 
     # Update balance and record plantation details
     update_user_balance(user_id, -total_cost)  # Deducting the cost for planting
-    user_carrot_plantations[str(user_id)] = [current_time + grow_duration, amount]
-    save_user_data()
+    user_plantations = load_user_plants()
+    
+    # Store user's ID, planted amount, and time planted
+    user_plantations[str(user_id)] = {
+        'amount_planted': amount,
+        'time_planted': current_time,
+    }
+    
+    save_user_plants(user_plantations)
 
 
 def set_last_claim_time(user_id):
