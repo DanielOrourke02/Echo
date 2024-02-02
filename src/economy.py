@@ -9,22 +9,39 @@ class Economy(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=['inv'])
-    async def inventory(self, ctx):
-        user_id = ctx.author.id
-        inventory = get_user_inventory(user_id)
+    async def inventory(self, ctx, user: commands.MemberConverter=None):
+        if user is None:
+            user_id = ctx.author.id
+            inventory = get_user_inventory(user_id)
 
-        # Use Counter to count the occurrences of each item in the inventory
-        item_counts = Counter(inventory)
+            # Use Counter to count the occurrences of each item in the inventory
+            item_counts = Counter(inventory)
 
-        # Create an embed to display the inventory
-        embed = discord.Embed(title=f"{ctx.author.name}'s Inventory", color=embed_error)
-        
-        # Add fields for each unique item and its count
-        for item, count in item_counts.items():
-            embed.add_field(name=item, value=f"Count: {count}", inline=True)
+            # Create an embed to display the inventory
+            embed = discord.Embed(title=f"{ctx.author.name}'s Inventory", color=embed_error)
+            
+            # Add fields for each unique item and its count
+            for item, count in item_counts.items():
+                embed.add_field(name=item, value=f"Count: {count}", inline=True)
 
-        # Send the inventory as an embed
-        await ctx.send(embed=embed)
+            # Send the inventory as an embed
+            await ctx.send(embed=embed)
+        else:
+            user_id = user.id
+            inventory = get_user_inventory(user_id)
+
+            # Use Counter to count the occurrences of each item in the inventory
+            item_counts = Counter(inventory)
+
+            # Create an embed to display the inventory
+            embed = discord.Embed(title=f"{user.display_name}'s Inventory", color=embed_error)
+            
+            # Add fields for each unique item and its count
+            for item, count in item_counts.items():
+                embed.add_field(name=item, value=f"Count: {count}", inline=True)
+
+            # Send the inventory as an embed
+            await ctx.send(embed=embed)
 
     
     # Command to give money to a user (TO REMOVE DO /GIVE <USER> -<amount>)
@@ -72,15 +89,24 @@ class Economy(commands.Cog):
 
     # pay another user money
     @commands.command()
-    async def pay(self, ctx, user: commands.MemberConverter, amount: int=None):
+    async def pay(self, ctx, user: commands.MemberConverter=None, amount: int=None):
         if amount is None or amount <= 0:
             embed = discord.Embed(
                 title="Invalid Amount",
-                description=f"Please specify an amount to pay. Usage: `{prefix}pay <user> <amount>`",
+                description=f"Please specify an amount to pay. Usage: `{prefix}pay <@user> <amount>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
             return
+        
+        if user is None:
+            embed = discord.Embed(
+                title="Not a user",
+                description=f"Please specify a user. Usage: `{prefix}pay <@user> <amount>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return         
 
         payer_id = str(ctx.author.id)
         user_id = str(user.id)
@@ -118,7 +144,7 @@ class Economy(commands.Cog):
     # buy items from the list of items
     @commands.command()
     async def buy(self, ctx, item_name: str=None):
-        if item_name not in shop_items:
+        if item_name not in shop_items: # check if the item is in the shop
             embed = discord.Embed(
                 title="Item Not Found",
                 description="Item not found in the shop.",
@@ -126,10 +152,10 @@ class Economy(commands.Cog):
             )
             await ctx.send(embed=embed)
             return
-        elif item_name == None:
+        elif item_name is None:
             embed = discord.Embed(
-                title="Incorrect Usage",
-                description="Please specify an item name. Usage: `{prefix}buy <item_name>`",
+                title="Incorrect buy usage",
+                description=f"Please specify an item name. Usage: `{prefix}buy <item_name>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -139,27 +165,27 @@ class Economy(commands.Cog):
 
         user = ctx.author
 
-        item_cost = shop_items[item_name]['cost']
-        user_balance = get_user_balance(user.id)
+        item_cost = shop_items[item_name]['cost'] # get the item cost
+        user_balance = get_user_balance(user.id) # get the user balance
 
-        if user_balance < item_cost:
+        if user_balance < item_cost: # if they dont have enough output an error message
             embed = discord.Embed(
-                title="Insufficient Coins",
+                title="Insufficient Coins (poor)",
                 description="You do not have enough coins to buy this item.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
             return
 
-        update_user_balance(user.id, -item_cost)
-        add_item_to_inventory(user.id, item_name)
-        log_purchase(user.id, 1, user.name, shop_items[item_name]['name'], item_cost)
+        update_user_balance(user.id, -item_cost) # update their user balance
+        add_item_to_inventory(user.id, item_name) # add the item to their inventory
+        log_purchase(user.id, 1, user.name, shop_items[item_name]['name'], item_cost) # log the purchase
 
         # Check if the item has (role) in its name and assign the role
         # Role values and colours are in 'eco_support.py'
-        if "(role)" in shop_items[item_name]['name'].lower(): 
+        if "(role)" in shop_items[item_name]['name'].lower(): # if the item name has (role) inside the str we know its a role you can buy
             role_name = shop_items[item_name]['name'].split(" (")[0]  # Extract role name
-            await assign_role_to_user(ctx, role_name)
+            await assign_role_to_user(ctx, role_name) # give role to the author/user
 
         embed = discord.Embed(
             title="Purchase Successful",
@@ -184,6 +210,7 @@ class Economy(commands.Cog):
             await ctx.send(embed=embed)
             return
 
+        # check for a cooldown
         if not can_dig(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
@@ -212,10 +239,10 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-        amount = random.randint(1000, 1600)
+        amount = random.randint(1000, 1600) # random amount of money
 
-        user_balances[f"{user_id}_last_dig"] = time.time()
-        update_user_balance(ctx.author.id, amount)
+        user_balances[f"{user_id}_last_dig"] = time.time() # update cooldown
+        update_user_balance(ctx.author.id, amount) # update balance
 
         embed = discord.Embed(
             title="Coins Found",
@@ -241,6 +268,7 @@ class Economy(commands.Cog):
             await ctx.send(embed=embed)
             return
 
+        # check if they can hunt (not on cooldown)
         if not can_hunt(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
@@ -269,10 +297,10 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-        amount = random.randint(600, 1300)
+        amount = random.randint(600, 1300) # random money amount
 
-        user_balances[f"{user_id}_last_hunt"] = time.time()
-        update_user_balance(ctx.author.id, amount)
+        user_balances[f"{user_id}_last_hunt"] = time.time() # update cooldown
+        update_user_balance(ctx.author.id, amount) # update balance
 
         embed = discord.Embed(
             title="Coins Found",
@@ -368,13 +396,12 @@ class Economy(commands.Cog):
             await ctx.send(embed=embed)
             return
 
-        amount = 1000  # Daily reward amount
-        update_user_balance(user_id, amount)
-        set_last_claim_time(user_id)
+        update_user_balance(user_id, daily_reward)
+        set_last_claim_time(user_id) # update daily cooldown
 
         embed = discord.Embed(
             title="Daily Reward Claimed",
-            description=f'You have claimed your daily reward of {amount} coins!',
+            description=f'You have claimed your daily reward of {daily_reward} coins!',
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -387,17 +414,7 @@ class Economy(commands.Cog):
     async def sell(self, ctx, item_id: str=None):
         user_id = ctx.author.id
 
-        item_id = item_id.lower() # make it lower to prevent stuff like LeG.SwoRD 
-
-        if item_id not in combined_items:
-            embed = discord.Embed(
-                title="Invalid Item ID",
-                description="Invalid item ID.",
-                color=embed_error
-            )
-            await ctx.send(embed=embed)
-            return
-        elif item_id == None:
+        if item_id is None:
             embed = discord.Embed(
                 title="Incorrect Usage",
                 description=f"Incorrect usage. Please use: `{prefix}sell <item>`",
@@ -405,12 +422,22 @@ class Economy(commands.Cog):
             )
             await ctx.send(embed=embed)
             return
+        
+        item_id = item_id.lower() # make it lower to prevent stuff like LeG.SwoRD 
+
+        if item_id not in combined_items: # check if the item is in the sell list
+            embed = discord.Embed(
+                title="Invalid Item ID",
+                description="Invalid item ID.",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
 
         user_inventory = get_user_inventory(user_id)
-        user = await self.bot.fetch_user(ctx.author.id)
-        username = user.name
+        user = await self.bot.fetch_user(ctx.author.id) 
 
-        if item_id not in user_inventory:
+        if item_id not in user_inventory: # check if they own the item
             embed = discord.Embed(
                 title="Item Not Found",
                 description="You don't have this item in your inventory.",
@@ -419,9 +446,9 @@ class Economy(commands.Cog):
             await ctx.send(embed=embed)
             return
 
-        item_info = combined_items[item_id]
-        item_name = item_info["name"]
-        item_sell_price = item_info["sell"]
+        item_info = combined_items[item_id] # id
+        item_name = item_info["name"] # name
+        item_sell_price = item_info["sell"] # price
 
         # Update user's balance
         update_user_balance(user_id, item_sell_price)
@@ -435,18 +462,9 @@ class Economy(commands.Cog):
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
-    
-    # i defined values here becuase why not idc
 
-    global lottery_pool
-    global required_participants
-    global entry_fee
-    global refund_timer
+
     global refund_lottery_tickets
-    lottery_pool = set()
-    required_participants = 5
-    entry_fee = 1000
-    refund_timer = 30  # seconds
 
     @commands.command(aliases=['lottery', 'lotto'])
     async def enterlottery(self, ctx):
@@ -476,7 +494,7 @@ class Economy(commands.Cog):
 
         # Check if lottery pool has enough members to draw
         if len(lottery_pool) >= required_participants:
-            winner_id = random.choice(list(lottery_pool))
+            winner_id = random.choice(list(lottery_pool)) # random winner
             update_user_balance(winner_id, 5000)
             embed = discord.Embed(
                 title="Lottery Winner!",
@@ -484,14 +502,14 @@ class Economy(commands.Cog):
                 color=discord.Color.green()
             )
             await ctx.send(embed=embed)
-            lottery_pool.clear()
+            lottery_pool.clear() # clear the lottery pool for a new lottery
 
         # If not enough participants, start a refund timer
         if len(lottery_pool) < required_participants:
             await asyncio.sleep(refund_timer)
             if len(lottery_pool) < required_participants:
                 try:
-                    await refund_lottery_tickets()  # Use await here
+                    await refund_lottery_tickets()
                     embed = discord.Embed(
                         title="Not enough Participants!!",
                         description=f"Refunded lottery tickets. Not enough participants!",
@@ -519,12 +537,12 @@ class Economy(commands.Cog):
 
     @commands.command()
     async def deposit(self, ctx, amount=None):
-        if amount == 'all':
+        if amount == 'all': # deposit as much as possible
             amount = get_user_balance(ctx.author.id)
         elif amount == None:
             embed = discord.Embed(
-                title="Incorrect usage of deposit command",
-                description=f"Incorrect usage, please use: `{prefix}deposit <amount>`",
+                title="Incorrect deposit usage!",
+                description=f"Incorrect deposit usage, please use: `{prefix}deposit <amount>`",
                 color=embed_error
             )   
             await ctx.send(embed=embed)
@@ -572,17 +590,17 @@ class Economy(commands.Cog):
 
 
     @commands.command()
-    async def withdraw(self, ctx, amount=None):
-        if amount == 'all':
-            amount = get_bank_balance(ctx.author.id)
-        else:
-            try:
-                amount = int(amount)
-            except ValueError:
-                await ctx.send("Please enter a valid amount.")
-                return
-
-        if amount <= 0 or amount > get_bank_balance(ctx.author.id):
+    async def withdraw(self, ctx, amount: int=None):
+        if amount is None: # if they didnt enter an amount
+            embed = discord.Embed(
+                title="Incorrect withdraw usage!",
+                description=f'Incorrect withdraw usage. Please use: `{prefix}withdraw <amount>`',
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        elif amount <= 0 or amount > get_bank_balance(ctx.author.id): # check if they have that amount to withdraw
             embed = discord.Embed(
                 title="Invalid withdraw amount",
                 description=f'Invalid withdraw amount. Please try again.',
@@ -606,7 +624,7 @@ class Economy(commands.Cog):
     @commands.command(aliases=['top', 'balancetop', 'balance_top'])
     async def baltop(self, ctx):
         # Check if the file exists and is not empty
-        if not os.path.exists('user_data.json') or os.path.getsize('user_data.json') == 0:
+        if not os.path.exists('user_data.json') or os.path.getsize('user_data.json') == 0: # access money json file and get the top 10 people
             await ctx.send("No data available.")
             return
 
@@ -622,7 +640,7 @@ class Economy(commands.Cog):
         balances = {user_id: data for user_id, data in user_balances.items() if user_id.isdigit() and isinstance(data, int)}
 
         # Sorting the dictionary by balance and getting top 10
-        top_balances = dict(sorted(balances.items(), key=lambda item: item[1], reverse=True)[:10])
+        top_balances = dict(sorted(balances.items(), key=lambda item: item[1], reverse=True)[:10]) # complex asf idk how it works
 
         # Creating an embedded message with orange color
         embed = discord.Embed(
@@ -649,9 +667,6 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-
-    global robbery_cooldown
-    robbery_cooldown = {}  # Dictionary to track cooldowns
 
     @commands.command(aliases=['steal'])
     async def rob(self, ctx, victim: commands.MemberConverter):
@@ -709,7 +724,7 @@ class Economy(commands.Cog):
 
     @commands.command(aliases=['g'])
     async def gamble(self, ctx, amount: str = None):
-        if amount is None:
+        if amount is None: # if they didnt enter an amount to gamble
             embed = discord.Embed(
                 title="Gamble Command",
                 description=f"Please specify an amount to gamble. Usage: `{prefix}gamble <amount>`",
@@ -720,7 +735,7 @@ class Economy(commands.Cog):
 
         # Check if the user entered "max"
         if amount.lower() == "max":
-            amount = min(get_user_balance(ctx.author.id), max_bet)
+            amount = min(get_user_balance(ctx.author.id), max_bet) # gamble as much as possible (within max gamble limit)
         else:
             try:
                 amount = int(amount)
