@@ -8,21 +8,48 @@ class Crafting(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
 
+
     @commands.command()
     async def recipes(self, ctx):
+        """
+        Displays crafting recipes.
+
+        Parameters:
+            ctx (commands.Context): The context of the command.
+
+        Returns:
+            None
+        """
         embed = discord.Embed(title="Crafting Recipes", color=discord.Colour.green())
+        
         for recipe_name, ingredients in crafting_recipes.items():
             recipe_text = ', '.join([f"{count}x {item}" for item, count in ingredients.items() if item != 'result'])
             embed.add_field(name=recipe_name, value=recipe_text, inline=False)
 
         await ctx.send(embed=embed)
-        
+
 
     @commands.command()
-    async def craft(self, ctx, item_name: str):
+    async def craft(self, ctx, item_name: str=None):
+        """
+        Craft an item using the specified recipe.
+
+        Parameters:
+            ctx (commands.Context): The context of the command.
+            item_name (str): The name of the item to craft.
+
+        Returns:
+            None
+        """
         user_id = ctx.author.id
 
-        item_name = item_name.lower # prevent case errors
+        # Check if item_name is empty
+        if item_name is None:
+            embed = discord.Embed(title="Incorrect Usage", description=f"Correct usage: `{ctx.prefix}craft <item>`", color=embed_error)
+            await ctx.send(embed=embed)
+            return
+
+        item_name = item_name.lower()
 
         if item_name in crafting_recipes:
             recipe = crafting_recipes[item_name]
@@ -37,7 +64,7 @@ class Crafting(commands.Cog):
             # If missing items
             if missing_items:
                 missing_items_text = ', '.join([f"{count}x {item}" for item, count in missing_items.items()])
-                embed = discord.Embed(title="Missing Items", description=f"You are missing {missing_items_text} for crafting {item_name}.", color=discord.Colour.red())
+                embed = discord.Embed(title="Missing Items", description=f"You are missing {missing_items_text} for crafting {item_name}.", color=embed_error)
                 await ctx.send(embed=embed)
             else:
                 # Remove used items from inventory and add crafted item
@@ -49,7 +76,7 @@ class Crafting(commands.Cog):
                 embed = discord.Embed(title="Crafting Successful", description=f"You have crafted {recipe['result']}.", color=discord.Colour.green())
                 await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title="Error", description="This item cannot be crafted or does not exist.", color=discord.Colour.red())
+            embed = discord.Embed(title="Error", description="This item cannot be crafted or does not exist.", color=embed_error)
             await ctx.send(embed=embed)
 
 
