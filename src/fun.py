@@ -17,8 +17,17 @@ class Fun(commands.Cog):
 
 
     @commands.command()
-    async def say(self, ctx, message: str):
-        embed = discord.Embed(title="Say", description=message, color=embed_colour)
+    async def say(self, ctx, message: str=None):
+        if message is None:
+            embed = discord.Embed(
+                title="Incorrect say usage",
+                description=f"Please specify a message. Usage: `{prefix}say <message>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        embed = discord.Embed(title="Say", description=message, color=embed_colour) # 'description=message' set description to whatever their parsed in
         await ctx.send(embed=embed)
 
 
@@ -29,7 +38,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed) 
 
 
-    @commands.command()
+    @commands.command(aliases=['server'])
     async def server_info(self, ctx):
         guild = ctx.guild
         embed = discord.Embed(title="Server Information", color=embed_colour)
@@ -43,7 +52,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['user'])
     async def user_info(self, ctx, user: commands.MemberConverter = None):
         user = user or ctx.author  # If user is None, use the author of the command
         embed = discord.Embed(title="User Information", color=embed_colour)
@@ -57,7 +66,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def avatar(self, ctx, user: commands.MemberConverter = None):
-        user = user or ctx.author
+        user = user or ctx.author # if no user is input then set it to the author (the one who ran the command)
 
         embed = discord.Embed(title=f"{user.display_name}'s Avatar", color=embed_colour)
 
@@ -71,31 +80,49 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
-    async def eight_ball(self, ctx, *, question: str):
+    @commands.command(aliases=['ball', '8_ball', '8'])
+    async def eight_ball(self, ctx, *, question: str=None):
+        if question is None: # if no question is parsed
+            embed = discord.Embed(
+                title="Incorrect eight ball usage",
+                description=f"Please specify a question. Usage: `{prefix}eight_ball <question>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
         responses = ["It is certain.", "Without a doubt.", "Yes, definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."]
         answer = random.choice(responses)
         embed = discord.Embed(title="🎱 Magic 8-Ball", description=f"Question: {question}\nAnswer: {answer}", color=embed_error)
         await ctx.send(embed=embed)
     
 
-    @commands.command()
-    async def qr(self, ctx, link: str):
+    @commands.command(aliases=['qrcode'])
+    async def qr(self, ctx, link: str=None):
+        if link is None: # if no link is parsed
+            embed = discord.Embed(
+                title="Incorrect link usage",
+                description=f"Please specify a link. Usage: `{prefix}qr <link>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
         # Generate QR code
-        qr = qrcode.QRCode(
+        qr = qrcode.QRCode( 
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
             box_size=10,
             border=4,
         )
-        qr.add_data(link)
-        qr.make(fit=True)
+        qr.add_data(link) # add the link
+        qr.make(fit=True) # fit to image (make it good size)
 
-        img = qr.make_image(fill_color="black", back_color="white")
+        img = qr.make_image(fill_color="black", back_color="white") # black and white
 
         # Save the image to a BytesIO object
         with BytesIO() as image_binary:
-            img.save(image_binary, 'PNG')
+            img.save(image_binary, 'PNG') # save as png
             image_binary.seek(0)
             # Send the image in discord
             file = discord.File(fp=image_binary, filename='qr_code.png')
@@ -105,7 +132,7 @@ class Fun(commands.Cog):
     @commands.command()
     async def membercount(self, ctx):
         guild = ctx.guild
-        member_count = guild.member_count
+        member_count = guild.member_count # get guild membercount
 
         # Create and send an embed
         embed = discord.Embed(title="Member Count", color=embed_colour)
@@ -116,7 +143,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def dice(self, ctx):
-        result = random.randint(1, 6)
+        result = random.randint(1, 6) # random dice roll
 
         # Create and send an embed
         embed = discord.Embed(title="Dice Roll", color=embed_colour)
@@ -128,7 +155,10 @@ class Fun(commands.Cog):
     @commands.command()
     async def quote(self, ctx):
         # Fetch a random quote from the Quotable API
-        response = requests.get("https://api.quotable.io/random")
+        response = requests.get("https://api.quotable.io/random") # get random quote from this api
+
+        # warning, speeds for this api can be slow during peak times (its a free api allow it)
+
         if response.status_code == 200:
             quote_data = response.json()
             content = quote_data.get("content", "Quote not available.")
@@ -140,11 +170,11 @@ class Fun(commands.Cog):
             embed.add_field(name="Author", value=author, inline=False)
 
             await ctx.send(embed=embed)
-        else:
+        else: # if this happens open an error on github (this means the api is no longer valid or its offline)
             await ctx.send("Failed to fetch the daily quote. Try again later.")
 
 
-    @commands.command()
+    @commands.command(aliases=['calc'])
     async def calculator(self, ctx, expression: str = None):
         if expression is None:
             # Handle the case where no expression is provided
@@ -153,7 +183,7 @@ class Fun(commands.Cog):
             return
 
         try:
-            result = eval(expression)
+            result = eval(expression) # calculation
 
             # Create a success embed
             embed = discord.Embed(title="Calculation Result", color=embed_colour)
@@ -171,10 +201,10 @@ class Fun(commands.Cog):
     @commands.command()
     async def joke(self, ctx):
         try:
-            response = requests.get("https://official-joke-api.appspot.com/random_joke")
+            response = requests.get("https://official-joke-api.appspot.com/random_joke") # random joke from api
             joke_data = response.json()
-            setup = joke_data["setup"]
-            punchline = joke_data["punchline"]
+            setup = joke_data["setup"] # get the joke setup
+            punchline = joke_data["punchline"] # get the punchline
 
             # Create an embed
             embed = discord.Embed(title="Joke Time!", color=embed_colour)
@@ -183,15 +213,37 @@ class Fun(commands.Cog):
 
             # Send the embed
             await ctx.send(embed=embed)
-        except Exception as e:
+        except Exception as e: # if this happens its probably because the api is no longer accessible (report this on github)
             await ctx.send(f"Error fetching joke: {e}")
 
 
+    @commands.command(aliases=['cf'])
+    async def coinflip(self, ctx, choice: str = None):
+        choices = ["heads", "tails"]
+        result = random.choice(choices)
 
-    @commands.command()
-    async def coinflip(self, ctx):
-        result = random.choice(["Heads", "Tails"])
-        embed = discord.Embed(title="Coinflip", description=f"The coin landed on: {result}", color=embed_colour)
+        if choice is None or choice.lower() not in choices:
+            embed = discord.Embed(
+                title="Coinflip",
+                description=f"Please specify your choice: `{prefix}coinflip <heads/tails>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        embed = discord.Embed(
+            title="Coinflip",
+            description=f"{ctx.author.mention} flipped a coin!",
+            color=discord.Colour.blue()
+        )
+        embed.add_field(name="Your Choice", value=choice.capitalize(), inline=True)
+        embed.add_field(name="Result", value=result.capitalize(), inline=True)
+
+        if choice.lower() == result:
+            embed.add_field(name="Outcome", value="Congratulations! You win!", inline=False)
+        else:
+            embed.add_field(name="Outcome", value="Better luck next time!", inline=False)
+
         await ctx.send(embed=embed)
 
 
