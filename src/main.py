@@ -5,16 +5,17 @@ SETUP_INSTALL() # installs packages. this is enabled by default. after running t
 
 
 from utilities import *
+from eco_support import *
 
 
-from crafting import crafting_setup
-from economy import economy_setup
-from farming import farming_setup
-from fun import fun_setup
-from help import help_setup
-from slots import slots_setup
-from moderation import mod_setup
 from blackjack import blackjack_setup
+from crafting import crafting_setup
+from farming import farming_setup
+from economy import economy_setup
+from moderation import mod_setup
+from slots import slots_setup
+from help import help_setup
+from fun import fun_setup
 
 
 intents = discord.Intents.all()
@@ -27,11 +28,11 @@ bot = commands.Bot(command_prefix=config.get('prefix'), intents=intents, help_co
 async def on_ready():
     await lock_function(bot, save_locked_channels, unlock_channel_after_delay)
 
-    print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}")
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
+    print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}") # Show login message 
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help")) # set presence to 'Listening to .help'
 
-    guilds(bot)
-    
+    guilds(bot) # call guilds function, this will output what guilds the bot is in (if enabled in config)
+
 
 # Add cogs
 crafting_setup(bot)
