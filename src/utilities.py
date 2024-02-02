@@ -2,15 +2,16 @@ from typing import List, Tuple, Union
 from discord.ext import commands
 from discord.ui import Button, View
 from discord import Interaction
+from PIL import Image, ImageDraw
 from collections import Counter
+from datetime import datetime
 from colorama import Fore
 from io import BytesIO
 from time import ctime
 from card import Card
 from helpers import *
-from PIL import Image
 
-import datetime
+
 import requests
 import discord
 import asyncio
@@ -69,11 +70,9 @@ max_carrot_planted = config.get("max_carrots_planted")
 growth_duration = 3600 * config.get("carrot_growth_duration")
 
 # max bank size
-
 max_bank_size = config.get("bank_size")
 
 # max gamble amount
-
 max_bet = config.get("max_gamble_amount")
 
 # ----------------------------------------------------------MODERATION FUNCTIONS----------------------------------------------------------
