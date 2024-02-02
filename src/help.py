@@ -48,7 +48,9 @@ class Help(commands.Cog):
             "lockchannel": "Lock a channel for a specified duration.",
             "unlockchannel": "Unlock a channel.",
             "lockserver": "Lock the entire server for a specified duration.",
-            "unlockserver": "Unlock the entire server."
+            "unlockserver": "Unlock the entire server.",
+            "setup_verify <role_name> <message>": "Setup a verification panel",
+            "ticket_panel": "Setup a ticket panel"
         }
 
         embed = discord.Embed(title="Moderation Commands", description="List of available moderation commands:", color=discord.Color.green())
