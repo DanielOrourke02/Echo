@@ -13,7 +13,7 @@ def SETUP_INSTALL():
             print(f"Error installating {package}.\n {ERROR}")
 
 
-    REQUIRED_PACKAGES = {'discord', 'flask', 'asyncio', 'qrcode[pil]', 'requests', 'colorama', 'aiohttp==3.7.4.post0', 'async-timeout==3.0.1', 'chardet==4.0.0', 'chardet==4.0.0', 'idna==3.1', 'multidict==5.1.0', 'Pillow==8.2.0', 'typing-extensions==3.7.4.3', 'yarl==1.6.3'} # required packages to install
+    REQUIRED_PACKAGES = {'discord', 'flask', 'asyncio', 'qrcode[pil]', 'requests', 'colorama', 'aiohttp==3.7.4.post0', 'async-timeout==3.0.1', 'chardet==4.0.0', 'chardet==4.0.0', 'idna==3.1', 'multidict==5.1.0', 'pillow', 'typing-extensions==3.7.4.3', 'yarl'} # required packages to install
 
 
     if CONFIG.get("skip_installtion") == "false":
