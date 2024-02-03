@@ -676,7 +676,7 @@ class Economy(commands.Cog):
         # Check for cooldown
         if robber_id in robbery_cooldown and time.time() - robbery_cooldown[robber_id] < 3600:
             embed = discord.Embed(
-                title="Broke",
+                title="Cooldown",
                 description=f'Wait the cooldown. You cant rob everyone buddy.',
                 color=embed_error
             )
@@ -707,6 +707,7 @@ class Economy(commands.Cog):
                 description=f"You successfully robbed {robbed_amount} coins from {victim.mention}!",
                 color=discord.Color.green()
             )
+            await ctx.send(embed=embed)
         else:
             penalty_amount = int(get_user_balance(robber_id) * 0.20)  # 20% of robber's balance
             update_user_balance(robber_id, -penalty_amount)
