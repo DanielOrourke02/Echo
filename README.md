@@ -16,6 +16,10 @@ A cool bot with lots and lots of commands and many different features. Scroll do
 
 make code much neater and remove all DRY (dont repeat yourself)
 
+add fertelizer (for plants to speed up process)
+
+increase dig and hunt rarity of getting found
+
 fix embedding
 
 debug code
