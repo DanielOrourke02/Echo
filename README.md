@@ -50,8 +50,6 @@ fix errors when planting (it still works just outputs some gibberish error)
 
 # KNOWN BUGS
 
-`Economy game` - Restarting the bot while users have crops planted WILL wipe all data of planted crops (users will loose all the crops they planted)
-
 `Buttons` - Buttons will no longer work after a bot restart (ticket button and verify button)
 
 `json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)` - Just delete whatever json file is erroring (only happens with empty json files)
