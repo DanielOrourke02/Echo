@@ -1,5 +1,5 @@
 {
-    "TOKEN": "",
+    "TOKEN": "BOT_TOKEN_HERE",
 
     "bot_invite_link": "YOUR_BOT_INVITE_LINK_HERE",
 
@@ -11,6 +11,8 @@
 
     "show_guilds": "true",
 
+    "daily_reward": 1000,
+
     "carrot_plant_price": 100,
 
     "carrot_sell_price": 110,
@@ -21,6 +23,10 @@
 
     "bank_size": 250000,
 
-    "max_gamble_amount": 15000
+    "max_gamble_amount": 15000,
+
+    "lottery_cooldown": 30,
+
+    "entry_fee": 1000
 }
 
