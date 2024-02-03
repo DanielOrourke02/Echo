@@ -109,6 +109,31 @@ class Moderation(commands.Cog):
 
 
     @commands.command()
+    @commands.has_permissions(manage_roles=True)
+    async def unmute(self, ctx, member: discord.Member, reason: str = "No reason provided"):
+        # Get the "Muted" role
+        mute_role = discord.utils.get(ctx.guild.roles, name="Muted")
+
+        if not mute_role:
+            # If the "Muted" role doesn't exist, you can handle this as you prefer.
+            # For example, you can send a message saying the role doesn't exist or create it.
+            await ctx.send("The 'Muted' role doesn't exist.")
+            return
+
+        # Remove the "Muted" role from the specified user
+        await member.remove_roles(mute_role, reason=f"Unmuted by {ctx.author} for reason: {reason}")
+        await member.send(f"You have been unmuted in {ctx.guild.name} by an admin. Reason: {reason}")  # dm user
+
+        # Create an embed for the confirmation message
+        embed = discord.Embed(title="User Unmuted", description=f"{member.mention} has been unmuted.", color=discord.Color.green())
+        embed.add_field(name="Reason", value=reason)
+        embed.set_footer(text=f"Unmuted by {ctx.author}")
+
+        # Send the embed
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int = None):
         if amount is None:
