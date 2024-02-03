@@ -13,15 +13,17 @@ class Slots(commands.Cog):
     def check_bet(self, ctx, bet):
         user_id = ctx.author.id
         bal = get_user_balance(user_id)
-        if bet > bal:
-            return False
+        if bet is None:
+            return True
         elif bet < bal:
             pass
+        elif bet > bal:
+            return False
 
 
     @commands.command(brief='Slot machine\nbet must be 1-3', usage='slots *[bet]')
     async def slots(self, ctx: commands.Context, bet: int=None):
-        if self.check_bet(ctx, bet=bet) == False:
+        if self.check_bet(ctx, bet=bet) is False:
             embed = discord.Embed(
                 title="BROKE ASF",
                 description=f"You do not have enough money to gamble that amount",
@@ -29,8 +31,15 @@ class Slots(commands.Cog):
             )
             await ctx.send(embed=embed)
             return
-        else:
-            pass
+        elif self.check_bet(ctx, bet=bet) is True:
+            embed = discord.Embed(
+                title="Enter a bet",
+                description=f"Please enter a bet amount. Usage: `{prefix}slots <bet>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            
+
         path = os.path.join('src/pictures/')
         facade = Image.open(f'{path}slot-face.png').convert('RGBA')
         reel = Image.open(f'{path}slot-reel.png').convert('RGBA')
@@ -75,6 +84,13 @@ class Slots(commands.Cog):
             duration=50  # duration of each slide (ms)
         )
 
+        # Send the GIF first
+        file = discord.File(fp, filename=fp)
+        message = await ctx.send(file=file)
+
+        # Introduce a delay (adjust the duration as needed)
+        await asyncio.sleep(len(images) * 0.05)
+
         # win logic
         result = ('lost', bet)
         update_user_balance(ctx.author.id, bet*-1)     
@@ -85,10 +101,11 @@ class Slots(commands.Cog):
             result = ('won', reward)
             update_user_balance(ctx.author.id, reward)
 
+        # Send the embed
         embed = make_embed(
             title=(
-                f'You {result[0]} {result[1]} credits'+
-                ('.' if result[0] == 'lost' else '!') # happy or sad based on outcome
+                f'You {result[0]} {result[1]} credits' +
+                ('.' if result[0] == 'lost' else '!')
             ),
             description=(
                 'You now have ' +
@@ -100,13 +117,9 @@ class Slots(commands.Cog):
             )
         )
 
-        file = discord.File(fp, filename=fp)
-        embed.set_image(url=f"attachment://{fp}") # none of this makes sense to me :)
-        await ctx.send(
-            file=file,
-            embed=embed
-        )
-
+        embed.set_image(url=f"attachment://{fp}")
+        await message.edit(content=None, embed=embed)
+        
         os.remove(fp)
 
 
