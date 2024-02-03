@@ -20,6 +20,8 @@ add fertelizer (for plants to speed up process)
 
 increase dig and hunt rarity of getting found
 
+increase slots chance of winning
+
 fix embedding
 
 debug code
