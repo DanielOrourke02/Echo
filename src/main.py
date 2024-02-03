@@ -8,14 +8,14 @@ from utilities import *
 from eco_support import *
 
 
-from blackjack import blackjack_setup
-from crafting import crafting_setup
-from farming import farming_setup
-from economy import economy_setup
-from moderation import mod_setup
-from slots import slots_setup
-from help import help_setup
-from fun import fun_setup
+from blackjack import Blackjack
+from crafting import Crafting
+from farming import Farming
+from economy import Economy
+from moderation import Moderation
+from slots import Slots
+from help import Help
+from fun import Fun
 
 
 intents = discord.Intents.all()
@@ -34,14 +34,18 @@ async def on_ready():
     guilds(bot) # call guilds function, this will output what guilds the bot is in (if enabled in config)
 
 
-# Add cogs
-crafting_setup(bot)
-economy_setup(bot)
-fun_setup(bot)
-farming_setup(bot)
-help_setup(bot)
-mod_setup(bot)
-blackjack_setup(bot)
-slots_setup(bot)
+async def setup_bot():
+    # Add cogs with await
+    await bot.add_cog(Crafting(bot))
+    await bot.add_cog(Economy(bot))
+    await bot.add_cog(Fun(bot))
+    await bot.add_cog(Farming(bot))
+    await bot.add_cog(Help(bot))
+    await bot.add_cog(Moderation(bot))
+    await bot.add_cog(Blackjack(bot))
+    await bot.add_cog(Slots(bot))
+
+# Call the setup_bot function in an asynchronous context
+asyncio.run(setup_bot())
 
 bot.run(token)
