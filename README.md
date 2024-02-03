@@ -14,8 +14,6 @@ A cool bot with lots and lots of commands and many different features. Scroll do
 
 ### todo
 
-save planted crops to a json file
-
 make code much neater and remove all DRY (dont repeat yourself)
 
 fix embedding
@@ -27,6 +25,10 @@ make code more flexible and robust
 add unmute command
 
 update list of commands on this page
+
+fix daily command (not working)
+
+fix errors when planting (it still works just outputs some gibberish error)
 
 # Installation
 
