@@ -44,6 +44,7 @@ class Help(commands.Cog):
             "kick <@user> <reason>": "Kick a user from the server.",
             "ban <@user> <reason>": "Ban a user from the server.",
             "mute <@user> <reason>": "Mute a user in the server.",
+            "unmute <@user> <reason": "Unmute a user in the server.",
             "clear <amount>": "Clear a specified number of messages in a text channel.",
             "lockchannel": "Lock a channel for a specified duration.",
             "unlockchannel": "Unlock a channel.",
