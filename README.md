@@ -30,7 +30,9 @@ update list of commands on this page
 
 # Installation
 
-1. `git clone https://github.com/DanielJones02/Echo` or download the latest release
+(first have python installled from the python website or micrisoft store)
+
+1. `git clone https://github.com/DanielJones02/Echo` or `OR download the latest release`
 
 2. `cd Echo`
 
@@ -40,7 +42,7 @@ update list of commands on this page
 
  - Add your user id for admin commands
 
- - add your bot invite link (scroll down for all the permissions needed
+ - add your bot invite link (scroll down for all the permissions needed)
 
 4. for windows simply run `win-run.bat` and for linux do the following `chmod +x linux-run.sh` then `./linux-run.sh` (untested I tink those commands work). All requirements will be installed (you can disable this by setting skip-installation to true)
 
