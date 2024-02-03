@@ -22,13 +22,11 @@ increase dig and hunt rarity of getting found
 
 increase slots chance of winning
 
+make slots win rate lower (Currently its profit in the long run)
+
 fix embedding
 
 debug code
-
-make code more flexible and robust
-
-add unmute command
 
 update list of commands on this page
 
