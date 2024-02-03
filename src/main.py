@@ -1,12 +1,10 @@
 
 
 from installation import SETUP_INSTALL
-SETUP_INSTALL() # installs packages. this is enabled by default. after running this for the first time, you can set 'skip_installation' to 'true'
-
+SETUP_INSTALL() # INSTALLS REQUIREMENTS
 
 from utilities import *
 from eco_support import *
-
 
 from blackjack import Blackjack
 from crafting import Crafting
@@ -24,28 +22,33 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=config.get('prefix'), intents=intents, help_command=None)
 
 
+async def setup_bot():
+    # Add cogs without await
+    bot.add_cog(Crafting(bot))
+    bot.add_cog(Economy(bot))
+    bot.add_cog(Fun(bot))
+    bot.add_cog(Farming(bot))
+    bot.add_cog(Help(bot))
+    bot.add_cog(Moderation(bot))
+    bot.add_cog(Blackjack(bot))
+    bot.add_cog(Slots(bot))
+
+
 @bot.event
 async def on_ready():
     await lock_function(bot, save_locked_channels, unlock_channel_after_delay)
 
-    print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}") # Show login message 
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help")) # set presence to 'Listening to .help'
+    print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}")  # Show login message
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help"))  # set presence to 'Listening to .help'
 
-    guilds(bot) # call guilds function, this will output what guilds the bot is in (if enabled in config)
+    guilds(bot)  # call guilds function, this will output what guilds the bot is in (if enabled in config)
 
 
-async def setup_bot():
-    # Add cogs with await
-    await bot.add_cog(Crafting(bot))
-    await bot.add_cog(Economy(bot))
-    await bot.add_cog(Fun(bot))
-    await bot.add_cog(Farming(bot))
-    await bot.add_cog(Help(bot))
-    await bot.add_cog(Moderation(bot))
-    await bot.add_cog(Blackjack(bot))
-    await bot.add_cog(Slots(bot))
+# Use an asynchronous function to run the setup and the bot
+async def run_bot():
+    await setup_bot() # load cogs
+    await bot.start(token)
 
-# Call the setup_bot function in an asynchronous context
-asyncio.run(setup_bot())
 
-bot.run(token)
+# Run the bot using the asynchronous function
+asyncio.run(run_bot())
