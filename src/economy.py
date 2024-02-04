@@ -18,7 +18,7 @@ class Economy(commands.Cog):
             item_counts = Counter(inventory)
 
             # Create an embed to display the inventory
-            embed = discord.Embed(title=f"{ctx.author.name}'s Inventory", color=embed_error)
+            embed = discord.Embed(title=f"{ctx.author.display_name}'s Inventory", color=embed_error)
             
             # Add fields for each unique item and its count
             for item, count in item_counts.items():
@@ -64,14 +64,6 @@ class Economy(commands.Cog):
     @commands.check(is_admin) # Only one user can do this (put the id in config.json)
     async def remove_item(self, ctx, user: commands.MemberConverter, item: str):
         remove_item_from_inventory(user.id, item)
-        embed = discord.Embed(
-            title="Coins Given!",
-            description=f"Admin {ctx.author.display_name} has removed {item} from {user.display_name} inventory!.",
-            color=discord.Color.green()
-        )
-
-        # Send the embed
-        await ctx.send(embed=embed)
 
     
     # Error handling for the give command
@@ -81,7 +73,7 @@ class Economy(commands.Cog):
             # Create an embed for the error message with red color
             embed = discord.Embed(
                 title="Permission Denied",
-                description="You don't have permission to use this command.",
+                description=f"{ctx.author.mention}, You don't have permission to use this command.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -93,7 +85,7 @@ class Economy(commands.Cog):
         if amount is None or amount <= 0:
             embed = discord.Embed(
                 title="Invalid Amount",
-                description=f"Please specify an amount to pay. Usage: `{prefix}pay <@user> <amount>`",
+                description=f"{ctx.author.mention}, Please specify an amount to pay. Usage: `{prefix}pay <@user> <amount>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -102,7 +94,7 @@ class Economy(commands.Cog):
         if user is None:
             embed = discord.Embed(
                 title="Not a user",
-                description=f"Please specify a user. Usage: `{prefix}pay <@user> <amount>`",
+                description=f"{ctx.author.mention}, Please specify a user. Usage: `{prefix}pay <@user> <amount>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -114,7 +106,7 @@ class Economy(commands.Cog):
         if payer_id == user_id: # check if they tried to pay themself
             embed = discord.Embed(
                 title="Payment Error",
-                description="You can't pay yourself.",
+                description=f"{ctx.author.mention}, You can't pay yourself.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -123,7 +115,7 @@ class Economy(commands.Cog):
         if amount > get_user_balance(payer_id): # if they dont have enough money
             embed = discord.Embed(
                 title="Insufficient Balance",
-                description="You don't have enough coins to make that payment.",
+                description=f"{ctx.author.mention}, You don't have enough coins to make that payment.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -135,7 +127,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Payment Successful",
-            description=f"You successfully paid {user.mention} {amount} coins!",
+            description=f"{ctx.author.mention}, You successfully paid {user.display_name} {amount} coins!",
             color=discord.Color.green()
         )
         await ctx.send(embed=embed)
@@ -147,7 +139,7 @@ class Economy(commands.Cog):
         if item_name not in shop_items: # check if the item is in the shop
             embed = discord.Embed(
                 title="Item Not Found",
-                description="Item not found in the shop.",
+                description=f"{ctx.author.mention}, Item not found in the shop.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -155,7 +147,7 @@ class Economy(commands.Cog):
         elif item_name is None:
             embed = discord.Embed(
                 title="Incorrect buy usage",
-                description=f"Please specify an item name. Usage: `{prefix}buy <item_name>`",
+                description=f"{ctx.author.mention}, Please specify an item name. Usage: `{prefix}buy <item_name>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -171,7 +163,7 @@ class Economy(commands.Cog):
         if user_balance < item_cost: # if they dont have enough output an error message
             embed = discord.Embed(
                 title="Insufficient Coins (poor)",
-                description="You do not have enough coins to buy this item.",
+                description=f"{ctx.author.mention}, You do not have enough coins to buy this item.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -189,7 +181,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Purchase Successful",
-            description=f"You have successfully bought {shop_items[item_name]['name']} for {item_cost} coins.",
+            description=f"{ctx.author.mention}, You have successfully bought {shop_items[item_name]['name']} for {item_cost} coins.",
             color=discord.Color.green()
         )
         await ctx.send(embed=embed)
@@ -204,7 +196,7 @@ class Economy(commands.Cog):
         if 'shovel' not in user_inventory:
             embed = discord.Embed(
                 title="Unable to Dig",
-                description=f"You need a shovel to dig! Acquire a shovel and try again.",
+                description=f"{ctx.author.mention}, You need a shovel to dig! Acquire a shovel and try again. Find one using `{prefix}scrap`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -214,7 +206,7 @@ class Economy(commands.Cog):
         if not can_dig(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
-                description="You've already gone digging in the past 15 minutes. Please wait for the cooldown.",
+                description=f"{ctx.author.mention}, You've already gone digging in the past 15 minutes. Please wait for the cooldown.",
                 color=discord.Color.orange()
             )
             await ctx.send(embed=embed)
@@ -234,7 +226,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Item Found",
-            description=f"You found: {won_item['name']}! Check your inventory with `{prefix}inventory`.",
+            description=f"{ctx.author.mention}, You found: {won_item['name']}! Check your inventory with `{prefix}inventory`.",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -246,7 +238,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Coins Found",
-            description=f"You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
+            description=f"{ctx.author.mention}, You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -262,7 +254,7 @@ class Economy(commands.Cog):
         if 'bow' not in user_inventory:
             embed = discord.Embed(
                 title="Unable to Hunt",
-                description=f"You need a bow to hunt! Find one using `{prefix}scrap`!",
+                description=f"{ctx.author.mention}, You need a bow to hunt! Find one using `{prefix}scrap`!",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -272,8 +264,8 @@ class Economy(commands.Cog):
         if not can_hunt(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
-                description="You've already hunted in the past 10 minutes. Please wait for the cooldown.",
-                color=discord.Color.orange()
+                description=f"{ctx.author.mention}, You've already hunted in the past 10 minutes. Please wait for the cooldown.",
+                color=embed_error
             )
             await ctx.send(embed=embed)
             return
@@ -292,7 +284,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Item Found",
-            description=f"You found: {won_item['name']}! Check your inventory with `{prefix}inventory`",
+            description=f"{ctx.author.mention}, You found: {won_item['name']}! Check your inventory with `{prefix}inventory`",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -304,7 +296,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Coins Found",
-            description=f"You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
+            description=f"{ctx.author.mention}, You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -317,7 +309,7 @@ class Economy(commands.Cog):
         if not can_scavenge(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
-                description="You've already scavenged in the past 5 minutes. Please wait for the cooldown.",
+                description=f"{ctx.author.mention}, You've already scavenged in the past 5 minutes. Please wait for the cooldown.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -337,7 +329,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Item Found",
-            description=f"You found: {won_item['name']}! Check your inventory with `{prefix}inventory`",
+            description=f"{ctx.author.mention}, You found: {won_item['name']}! Check your inventory with `{prefix}inventory`",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -349,7 +341,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Coins Found",
-            description=f"You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
+            description=f"{ctx.author.mention}, You found: {amount} coins! Your new balance is: {get_user_balance(ctx.author.id)}.",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -362,7 +354,7 @@ class Economy(commands.Cog):
         if not can_beg(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
-                description="You begged in the past 30s. Wait the cooldown.",
+                description=f"{ctx.author.mention}, You begged in the past 30s. Wait the cooldown.",
                 color=discord.Color.orange()
             )
             await ctx.send(embed=embed)
@@ -374,7 +366,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Successful Begging",
-            description=f'You begged and some idiot gave you {amount}.',
+            description=f'{ctx.author.mention}, You begged and someone gave you {amount}.',
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -390,7 +382,7 @@ class Economy(commands.Cog):
         if not can_claim_daily(user_id):
             embed = discord.Embed(
                 title="Daily Reward Already Claimed",
-                description="You've already claimed your daily reward. Please wait for the cooldown.",
+                description=f"{ctx.author.mention}, You've already claimed your daily reward. Please wait for the cooldown.",
                 color=discord.Color.orange()
             )
             await ctx.send(embed=embed)
@@ -401,7 +393,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Daily Reward Claimed",
-            description=f'You have claimed your daily reward of {daily_reward} coins!',
+            description=f'{ctx.author.mention}, You have claimed your daily reward of {daily_reward} coins!',
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -417,7 +409,7 @@ class Economy(commands.Cog):
         if item_id is None:
             embed = discord.Embed(
                 title="Incorrect Usage",
-                description=f"Incorrect usage. Please use: `{prefix}sell <item>`",
+                description=f"{ctx.author.mention}, Incorrect usage. Please use: `{prefix}sell <item>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -428,7 +420,7 @@ class Economy(commands.Cog):
         if item_id not in combined_items: # check if the item is in the sell list
             embed = discord.Embed(
                 title="Invalid Item ID",
-                description="Invalid item ID.",
+                description=f"{ctx.author.mention}, Thats an invalid item ID.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -440,7 +432,7 @@ class Economy(commands.Cog):
         if item_id not in user_inventory: # check if they own the item
             embed = discord.Embed(
                 title="Item Not Found",
-                description="You don't have this item in your inventory.",
+                description=f"{ctx.author.mention}, You don't have this item in your inventory.",
                 color=discord.Color.orange()
             )
             await ctx.send(embed=embed)
@@ -458,7 +450,7 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Item Sold",
-            description=f"You sold {item_name} for {item_sell_price} coins. Your new balance is: {get_user_balance(user_id)}!",
+            description=f"{ctx.author.mention}, You sold {item_name} for {item_sell_price} coins. Your new balance is: {get_user_balance(user_id)}!",
             color=discord.Color.orange()
         )
         await ctx.send(embed=embed)
@@ -537,14 +529,14 @@ class Economy(commands.Cog):
 
     @commands.command()
     async def deposit(self, ctx, amount=None):
-        if amount == 'all': # deposit as much as possible
+        if amount == 'all' or amount == 'max':  # deposit as much as possible
             amount = get_user_balance(ctx.author.id)
-        elif amount == None:
+        elif amount is None:
             embed = discord.Embed(
                 title="Incorrect deposit usage!",
-                description=f"Incorrect deposit usage, please use: `{prefix}deposit <amount>`",
+                description=f"{ctx.author.mention}, Incorrect deposit usage, please use: `{prefix}deposit <amount>`",
                 color=embed_error
-            )   
+            )
             await ctx.send(embed=embed)
             return
         else:
@@ -553,7 +545,7 @@ class Economy(commands.Cog):
             except ValueError:
                 embed = discord.Embed(
                     title="Invalid deposit amount",
-                    description=f"Please enter a valid amount.",
+                    description=f"{ctx.author.mention}, Please enter a valid amount.",
                     color=embed_error
                 )
                 await ctx.send(embed=embed)
@@ -562,28 +554,22 @@ class Economy(commands.Cog):
         if amount <= 0 or amount > get_user_balance(ctx.author.id):
             embed = discord.Embed(
                 title="Invalid deposit amount",
-                description=f"Please enter a valid amount.",
+                description=f"{ctx.author.mention}, Please enter a valid amount.",
                 color=embed_error
             )
             await ctx.send(embed=embed)
             return
 
-        if get_bank_balance(ctx.author.id) + amount > max_bank_size:  # Max bank limit
-            embed = discord.Embed(
-                title="Bank limit Reached",
-                description=f"Bank limit exceeded. Max storage is {max_bank_size} coins.",
-                color=embed_error
-            )
-            await ctx.send(embed=embed)
-            return
+        remaining_space = max_bank_size - get_bank_balance(ctx.author.id)
+        amount_to_deposit = min(amount, remaining_space)
 
-        update_user_balance(ctx.author.id, -amount)
-        update_bank_balance(ctx.author.id, amount)
+        update_user_balance(ctx.author.id, -amount_to_deposit)
+        update_bank_balance(ctx.author.id, amount_to_deposit)
 
         # Embed the message
         embed = discord.Embed(
             title="Deposit Successful",
-            description=f'{amount} coins deposited to your bank account.',
+            description=f'{ctx.author.mention}, {amount_to_deposit} coins has been deposited to your bank account.',
             color=embed_colour
         )
         await ctx.send(embed=embed)
@@ -594,7 +580,7 @@ class Economy(commands.Cog):
         if amount is None: # if they didnt enter an amount
             embed = discord.Embed(
                 title="Incorrect withdraw usage!",
-                description=f'Incorrect withdraw usage. Please use: `{prefix}withdraw <amount>`',
+                description=f'{ctx.author.mention}, Incorrect withdraw usage. Please use: `{prefix}withdraw <amount>`',
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -603,7 +589,7 @@ class Economy(commands.Cog):
         elif amount <= 0 or amount > get_bank_balance(ctx.author.id): # check if they have that amount to withdraw
             embed = discord.Embed(
                 title="Invalid withdraw amount",
-                description=f'Invalid withdraw amount. Please try again.',
+                description=f'{ctx.author.mention}, Invalid withdraw amount. Please try again.',
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -615,7 +601,7 @@ class Economy(commands.Cog):
         # Embed the message
         embed = discord.Embed(
             title="Withdraw Successful",
-            description=f'{amount} coins withdrawn from your bank account.',
+            description=f'{ctx.author.mention}, {amount} coins have been withdrawn from your bank account.',
             color=discord.Color.green()
         )
         await ctx.send(embed=embed)
@@ -653,7 +639,6 @@ class Economy(commands.Cog):
         await ctx.send(embed=embed)
 
 
-
     @commands.command(aliases=['bal'])
     async def balance(self, ctx):
         user_id = ctx.author.id
@@ -661,7 +646,7 @@ class Economy(commands.Cog):
         bank_balance = get_user_bank_balance(user_id)
 
         embed = discord.Embed(
-            title="Balance",
+            title=f"**{ctx.author.display_name}'s** Balance",
             description=f'Money On hand: {pocket_money} coins\nBank Balance: {bank_balance}/{max_bank_size} coins',
             color=discord.Color.green()
         )
@@ -669,7 +654,17 @@ class Economy(commands.Cog):
 
 
     @commands.command(aliases=['steal'])
-    async def rob(self, ctx, victim: commands.MemberConverter):
+    async def rob(self, ctx, victim: commands.MemberConverter=None):
+        if victim is None:
+            embed = discord.Embed(
+                title="Incorrect Usage",
+                description=f'{ctx.author.mention}, Incorrect rob usage. Usage: `{prefix}rob <@user>`',
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+
         robber_id = str(ctx.author.id)
         victim_id = str(victim.id)
 
@@ -677,7 +672,7 @@ class Economy(commands.Cog):
         if robber_id in robbery_cooldown and time.time() - robbery_cooldown[robber_id] < 3600:
             embed = discord.Embed(
                 title="Cooldown",
-                description=f'Wait the cooldown. You cant rob everyone buddy.',
+                description=f'{ctx.author.mention}, Wait the cooldown. You cant rob everyone buddy.',
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -690,7 +685,7 @@ class Economy(commands.Cog):
         if get_user_balance(robber_id) < 100 or get_user_balance(victim_id) < 600:
             embed = discord.Embed(
                 title="Rob fail lmao",
-                description=f'Either you or the victim does not have enough coins. LOL',
+                description=f'{ctx.author.mention}, Either you or the victim does not have enough coins. LOL',
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -704,10 +699,9 @@ class Economy(commands.Cog):
             # Embed for success
             embed = discord.Embed(
                 title="Robbery Success",
-                description=f"You successfully robbed {robbed_amount} coins from {victim.mention}!",
+                description=f"{ctx.author.mention}, You successfully robbed {robbed_amount} coins from {victim.mention}!",
                 color=discord.Color.green()
             )
-            await ctx.send(embed=embed)
         else:
             penalty_amount = int(get_user_balance(robber_id) * 0.20)  # 20% of robber's balance
             update_user_balance(robber_id, -penalty_amount)
@@ -715,7 +709,7 @@ class Economy(commands.Cog):
             # Embed for failure
             embed = discord.Embed(
                 title="Robbery Failed",
-                description=f"The robbery failed! You've lost {penalty_amount} coins.",
+                description=f"{ctx.author.mention}, The robbery failed! You got caught and lost {penalty_amount} coins.",
                 color=embed_error()
             )
 
@@ -728,7 +722,7 @@ class Economy(commands.Cog):
         if amount is None: # if they didnt enter an amount to gamble
             embed = discord.Embed(
                 title="Gamble Command",
-                description=f"Please specify an amount to gamble. Usage: `{prefix}gamble <amount>`",
+                description=f"{ctx.author.mention}, Please specify an amount to gamble. Usage: `{prefix}gamble <amount>`",
                 color=discord.Color.orange()
             )
             await ctx.send(embed=embed)
@@ -743,7 +737,7 @@ class Economy(commands.Cog):
             except ValueError:
                 embed = discord.Embed(
                     title="Invalid Input",
-                    description="Please enter a valid amount or 'max'.",
+                    description=f"{ctx.author.mention}, Please enter a valid amount or 'max'.",
                     color=discord.Color.orange()
                 )
                 await ctx.send(embed=embed)
@@ -752,7 +746,7 @@ class Economy(commands.Cog):
         if amount <= 0 or amount > get_user_balance(ctx.author.id) or amount > max_bet:
             embed = discord.Embed(
                 title="Invalid Bet Amount",
-                description=f"Invalid bet amount. You can bet up to {max_bet} coins.",
+                description=f"{ctx.author.mention}, Invalid bet amount. You can bet up to {max_bet} coins.",
                 color=discord.Color.orange()
             )
             await ctx.send(embed=embed)
@@ -762,11 +756,11 @@ class Economy(commands.Cog):
         if random.choice([True, False, False]):  # 1/3 chance
             # User wins
             update_user_balance(ctx.author.id, amount)
-            result_description = f"You won {amount} coins!"
+            result_description = f"{ctx.author.mention}, You won {amount} coins!"
             result_color = discord.Color.green()
         else:
             update_user_balance(ctx.author.id, -amount)
-            result_description = f"You lost {amount} coins!"
+            result_description = f"{ctx.author.mention}, You lost {amount} coins!"
             result_color = embed_error
 
         # Send result embed
