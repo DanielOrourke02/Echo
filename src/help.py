@@ -49,7 +49,6 @@ economy_command_descriptions = {
     "balance": "Check your current bank and pocket balance.",
     "baltop": "Leaderboard of the richest people",
     "daily": "Claim your daily reward.",
-    "gamble <amount>": "Gamble your money with 1/3 chance of winning (max 15k)",
     "shop": "View the available items in the shop.",
     "cosmetics": "Lists all findable items and their sell prices.",
     "buy <item_id>": "Buy an item from the shop.",
@@ -59,17 +58,21 @@ economy_command_descriptions = {
     "dig": "Dig for cosmetics and money (shovel needed)",
     "hunt": "Hunt for cosmetics and money (bow needed)",
     "inventory": "Lists items inside your inventory.",
-    "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
     "pay <amount>": "Pay someone money",
-    "deposit": "Deposit money into your bank (GAINS 10% every 24h)",
-    "withdraw": "Withdraw money from your bank",
+    "deposit <amount/max>": "Deposit money into your bank (GAINS 10% every 24h)",
+    "withdraw <amount>": "Withdraw money from your bank",
     "rob <@example>": "Rob a user and potentially steal 20% of their On Hand Money. But if you fail you lose 20% of your money",
-    "plant <amount/max>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
+    "plant <amount>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
     "harvest": "Harvest your planted crops.",
+    "fish": "Go fishing and sell fish for money.",
+    "fishc": "Show how many fishes you have caught and flex on other users.",
+    "leaderboard": "Top 10 fishes who have caught the most fish.",
     "craft <recipe_name>": "Craft items.",
     "recipes": "Shows craftable items and what you need for it.",
     "blackjacks <amount>": "Play a cool interactive blackjacks game.",
-    "slots <amount>": "Gamble away your money without a chance of winning."
+    "slots <amount>": "Gamble away your money without a chance of winning.",
+    "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
+    "gamble <amount>": f"Gamble your money with 1/3 chance of winning (max {max_bet})",
 }
 
 
@@ -114,21 +117,23 @@ class Help(commands.Cog):
     @commands.command(aliases=['helpme'])
     async def help(self, ctx):
         command_descriptions = {
+            "help": "Shows this message",
             "moderation": "List moderator commands.",
             "economy": "List economy commands.",
             "invite": "Invite the bot to your server.",
             "ping": "Get the bot's current latency.",
             "say": "Repeat a message.",
-            "coinflip": "Flip a coin.",
+            "coinflip <heads/tails>": "Flip a coin.",
             "dice": "Roll a six-sided die.",
-            "dailyquote": "Get a daily quote from an API.",
+            "8ball <question>": "Virtual Eight ball.",
             "qr": "Generate a QR code from a link.",
+            "quote": "Generate a random quote.",
             "membercount": "Get the member count of the server.",
-            "calculator": "Perform basic calculations.",
+            "calculator <+-*/>": "Perform basic calculations.",
             "joke": "Get a random joke.",
             "user_info": "Get user on a user.",
             "server_info": "Get the server info.",
-            "avatar": "Get someones avatar"
+            "avatar": "Get someones avatar or your own"
         }
 
         embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=discord.Color.green())
