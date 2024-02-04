@@ -27,7 +27,7 @@ import os
 button_storage = {} 
 
 # embed colour (change it to discord.Color.{whatyouwant} or hex values)
-embed_colour = discord.Color.blue()
+embed_colour = discord.Color.from_rgb(0, 255, 255)  # RGB values for cyan
 
 embed_error = discord.Color.red()
 
@@ -130,8 +130,6 @@ def guilds(bot):
 
         except Exception as e:
             print(e)
-    else:
-        pass
 
 # --------------------------------------------------------------------------------------------------------------------------
 
