@@ -21,12 +21,12 @@ class Slots(commands.Cog):
             return False
 
 
-    @commands.command(brief='Slot machine\nbet must be 1-3', usage='slots *[bet]')
+    @commands.command(brief='Slot machine\nbet must be 1-3', usage='slots *[bet]', aliases=['slot'])
     async def slots(self, ctx: commands.Context, bet: int=None):
         if self.check_bet(ctx, bet=bet) is False:
             embed = discord.Embed(
                 title="BROKE ASF",
-                description=f"You do not have enough money to gamble that amount",
+                description=f"{ctx.author.mention}, You do not have enough money to gamble that amount",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -34,10 +34,11 @@ class Slots(commands.Cog):
         elif self.check_bet(ctx, bet=bet) is True:
             embed = discord.Embed(
                 title="Enter a bet",
-                description=f"Please enter a bet amount. Usage: `{prefix}slots <bet>`",
+                description=f"{ctx.author.mention}, Please enter a bet amount. Usage: `{prefix}slots <bet>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
+            return
             
 
         path = os.path.join('src/pictures/')
@@ -76,39 +77,36 @@ class Slots(commands.Cog):
             bg.alpha_composite(facade)
             images.append(bg)
 
-        fp = str(id(ctx.author.id))+'.gif'
+        # Generate a unique filename using uuid
+        unique_filename = str(uuid.uuid4()) + '.gif'
+        fp = os.path.join('src/pictures/', unique_filename)
+
         images[0].save(
             fp,
             save_all=True,
-            append_images=images[1:], # append all images after first to first
-            duration=50  # duration of each slide (ms)
+            append_images=images[1:],
+            duration=50
         )
 
-        # Send the GIF first
-        file = discord.File(fp, filename=fp)
+        file = discord.File(fp, filename=unique_filename)
         message = await ctx.send(file=file)
 
-        # Introduce a delay (adjust the duration as needed)
-        await asyncio.sleep(len(images) * 0.05)
-
-        # win logic
         result = ('lost', bet)
-        update_user_balance(ctx.author.id, bet*-1)     
-        # (1+s1)%6 gets the symbol 0-5 inclusive
+        update_user_balance(ctx.author.id, bet*-1)
+
         if (1+s1)%6 == (1+s2)%6 == (1+s3)%6:
             symbol = (1+s1)%6
             reward = [4, 80, 40, 25, 10, 5][symbol] * bet
             result = ('won', reward)
             update_user_balance(ctx.author.id, reward)
 
-        # Send the embed
         embed = make_embed(
             title=(
-                f'You {result[0]} {result[1]} credits' +
+                f'{ctx.author.display_name}, You {result[0]} {result[1]} credits' +
                 ('.' if result[0] == 'lost' else '!')
             ),
             description=(
-                'You now have ' +
+                f'{ctx.author.display_name}, You now have ' +
                 f'**£{get_user_balance(ctx.author.id)}**'
             ),
             color=(
@@ -117,9 +115,9 @@ class Slots(commands.Cog):
             )
         )
 
-        embed.set_image(url=f"attachment://{fp}")
+        embed.set_image(url=f"attachment://{unique_filename}")
         await message.edit(content=None, embed=embed)
-        
+
         os.remove(fp)
 
 
