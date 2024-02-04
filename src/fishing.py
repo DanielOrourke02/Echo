@@ -75,6 +75,26 @@ class Fishing(commands.Cog):
 
 
     @commands.command()
+    async def fishc(self, ctx):
+        user_id = str(ctx.author.id)
+
+        # Ensure the user is in the fish_caught dictionary
+        if user_id not in self.fish_caught:
+            self.fish_caught[user_id] = {'fish_count': 0}
+
+        fish_count = self.fish_caught[user_id]['fish_count']
+
+        # Send an embed indicating the user's fish count
+        embed = discord.Embed(
+            title="Your Fish Count",
+            description=f"{ctx.author.mention}, you have caught {fish_count} fishes!",
+            color=embed_colour
+        )
+
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
     async def leaderboard(self, ctx):
         # Get the top fishers
         top_users = Counter(self.fish_caught).most_common(10)
