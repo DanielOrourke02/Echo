@@ -37,16 +37,14 @@ daily_reward = config.get('daily_reward')
 # List of all cosmetics
 cosmetics_items = {
     # Swords
-    "c.sword": {"name": "Common Sword", "sell": 1000, "chance": 50},
-    "un.sword": {"name": "Uncommon Sword", "sell": 1500, "chance": 30},
     "r.sword": {"name": "Rare Sword", "sell": 2500, "chance": 25},
     "leg.sword": {"name": "Legendary Sword", "sell": 5000, "chance": 15},
     "mythical_sword": {"name": "Mythical sword", "sell": 12500, "chance": 5},
 
     # Tools
-    "shovel": {"name": "Shovel used for digging", "sell": 1000, "chance": 30},
-    "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 35},
-    
+    "shovel": {"name": "Shovel used for digging", "sell": 1000, "chance": 50},
+    "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 45},
+
     # Other items (High to low chance)
     "infinity": {"name": "Infinity Gauntlet", "sell": 25000, "chance": 1},
     "david4": {"name": "David's 4th ball", "sell": 15000, "chance": 2},
@@ -81,10 +79,18 @@ shop_items = {
     "working": {"name": "Working class (role)", "cost": 25000},
     "middle": {"name": "Middle class (role)", "cost": 50000},
     "upper": {"name": "Upper class elite (role)", "cost": 100000},
-    "protagonist": {"name": "THE PROTAGONIST (role)", "cost": 500000}
+    "protagonist": {"name": "THE PROTAGONIST (role)", "cost": 500000},
+    "bait": {"name": "Bait for fishing", "cost": 250}
 }
 
+fish_data = {
+    "trash": {"name": "Plastic Trash", "sell": 10, "chance": 75},
+    "cod": {"name": "A cod, nothing special", "sell": 300, "chance": 25},
+    "lemo": {"name": "Lemo, rare fish", "sell": 350, "chance": 20},
+    "monkey": {"name": "Monkey fish Legenday", "sell": 700, "chance": 10},
+}
 
+# role colours
 role_colors = {
     "slave": discord.Color.light_grey(),                # grey
     "poor": discord.Color.dark_blue(),                  # Dark Blue
@@ -95,7 +101,7 @@ role_colors = {
 }
 
 
-combined_items = {**cosmetics_items, **craftables}
+combined_items = {**cosmetics_items, **craftables, **fish_data}
 
 ABS_PATH = os.path.abspath(os.path.dirname(__file__))
 
