@@ -19,6 +19,7 @@ import random
 import bisect
 import qrcode
 import json
+import uuid
 import time
 import os
 
@@ -163,9 +164,3 @@ async def lock_function(bot, save_locked_channels, unlock_channel_after_delay):
         del locked_channels[channel_id]
 
     save_locked_channels()  # Save the updated state
-
-
-# --------------------------------------------------------------------------------------------------------------------------
-
-
-# --------------------------------------------------------------------------------------------------------------------------
