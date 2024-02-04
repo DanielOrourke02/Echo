@@ -84,7 +84,8 @@ add more gambling games
 | `dig`                    | Dig for cosmetics and money. (with a shovel)          |
 | `scrap`                  | Find cosmetics and money.                             |
 | `fish`                   | Go fishing and sell fish for money.                   |
-| `fishc`                  | Get the top 10 users with the most caught fish        |
+| `fishc`                  | Get the amount of fish you have caught.               |
+| `leaderboard`            | Get the top 10 users with the most caught fish        |
 | `inventory`              | Lists items in your inventory.                        |
 | `pay <amount>`           | Pay someone money.                                    |
 | `deposit <amount/max`    | Deposit money into your bank (earns interest).        |
