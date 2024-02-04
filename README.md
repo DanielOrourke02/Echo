@@ -20,21 +20,7 @@ add fertelizer (for plants to speed up process)
 
 trading (items)
 
-increase dig and hunt rarity of getting found
-
-increase slots chance of winning
-
 add more gambling games
-
-add a command cooldown for slots and fix same output error when spamming the command
-
-update list of commands on this page
-
-fix daily command (not working)
-
-fix errors when planting (it still works just outputs some gibberish error)
-
-fix rob command
 
 # Installation
 
@@ -70,13 +56,14 @@ fix rob command
 | `moderation`              | Get help for moderation commands (Admin only).   |
 | `ping`                    | Get the bot's current latency.                   |
 | `say <message>`           | Repeat a message.                                |
-| `coinflip`                | Flip a coin.                                     |
+| `coinflip <heads/tails`   | Flip a coin.                                     |
 | `avatar`                  | Output a users avatar                            |
 | `dice`                    | Roll a six-sided die.                            |
+| `8ball <question>`        | Ask an 8ball a question.                         |
 | `dailyquote`              | Get a daily quote from an API.                   |
 | `qr <text/link>`          | Generate a QR code from a link.                  |
 | `membercount`             | Get the member count of the server.              |
-| `calculator`              | Perform basic calculations.                      |
+| `calculator <+-*/>`       | Perform basic calculations.                      |
 | `joke`                    | Get a random joke.                               |
 | `user_info`               | Get info on a user                               |
 | `server_info`             | Get the servers info                             |
@@ -88,36 +75,41 @@ fix rob command
 | `balance`                | Checks your current bank and pocket balance.          |
 | `baltop`                 | Displays the richest people leaderboard.              |
 | `daily`                  | Claims your daily reward.                             |
-| `gamble <amount>`        | Gambles your money with a 1/3 chance of winning.      |
 | `shop`                   | Views available items in the shop.                    |
 | `cosmetics`              | Lists available cosmetics and their prices.           |
 | `buy <item_id>`          | Buys an item from the shop.                           |
 | `sell <item_id>`         | Sells an item for its value.                          |
 | `beg`                    | Beg for money.                                        |
-| `hunt`                    | hunt for cosmetics and money. (with a bow)           |
+| `hunt`                   | hunt for cosmetics and money. (with a bow)            |
 | `dig`                    | Dig for cosmetics and money. (with a shovel)          |
 | `scrap`                  | Find cosmetics and money.                             |
+| `fish`                   | Go fishing and sell fish for money.                   |
+| `fishc`                  | Get the top 10 users with the most caught fish        |
 | `inventory`              | Lists items in your inventory.                        |
-| `lottery`                | Participate in a lottery for a chance to win money.   |
 | `pay <amount>`           | Pay someone money.                                    |
-| `deposit`                | Deposit money into your bank (earns interest).        |
-| `withdraw`               | Withdraw money from your bank.                        |
+| `deposit <amount/max`    | Deposit money into your bank (earns interest).        |
+| `withdraw <amount>`      | Withdraw money from your bank.                        |
 | `rob <@user>`            | Rob a user and potentially steal some of their money. |
 | `plant <amount/max>`     | Plant crops to sell later at a profit.                |
 | `harvest`                | Harvest your planted crops.                           |
 | `craft <recipe_name>`    | Craft items.                                          |
 | `recipes`                | Shows craftable items and required materials.         |
+| `lottery`                | Participate in a lottery for a chance to win money.   |
+| `gamble <amount>`        | Gamble your money with a 1/3 chance of winning.       |
+| `blackjacks <amount>`    | Play a cool interactive blackjacks game               |
+| `gamble <amount>`        | Gamble away your money without a chance of winning.   |
 
 ## Moderation Commands
 
 | Command             | Description                                      |
 |---------------------|--------------------------------------------------|
-| `kick`              | Kick a user from the server.                     |
-| `ban`               | Ban a user from the server.                      |
-| `mute`              | Mute a user in the server.                       |
-| `clear`             | Clear a specified number of messages in a channel. |
-| `ticketpanel`       | Create a ticket panel for support.              |
-| `setup-verify`      | Set up a verification panel.                     |
+| `kick <@user> <reason>` | Kick a user from the server.                 |
+| `ban <@user> <reason>`  | Ban a user from the server.                  |
+| `mute <@user> <reason>` | Mute a user in the server.                   |
+| `unmute <@user> <reason>` | Unmute a user in the server.               |
+| `clear <amount>`        | Clear a specified number of messages in a channel. |
+| `ticketpanel <message>` | Create a ticket panel for support.           |
+| `setup-verify <role_name> <message>` | Set up a verification panel.    |
 | `lockchannel`       | Lock a channel for a specified duration.         |
 | `unlockchannel`     | Unlock a channel.                                |
 | `lockserver`        | Lock the entire server for a specified duration. |
