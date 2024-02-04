@@ -17,7 +17,7 @@ class Farming(commands.Cog):
         if amount is None: # if they didnt enter an amount
             embed = discord.Embed(color=embed_error)
             embed.title = "Incorrect usage"
-            embed.description = f"Please enter the amount you want to plant. Usage: `{prefix}plant <amount>`"
+            embed.description = f"{ctx.author.mention}, Please enter the amount you want to plant. Usage: `{prefix}plant <amount>`"
             embed.color = embed_error
 
             await ctx.send(embed=embed)
@@ -32,21 +32,21 @@ class Farming(commands.Cog):
             time_since_last_plant = datetime.datetime.now() - last_planting_time[user_id]
             if time_since_last_plant < datetime.timedelta(hours=24):
                 embed.title = "Wait a Little Longer"
-                embed.description = "You can only plant carrots once every 24 hours. Please wait a bit longer before planting again."
+                embed.description = f"{ctx.author.mention}, You can only plant carrots once every 24 hours. Please wait a bit longer before planting again."
                 embed.color = embed_error
                 await ctx.send(embed=embed)
                 return
 
         if amount > max_carrot_planted: # max carrots that you can plant (you can change this in the config)
             embed.title = "Too Many Carrots"
-            embed.description = f"You cannot plant more than {max_carrot_planted} carrots."
+            embed.description = f"{ctx.author.mention}, You cannot plant more than {max_carrot_planted} carrots."
             embed.color = embed_error
             await ctx.send(embed=embed)
             return
 
         if user_balance < total_cost: # if they are too poor
             embed.title = "Not Enough Balance"
-            embed.description = f"You need ${total_cost} to plant {amount} carrots"
+            embed.description = f"{ctx.author.mention}, You need ${total_cost} to plant {amount} carrots"
             embed.color = embed_error
             await ctx.send(embed=embed)
             return
@@ -56,11 +56,11 @@ class Farming(commands.Cog):
             plant_carrots(user_id, amount)
             last_planting_time[user_id] = datetime.datetime.now()  # Update the last planting time
             embed.title = "Carrots Planted"
-            embed.description = f"You have planted {amount} carrots."
+            embed.description = f"{ctx.author.mention}, You have planted {amount} carrots."
             await ctx.send(embed=embed)
         else:
             embed.title = "Planting Error"
-            embed.description = "You already have plants planted. Harvest them before planting again."
+            embed.description = f"{ctx.author.mention}, You already have plants planted. Harvest them before planting again."
             embed.color = embed_error
             await ctx.send(embed=embed)
 
@@ -83,13 +83,13 @@ class Farming(commands.Cog):
                 update_user_balance(user_id, total_profit) # sell corps and add money 
                 del user_plantations[user_id]  # Removing the plantation record
 
-                embed = discord.Embed(title="Success", description=f"You have successfully harvested {harvested_amount} carrots and earned ${total_profit}.", color=discord.Colour.green())
+                embed = discord.Embed(title="Success", description=f"{ctx.author.mention}, You have successfully harvested {harvested_amount} carrots and earned ${total_profit}.", color=discord.Colour.green())
                 await ctx.send(embed=embed)
             else:
-                embed = discord.Embed(title="Info", description=f"Your carrots are not ready yet. They are {int(growth_percentage)}% grown.", color=embed_error)
+                embed = discord.Embed(title="Info", description=f"{ctx.author.mention}, Your carrots are not ready yet. They are {int(growth_percentage)}% grown.", color=embed_error)
                 await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title="Error", description="You don't have any crops planted.", color=embed_error)
+            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You don't have any crops planted.", color=embed_error)
             await ctx.send(embed=embed)
 
         save_user_plants(user_plantations) # save data
