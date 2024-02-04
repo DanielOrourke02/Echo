@@ -18,6 +18,8 @@ make code much neater and remove all DRY (dont repeat yourself)
 
 add fertelizer (for plants to speed up process)
 
+trading (items)
+
 increase dig and hunt rarity of getting found
 
 increase slots chance of winning
