@@ -93,7 +93,7 @@ class Fun(commands.Cog):
         
         responses = ["It is certain.", "Without a doubt.", "Yes, definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."]
         answer = random.choice(responses)
-        embed = discord.Embed(title=f"{ctx.author.mention}, 🎱 Magic 8-Ball", description=f"Question: {question}\nAnswer: {answer}", color=embed_error)
+        embed = discord.Embed(title=f"{ctx.author.display_name}'s, 🎱 Magic 8-Ball", description=f"Question: {question}\nAnswer: {answer}", color=embed_error)
         await ctx.send(embed=embed)
     
 
@@ -186,7 +186,7 @@ class Fun(commands.Cog):
             result = eval(expression) # calculation
 
             # Create a success embed
-            embed = discord.Embed(title=f"{ctx.author.mention}, Calculation Result", color=embed_colour)
+            embed = discord.Embed(title=f"{ctx.author.display_name}'s, Calculation Result", color=embed_colour)
             embed.add_field(name="Expression", value=expression, inline=False)
             embed.add_field(name="Result", value=result, inline=False)
 
