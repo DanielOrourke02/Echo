@@ -2,211 +2,254 @@
 
 from installation import *
 from utilities import *
-from eco_support import *
 
 
-# COSMETICS VIEW
-
-
-class CosmeticsView(View):
-    def __init__(self, current_page, num_pages):
-        super().__init__()
-        self.current_page = current_page
-        self.num_pages = num_pages
-
-    @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
-    async def previous_button(self, button: discord.ui.Button, interaction: discord.Interaction):
-        if self.current_page > 0:
-            self.current_page -= 1
-            await send_cosmetics_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
-
-    @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
-    async def next_button(self, button: discord.ui.Button, interaction: discord.Interaction):
-        if self.current_page < self.num_pages - 1:
-            self.current_page += 1
-            await send_cosmetics_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
-
-
-async def send_cosmetics_page(channel, current_page, items_per_page, num_pages, view):
-    start_index = current_page * items_per_page
-    end_index = (current_page + 1) * items_per_page
-    page_items = list(combined_items.items())[start_index:end_index]
-
-    embed = discord.Embed(title=f"Cosmetics | Page {current_page + 1}")
-
-    for item_id, item_info in page_items:
-        name = item_info["name"]
-        sell_price = item_info["sell"]
-        embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price}", inline=True)
-
-    await channel.send(embed=embed, view=view)
-
-
-# ECONOMY COMMAND VIEW
-
-
-economy_command_descriptions = {
-    "balance": "Check your current bank and pocket balance.",
-    "baltop": "Leaderboard of the richest people",
-    "daily": "Claim your daily reward.",
-    "shop": "View the available items in the shop.",
-    "cosmetics": "Lists all findable items and their sell prices.",
-    "buy <item_id>": "Buy an item from the shop.",
-    "sell <item_id>": "Sells item for its value",
-    "beg": "Beg the kind people for money.",
-    "scrap": "Find cosmetics and money",
-    "dig": "Dig for cosmetics and money (shovel needed)",
-    "hunt": "Hunt for cosmetics and money (bow needed)",
-    "inventory": "Lists items inside your inventory.",
-    "pay <amount>": "Pay someone money",
-    "deposit <amount/max>": "Deposit money into your bank (GAINS 10% every 24h)",
-    "withdraw <amount>": "Withdraw money from your bank",
-    "rob <@example>": "Rob a user and potentially steal 20% of their On Hand Money. But if you fail you lose 20% of your money",
-    "plant <amount>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
-    "harvest": "Harvest your planted crops.",
-    "fish": "Go fishing and sell fish for money.",
-    "fishc": "Show how many fishes you have caught and flex on other users.",
-    "leaderboard": "Top 10 fishes who have caught the most fish.",
-    "craft <recipe_name>": "Craft items.",
-    "recipes": "Shows craftable items and what you need for it.",
-    "blackjacks <amount>": "Play a cool interactive blackjacks game.",
-    "slots <amount>": "Gamble away your money without a chance of winning.",
-    "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
-    "gamble <amount>": f"Gamble your money with 1/3 chance of winning (max {max_bet})",
-}
-
-
-class EconomyView(View):
-    def __init__(self, current_page, num_pages):
-        super().__init__()
-        self.current_page = current_page
-        self.num_pages = num_pages
-
-    @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
-    async def previous_button(self, button: discord.ui.Button, interaction: discord.Interaction):
-        if self.current_page > 0:
-            self.current_page -= 1
-            await send_economy_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
-
-    @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
-    async def next_button(self, button: discord.ui.Button, interaction: discord.Interaction):
-        if self.current_page < self.num_pages - 1:
-            self.current_page += 1
-            await send_economy_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
-
-
-async def send_economy_page(channel, current_page, items_per_page, num_pages, view):
-    start_index = current_page * items_per_page
-    end_index = (current_page + 1) * items_per_page
-    page_items = list(economy_command_descriptions.items())[start_index:end_index]
-
-    embed = discord.Embed(title=f"Economy Commands | Page {current_page + 1}", description="List of available economy commands:", color=discord.Color.green())
-
-    for cmd, desc in page_items:
-        embed.add_field(name=f"{cmd}", value=desc, inline=True)
-
-    await channel.send(embed=embed, view=view)
-
-
-
-class Help(commands.Cog):
+class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
-    @commands.command(aliases=['helpme'])
-    async def help(self, ctx):
-        command_descriptions = {
-            "help": "Shows this message",
-            "moderation": "List moderator commands.",
-            "economy": "List economy commands.",
-            "invite": "Invite the bot to your server.",
-            "ping": "Get the bot's current latency.",
-            "say": "Repeat a message.",
-            "coinflip <heads/tails>": "Flip a coin.",
-            "dice": "Roll a six-sided die.",
-            "8ball <question>": "Virtual Eight ball.",
-            "qr": "Generate a QR code from a link.",
-            "quote": "Generate a random quote.",
-            "membercount": "Get the member count of the server.",
-            "calculator <+-*/>": "Perform basic calculations.",
-            "joke": "Get a random joke.",
-            "user_info": "Get user on a user.",
-            "server_info": "Get the server info.",
-            "avatar": "Get someones avatar or your own"
-        }
-
-        embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=discord.Color.green())
-        for cmd, desc in command_descriptions.items():
-            embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
-
-        await ctx.send(embed=embed)
-
-
-    @commands.command(aliases=['mod'])
-    @commands.has_permissions(manage_guild=True)
-    async def moderation(self, ctx):
-        moderation_descriptions = {
-            "kick <@user> <reason>": "Kick a user from the server.",
-            "ban <@user> <reason>": "Ban a user from the server.",
-            "mute <@user> <reason>": "Mute a user in the server.",
-            "unmute <@user> <reason": "Unmute a user in the server.",
-            "clear <amount>": "Clear a specified number of messages in a text channel.",
-            "lockchannel": "Lock a channel for a specified duration.",
-            "unlockchannel": "Unlock a channel.",
-            "lockserver": "Lock the entire server for a specified duration.",
-            "unlockserver": "Unlock the entire server.",
-            "setup_verify <role_name> <message>": "Setup a verification panel",
-            "ticket_panel": "Setup a ticket panel"
-        }
-
-        embed = discord.Embed(title="Moderation Commands", description="List of available moderation commands:", color=discord.Color.green())
-        for cmd, desc in moderation_descriptions.items():
-            embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
-
-        await ctx.send(embed=embed)
-
-
-    @commands.command(aliases=['eco'])
-    async def economy(self, ctx):
-        items_per_page = 10
-        total_items = len(economy_command_descriptions)
-        num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
-
-        current_page = 0
-        view = EconomyView(current_page, num_pages)
-        await send_economy_page(ctx, current_page, items_per_page, num_pages, view)
+    # Ping Command
+    @commands.command()
+    async def ping(self, ctx):
+        latency = round(self.bot.latency * 1000)  # Latency in milliseconds
+        embed = discord.Embed(title="Ping", description=f"Pong! Latency is {latency}ms", color=embed_colour)
+        await ctx.send(embed=embed) 
 
 
     @commands.command()
-    async def shop(self, ctx):
-        embed = discord.Embed(
-            title="Item Shop",
-            description="Here are the items you can buy:",
-            color=embed_colour
-        )
+    async def say(self, ctx, message: str=None):
+        if message is None:
+            embed = discord.Embed(
+                title="Incorrect say usage",
+                description=f"{ctx.author.mention}, Please specify a message. Usage: `{prefix}say <message>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
 
-        for item_id, item_info in shop_items.items():
-            embed.add_field(name=f"{item_info['name']} (ID: {item_id})", value=f"Cost: {item_info['cost']} coins", inline=False)
+        embed = discord.Embed(title="Say", description=message, color=embed_colour) # 'description=message' set description to whatever their parsed in
+        await ctx.send(embed=embed)
+
+
+    # Invite Command
+    @commands.command()
+    async def invite(self, ctx):
+        embed = discord.Embed(title="Invite", description=bot_invite, color=embed_colour)
+        await ctx.send(embed=embed) 
+
+
+    @commands.command(aliases=['server'])
+    async def server_info(self, ctx):
+        guild = ctx.guild
+        embed = discord.Embed(title="Server Information", color=embed_colour)
+        embed.set_thumbnail(url=guild.icon.url if guild.icon else None)
+        embed.add_field(name="Server Name", value=guild.name, inline=True)
+        embed.add_field(name="Server ID", value=guild.id, inline=True)
+        embed.add_field(name="Members", value=guild.member_count, inline=True)
+        embed.add_field(name="Owner", value=guild.owner.display_name, inline=True)
+        # Removed the line for region since it's no longer available
+        embed.add_field(name="Creation Time", value=guild.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+        await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['user'])
+    async def user_info(self, ctx, user: commands.MemberConverter = None):
+        user = user or ctx.author  # If user is None, use the author of the command
+        embed = discord.Embed(title="User Information", color=embed_colour)
+        embed.set_thumbnail(url=user.avatar.url)
+        embed.add_field(name="Username", value=user.display_name, inline=True)
+        embed.add_field(name="User ID", value=user.id, inline=True)
+        embed.add_field(name="Joined Server", value=user.joined_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+        embed.add_field(name="Account Created", value=user.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
+    async def avatar(self, ctx, user: commands.MemberConverter = None):
+        user = user or ctx.author # if no user is input then set it to the author (the one who ran the command)
+
+        embed = discord.Embed(title=f"{user.display_name}'s Avatar", color=embed_colour)
+
+        if user.avatar:
+            # User has an avatar, include the URL in the embed
+            embed.set_image(url=user.avatar.url)
+        else:
+            # User doesn't have an avatar, provide a default image or message
+            embed.description = f"{ctx.author.mention}, This user does not have an avatar."
 
         await ctx.send(embed=embed)
 
 
-    @commands.command(aliases=['cosmos', 'cos', 'cosmetic'])
-    async def cosmetics(self, ctx):
-        items_per_page = 10
-        total_items = len(combined_items)
-        num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
+    @commands.command(aliases=['ball', '8_ball', '8', '8ball'])
+    async def eight_ball(self, ctx, *, question: str=None):
+        if question is None: # if no question is parsed
+            embed = discord.Embed(
+                title="Incorrect 8ball usage",
+                description=f"{ctx.author.mention}, Please specify a question. Usage: `{prefix}eight_ball <question>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        responses = ["It is certain.", "Without a doubt.", "Yes, definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."]
+        answer = random.choice(responses)
+        embed = discord.Embed(title=f"{ctx.author.display_name}'s, 🎱 Magic 8-Ball", description=f"Question: {question}\nAnswer: {answer}", color=embed_error)
+        await ctx.send(embed=embed)
+    
 
-        current_page = 0
-        view = CosmeticsView(current_page, num_pages)
-        await send_cosmetics_page(ctx, current_page, items_per_page, num_pages, view)
+    @commands.command(aliases=['qrcode'])
+    async def qr(self, ctx, link: str=None):
+        if link is None: # if no link is parsed
+            embed = discord.Embed(
+                title="Incorrect link usage",
+                description=f"{ctx.author.mention}, Please specify a link. Usage: `{prefix}qr <link>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        # Generate QR code
+        qr = qrcode.QRCode( 
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(link) # add the link
+        qr.make(fit=True) # fit to image (make it good size)
+
+        img = qr.make_image(fill_color="black", back_color="white") # black and white
+
+        # Save the image to a BytesIO object
+        with BytesIO() as image_binary:
+            img.save(image_binary, 'PNG') # save as png
+            image_binary.seek(0)
+            # Send the image in discord
+            file = discord.File(fp=image_binary, filename='qr_code.png')
+            await ctx.send(f"{ctx.author.mention}, Here is your QR code linking to: {link}", file=file)
+    
+
+    @commands.command()
+    async def membercount(self, ctx):
+        guild = ctx.guild
+        member_count = guild.member_count # get guild membercount
+
+        # Create and send an embed
+        embed = discord.Embed(title="Member Count", color=embed_colour)
+        embed.add_field(name="Server Members", value=f"{ctx.author.mention}, This server has {member_count} members.", inline=False)
+
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
+    async def dice(self, ctx):
+        result = random.randint(1, 6) # random dice roll
+
+        # Create and send an embed
+        embed = discord.Embed(title="Dice Roll", color=embed_colour)
+        embed.add_field(name="Result", value=f"{ctx.author.mention}, You rolled a {result}!", inline=False)
+
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
+    async def quote(self, ctx):
+        # Fetch a random quote from the Quotable API
+        response = requests.get("https://api.quotable.io/random") # get random quote from this api
+
+        # warning, speeds for this api can be slow during peak times (its a free api allow it)
+
+        if response.status_code == 200:
+            quote_data = response.json()
+            content = quote_data.get("content", "Quote not available.")
+            author = quote_data.get("author", "Unknown")
+
+            # Create and send an embed
+            embed = discord.Embed(title="Quote of the Day", color=embed_colour)
+            embed.add_field(name="Content", value=content, inline=False)
+            embed.add_field(name="Author", value=author, inline=False)
+
+            await ctx.send(embed=embed)
+        else: # if this happens open an error on github (this means the api is no longer valid or its offline)
+            await ctx.send("Failed to fetch the daily quote. Try again later.")
+
+
+    @commands.command(aliases=['calc'])
+    async def calculator(self, ctx, expression: str = None):
+        if expression is None:
+            # Handle the case where no expression is provided
+            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You need to provide a mathematical expression.", color=embed_error)
+            await ctx.send(embed=embed)
+            return
+
+        try:
+            result = eval(expression) # calculation
+
+            # Create a success embed
+            embed = discord.Embed(title=f"{ctx.author.display_name}'s, Calculation Result", color=embed_colour)
+            embed.add_field(name="Expression", value=expression, inline=False)
+            embed.add_field(name="Result", value=result, inline=False)
+
+            await ctx.send(embed=embed)
+        except Exception as e:
+            # Create an error embed
+            embed = discord.Embed(title="Error", description=str(e), color=embed_error)
+
+            await ctx.send(embed=embed)
+
+
+    @commands.command()
+    async def joke(self, ctx):
+        try:
+            response = requests.get("https://official-joke-api.appspot.com/random_joke") # random joke from api
+            joke_data = response.json()
+            setup = joke_data["setup"] # get the joke setup
+            punchline = joke_data["punchline"] # get the punchline
+
+            # Create an embed
+            embed = discord.Embed(title="Joke Time!", color=embed_colour)
+            embed.add_field(name="Setup", value=setup, inline=False)
+            embed.add_field(name="Punchline", value=punchline, inline=False)
+
+            # Send the embed
+            await ctx.send(embed=embed)
+        except Exception as e: # if this happens its probably because the api is no longer accessible (report this on github)
+            await ctx.send(f"{ctx.author.mention}, Error fetching joke: {e}")
+
+
+    @commands.command(aliases=['cf'])
+    async def coinflip(self, ctx, choice: str = None):
+        choices = ["heads", "tails"]
+        result = random.choice(choices)
+
+        if choice is None or choice.lower() not in choices:
+            embed = discord.Embed(
+                title="Coinflip",
+                description=f"{ctx.author.mention}, Please specify your choice: `{prefix}coinflip <heads/tails>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        embed = discord.Embed(
+            title="Coinflip",
+            description=f"{ctx.author.mention} flipped a coin!",
+            color=discord.Colour.blue()
+        )
+        embed.add_field(name="Your Choice", value=choice.capitalize(), inline=True)
+        embed.add_field(name="Result", value=result.capitalize(), inline=True)
+
+        if choice.lower() == result:
+            embed.add_field(name="Outcome", value="Congratulations! You win!", inline=False)
+        else:
+            embed.add_field(name="Outcome", value="Better luck next time!", inline=False)
+
+        await ctx.send(embed=embed)
 
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Help Cog Loaded! {Fore.RESET}')
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Fun Cog Loaded! {Fore.RESET}')
 
-
-def help_setup(bot):
-    bot.add_cog(Help(bot))
+def fun_setup(bot):
+    bot.add_cog(Fun(bot))
