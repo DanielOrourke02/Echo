@@ -5,12 +5,113 @@ from utilities import *
 from eco_support import *
 
 
+# COSMETICS VIEW
+
+
+class CosmeticsView(View):
+    def __init__(self, current_page, num_pages):
+        super().__init__()
+        self.current_page = current_page
+        self.num_pages = num_pages
+
+    @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
+    async def previous_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+        if self.current_page > 0:
+            self.current_page -= 1
+            await send_cosmetics_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+
+    @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
+    async def next_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+        if self.current_page < self.num_pages - 1:
+            self.current_page += 1
+            await send_cosmetics_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+
+
+async def send_cosmetics_page(channel, current_page, items_per_page, num_pages, view):
+    start_index = current_page * items_per_page
+    end_index = (current_page + 1) * items_per_page
+    page_items = list(combined_items.items())[start_index:end_index]
+
+    embed = discord.Embed(title=f"Cosmetics | Page {current_page + 1}")
+
+    for item_id, item_info in page_items:
+        name = item_info["name"]
+        sell_price = item_info["sell"]
+        embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price}", inline=True)
+
+    await channel.send(embed=embed, view=view)
+
+
+# ECONOMY COMMAND VIEW
+
+
+economy_command_descriptions = {
+    "balance": "Check your current bank and pocket balance.",
+    "baltop": "Leaderboard of the richest people",
+    "daily": "Claim your daily reward.",
+    "gamble <amount>": "Gamble your money with 1/3 chance of winning (max 15k)",
+    "shop": "View the available items in the shop.",
+    "cosmetics": "Lists all findable items and their sell prices.",
+    "buy <item_id>": "Buy an item from the shop.",
+    "sell <item_id>": "Sells item for its value",
+    "beg": "Beg the kind people for money.",
+    "scrap": "Find cosmetics and money",
+    "dig": "Dig for cosmetics and money (shovel needed)",
+    "hunt": "Hunt for cosmetics and money (bow needed)",
+    "inventory": "Lists items inside your inventory.",
+    "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
+    "pay <amount>": "Pay someone money",
+    "deposit": "Deposit money into your bank (GAINS 10% every 24h)",
+    "withdraw": "Withdraw money from your bank",
+    "rob <@example>": "Rob a user and potentially steal 20% of their On Hand Money. But if you fail you lose 20% of your money",
+    "plant <amount/max>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
+    "harvest": "Harvest your planted crops.",
+    "craft <recipe_name>": "Craft items.",
+    "recipes": "Shows craftable items and what you need for it.",
+    "blackjacks <amount>": "Play a cool interactive blackjacks game.",
+    "slots <amount>": "Gamble away your money without a chance of winning."
+}
+
+
+class EconomyView(View):
+    def __init__(self, current_page, num_pages):
+        super().__init__()
+        self.current_page = current_page
+        self.num_pages = num_pages
+
+    @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
+    async def previous_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+        if self.current_page > 0:
+            self.current_page -= 1
+            await send_economy_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+
+    @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
+    async def next_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+        if self.current_page < self.num_pages - 1:
+            self.current_page += 1
+            await send_economy_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+
+
+async def send_economy_page(channel, current_page, items_per_page, num_pages, view):
+    start_index = current_page * items_per_page
+    end_index = (current_page + 1) * items_per_page
+    page_items = list(economy_command_descriptions.items())[start_index:end_index]
+
+    embed = discord.Embed(title=f"Economy Commands | Page {current_page + 1}", description="List of available economy commands:", color=discord.Color.green())
+
+    for cmd, desc in page_items:
+        embed.add_field(name=f"{cmd}", value=desc, inline=True)
+
+    await channel.send(embed=embed, view=view)
+
+
+
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
 
-    @commands.command()
+    @commands.command(aliases=['helpme'])
     async def help(self, ctx):
         command_descriptions = {
             "moderation": "List moderator commands.",
@@ -37,7 +138,7 @@ class Help(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['mod'])
     @commands.has_permissions(manage_guild=True)
     async def moderation(self, ctx):
         moderation_descriptions = {
@@ -61,40 +162,15 @@ class Help(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['eco'])
     async def economy(self, ctx):
-        economy_command_descriptions = {
-            "balance": "Check your current bank and pocket balance.",
-            "baltop": "Leaderboard of the richest people",
-            "daily": "Claim your daily reward.",
-            "gamble <amount>": "Gamble your money with 1/3 chance of winning (max 15k)",
-            "shop": "View the available items in the shop.",
-            "cosmetics": "Lists all findable items and their sell prices.",
-            "buy <item_id>": "Buy an item from the shop.",
-            "sell <item_id>": "Sells item for its value",
-            "beg": "Beg the kind people for money.",
-            "scrap": "Find cosmetics and money",
-            "dig": "Dig for cosmetics and money (shovel needed)",
-            "hunt": "Hunt for cosmetics and money (bow needed)",
-            "inventory": "Lists items inside your inventory.",
-            "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
-            "pay <amount>": "Pay someone money",
-            "deposit": "Deposit money into your bank (GAINS 10% every 24h)",
-            "withdraw": "Withdraw money from your bank",
-            "rob <@example>": "Rob a user and potentially steal 20% of their On Hand Money. But if you fail you lose 20% of your money",
-            "plant <amount/max>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
-            "harvest": "Harvest your planted crops.",
-            "craft <recipe_name>": "Craft items.",
-            "recipes": "Shows craftable items and what you need for it.",
-            "blackjacks <amount>": "Play a cool interactive blackjacks game.",
-            "slots <amount>": "Gamble away your money without a chance of winning."
-        }
+        items_per_page = 10
+        total_items = len(economy_command_descriptions)
+        num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
 
-        embed = discord.Embed(title="Economy Commands", description="List of available economy commands:", color=discord.Color.green())
-        for cmd, desc in economy_command_descriptions.items():
-            embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
-
-        await ctx.send(embed=embed)
+        current_page = 0
+        view = EconomyView(current_page, num_pages)
+        await send_economy_page(ctx, current_page, items_per_page, num_pages, view)
 
 
     @commands.command()
@@ -102,7 +178,7 @@ class Help(commands.Cog):
         embed = discord.Embed(
             title="Item Shop",
             description="Here are the items you can buy:",
-            color=discord.Color.blue()
+            color=embed_colour
         )
 
         for item_id, item_info in shop_items.items():
@@ -111,18 +187,15 @@ class Help(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['cosmos', 'cos', 'cosmetic'])
     async def cosmetics(self, ctx):
-        embed = discord.Embed(title="Available Cosmetics", color=discord.Color.blue())
+        items_per_page = 10
+        total_items = len(combined_items)
+        num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
 
-        for item_id, item_info in cosmetics_items.items():
-            name = item_info["name"]
-            sell_price = item_info["sell"]
-            chance = item_info.get("chance", "N/A")  # Default to "N/A" if 'chance' key is not found
-
-            embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price} | Chance: {chance}%", inline=True)
-
-        await ctx.send(embed=embed)
+        current_page = 0
+        view = CosmeticsView(current_page, num_pages)
+        await send_cosmetics_page(ctx, current_page, items_per_page, num_pages, view)
 
 
     @commands.Cog.listener()
