@@ -14,6 +14,7 @@ from moderation import Moderation
 from slots import Slots
 from help import Help
 from fun import Fun
+from fishing import Fishing
 
 
 intents = discord.Intents.all()
@@ -22,8 +23,8 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=config.get('prefix'), intents=intents, help_command=None)
 
 
+# function that loads cogs
 async def setup_bot():
-    # Add cogs without await
     bot.add_cog(Crafting(bot))
     bot.add_cog(Economy(bot))
     bot.add_cog(Fun(bot))
@@ -32,6 +33,7 @@ async def setup_bot():
     bot.add_cog(Moderation(bot))
     bot.add_cog(Blackjack(bot))
     bot.add_cog(Slots(bot))
+    bot.add_cog(Fishing(bot))
 
 
 @bot.event
