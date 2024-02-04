@@ -21,7 +21,7 @@ class Fun(commands.Cog):
         if message is None:
             embed = discord.Embed(
                 title="Incorrect say usage",
-                description=f"Please specify a message. Usage: `{prefix}say <message>`",
+                description=f"{ctx.author.mention}, Please specify a message. Usage: `{prefix}say <message>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -75,17 +75,17 @@ class Fun(commands.Cog):
             embed.set_image(url=user.avatar.url)
         else:
             # User doesn't have an avatar, provide a default image or message
-            embed.description = "This user does not have an avatar."
+            embed.description = f"{ctx.author.mention}, This user does not have an avatar."
 
         await ctx.send(embed=embed)
 
 
-    @commands.command(aliases=['ball', '8_ball', '8'])
+    @commands.command(aliases=['ball', '8_ball', '8', '8ball'])
     async def eight_ball(self, ctx, *, question: str=None):
         if question is None: # if no question is parsed
             embed = discord.Embed(
-                title="Incorrect eight ball usage",
-                description=f"Please specify a question. Usage: `{prefix}eight_ball <question>`",
+                title="Incorrect 8ball usage",
+                description=f"{ctx.author.mention}, Please specify a question. Usage: `{prefix}eight_ball <question>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -93,7 +93,7 @@ class Fun(commands.Cog):
         
         responses = ["It is certain.", "Without a doubt.", "Yes, definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."]
         answer = random.choice(responses)
-        embed = discord.Embed(title="🎱 Magic 8-Ball", description=f"Question: {question}\nAnswer: {answer}", color=embed_error)
+        embed = discord.Embed(title=f"{ctx.author.mention}, 🎱 Magic 8-Ball", description=f"Question: {question}\nAnswer: {answer}", color=embed_error)
         await ctx.send(embed=embed)
     
 
@@ -102,7 +102,7 @@ class Fun(commands.Cog):
         if link is None: # if no link is parsed
             embed = discord.Embed(
                 title="Incorrect link usage",
-                description=f"Please specify a link. Usage: `{prefix}qr <link>`",
+                description=f"{ctx.author.mention}, Please specify a link. Usage: `{prefix}qr <link>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -126,7 +126,7 @@ class Fun(commands.Cog):
             image_binary.seek(0)
             # Send the image in discord
             file = discord.File(fp=image_binary, filename='qr_code.png')
-            await ctx.send(f"Here is your QR code linking to: {link}", file=file)
+            await ctx.send(f"{ctx.author.mention}, Here is your QR code linking to: {link}", file=file)
     
 
     @commands.command()
@@ -136,7 +136,7 @@ class Fun(commands.Cog):
 
         # Create and send an embed
         embed = discord.Embed(title="Member Count", color=embed_colour)
-        embed.add_field(name="Server Members", value=f"The server has {member_count} members.", inline=False)
+        embed.add_field(name="Server Members", value=f"{ctx.author.mention}, This server has {member_count} members.", inline=False)
 
         await ctx.send(embed=embed)
 
@@ -147,7 +147,7 @@ class Fun(commands.Cog):
 
         # Create and send an embed
         embed = discord.Embed(title="Dice Roll", color=embed_colour)
-        embed.add_field(name="Result", value=f"You rolled a {result}!", inline=False)
+        embed.add_field(name="Result", value=f"{ctx.author.mention}, You rolled a {result}!", inline=False)
 
         await ctx.send(embed=embed)
 
@@ -178,7 +178,7 @@ class Fun(commands.Cog):
     async def calculator(self, ctx, expression: str = None):
         if expression is None:
             # Handle the case where no expression is provided
-            embed = discord.Embed(title="Error", description="You need to provide a mathematical expression.", color=embed_error)
+            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You need to provide a mathematical expression.", color=embed_error)
             await ctx.send(embed=embed)
             return
 
@@ -186,7 +186,7 @@ class Fun(commands.Cog):
             result = eval(expression) # calculation
 
             # Create a success embed
-            embed = discord.Embed(title="Calculation Result", color=embed_colour)
+            embed = discord.Embed(title=f"{ctx.author.mention}, Calculation Result", color=embed_colour)
             embed.add_field(name="Expression", value=expression, inline=False)
             embed.add_field(name="Result", value=result, inline=False)
 
@@ -214,7 +214,7 @@ class Fun(commands.Cog):
             # Send the embed
             await ctx.send(embed=embed)
         except Exception as e: # if this happens its probably because the api is no longer accessible (report this on github)
-            await ctx.send(f"Error fetching joke: {e}")
+            await ctx.send(f"{ctx.author.mention}, Error fetching joke: {e}")
 
 
     @commands.command(aliases=['cf'])
@@ -225,7 +225,7 @@ class Fun(commands.Cog):
         if choice is None or choice.lower() not in choices:
             embed = discord.Embed(
                 title="Coinflip",
-                description=f"Please specify your choice: `{prefix}coinflip <heads/tails>`",
+                description=f"{ctx.author.mention}, Please specify your choice: `{prefix}coinflip <heads/tails>`",
                 color=embed_error
             )
             await ctx.send(embed=embed)
