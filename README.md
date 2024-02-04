@@ -22,17 +22,17 @@ increase dig and hunt rarity of getting found
 
 increase slots chance of winning
 
-make slots win rate lower (Currently its profit in the long run)
+add more gambling games
 
-fix embedding
-
-debug code
+add a command cooldown for slots and fix same output error when spamming the command
 
 update list of commands on this page
 
 fix daily command (not working)
 
 fix errors when planting (it still works just outputs some gibberish error)
+
+fix rob command
 
 # Installation
 
