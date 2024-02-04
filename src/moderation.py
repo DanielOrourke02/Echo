@@ -8,11 +8,17 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
     # Ticket Panel Command
     @commands.command()
-    async def ticket_panel(self, ctx):
+    async def ticket_panel(self, ctx, *message: str):
         view = View()
-        button = Button(label="Create Ticket", style=discord.ButtonStyle.green) 
+        button = Button(label="Create Ticket", style=discord.ButtonStyle.green)
+
+        if not message:
+            message = "Click the button below to create a support ticket."
+        else:
+            message = " ".join(message)
 
         async def ticket_button_callback(interaction):
             guild = interaction.guild
@@ -23,20 +29,29 @@ class Moderation(commands.Cog):
             }
             ticket_channel = await guild.create_text_channel(f"ticket-{member.display_name}", overwrites=overwrites)
             await ticket_channel.send(f"{member.mention} Welcome to your ticket!")
-            await interaction.response.send_message(f"Ticket created: {ticket_channel.mention}", ephemeral=True) 
+            await interaction.response.send_message(f"Ticket created: {ticket_channel.mention}", ephemeral=True)
 
         button.callback = ticket_button_callback
-        view.add_item(button) 
+        view.add_item(button)
 
-        embed = discord.Embed(title="Support Tickets", description="Click the button below to create a support ticket.", color=embed_colour)
-        await ctx.send(embed=embed, view=view) 
+        embed = discord.Embed(title="Support Tickets", description=message, color=embed_colour)
+        await ctx.send(embed=embed, view=view)
 
 
     # Verification Setup Command
     @commands.command()
-    async def setup_verify(self, ctx, verify_role: str, message: str):
+    async def setup_verify(self, ctx, verify_role: str=None, message: str=None):
         view = View()
         button = Button(label="Verify", style=discord.ButtonStyle.green)
+
+        if verify_role or message is None:
+            embed = discord.Embed(color=embed_error)
+            embed.title = "Incorrect usage"
+            embed.description = f"{ctx.author.mention}, Incorrect usage. Please try: `{prefix}setup_verify <@role> <message>`"
+            embed.color = embed_error
+
+            await ctx.send(embed=embed)
+            return
 
         async def verify_button_callback(interaction):
             guild = interaction.guild
@@ -67,7 +82,7 @@ class Moderation(commands.Cog):
             embed = discord.Embed(title="Kick", description=f"{member.mention} has been kicked.\nReason: {reason}", color=discord.Color.red())
             await ctx.send(embed=embed)
         except discord.Forbidden:
-            await ctx.send("I do not have permission to kick this user.")
+            await ctx.send(f"{ctx.author.mention}, I do not have permission to kick {member.mention}.")
 
 
     @commands.command()
@@ -79,7 +94,7 @@ class Moderation(commands.Cog):
             embed = discord.Embed(title="Ban", description=f"{member.mention} has been banned.\nReason: {reason}", color=discord.Color.red())
             await ctx.send(embed=embed)
         except discord.Forbidden:
-            await ctx.send("I do not have permission to ban this user.")
+            await ctx.send(f"{ctx.author.mention}, I do not have permission to ban {member.mention}.")
 
 
     @commands.command()
@@ -117,7 +132,7 @@ class Moderation(commands.Cog):
         if not mute_role:
             # If the "Muted" role doesn't exist, you can handle this as you prefer.
             # For example, you can send a message saying the role doesn't exist or create it.
-            await ctx.send("The 'Muted' role doesn't exist.")
+            await ctx.send(f"{ctx.author.mention}, The 'Muted' role doesn't exist.")
             return
 
         # Remove the "Muted" role from the specified user
@@ -137,12 +152,12 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int = None):
         if amount is None:
-            embed = discord.Embed(title="Error", description="You need to specify the number of messages to clear.", color=embed_colour)
+            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You need to specify the number of messages to clear.", color=embed_colour)
             await ctx.send(embed=embed)
             return
 
         if amount > 1000:
-            embed = discord.Embed(title="Error", description="You can only clear up to 1000 messages at a time.", color=embed_colour) 
+            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You can only clear up to 1000 messages at a time.", color=embed_colour) 
             await ctx.send(embed=embed)
             return
 
