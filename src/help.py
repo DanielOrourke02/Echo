@@ -1,6 +1,5 @@
 
 
-from installation import *
 from utilities import *
 from eco_support import *
 
