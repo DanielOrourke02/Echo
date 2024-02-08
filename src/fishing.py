@@ -42,7 +42,7 @@ class Fishing(commands.Cog):
         if 'bait' not in get_user_inventory(user_id):
             embed = discord.Embed(
                 title="No bait (thats bait)",
-                description=f"{ctx.author.mention}, You need bait for fishing! Buy some using: `{prefix}buy bait` (150 per bait)",
+                description=f"{ctx.author.mention}, You need bait for fishing! Buy some using: `{prefix}buy bait` (250 per bait)",
                 color=embed_colour
             )
             await ctx.send(embed=embed)
