@@ -18,8 +18,6 @@ Its very messy I know but I will tidy it up.
 
 """
 
-
-
 DATA_FILE = 'user_data.json'
 
 user_bank_balances = {}  # Holds users' bank 
@@ -84,7 +82,7 @@ shop_items = {
 }
 
 fish_data = {
-    "trash": {"name": "Plastic Trash", "sell": 10, "chance": 75},
+    "trash": {"name": "Plastic Trash", "sell": 250, "chance": 70},
     "cod": {"name": "A cod, nothing special", "sell": 300, "chance": 25},
     "lemo": {"name": "Lemo, rare fish", "sell": 350, "chance": 20},
     "monkey": {"name": "Monkey fish Legenday", "sell": 700, "chance": 10},
