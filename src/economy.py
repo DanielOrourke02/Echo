@@ -778,10 +778,10 @@ class Economy(commands.Cog):
         # Check if the user has a 'bow' in their inventory
         # if not dont let them run the hunt command
         user_inventory = get_user_inventory(user_id)
-        if 'gun' not in user_inventory:
+        if 'gun' or 'm4a1' not in user_inventory:
             embed = discord.Embed(
                 title="Unable to shoot",
-                description=f"{ctx.author.mention}, You need a gun to shoot people! Find one using `{prefix}scrap`!",
+                description=f"{ctx.author.mention}, You need to find a gun or craft an m4a1 to shoot people! Find a gun using `{prefix}scrap` or craft an m4a1 using `{prefix}craft m4a1` view recipes using `{prefix}recipes`!",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -790,7 +790,7 @@ class Economy(commands.Cog):
         if user is None:
             embed = discord.Embed(
                 title="Suicide",
-                description=f"{ctx.author.mention} has just shot their self!",
+                description=f"{ctx.author.mention} has just shot themself!",
                 color=embed_error
             )
             await ctx.send(embed=embed)
@@ -800,6 +800,38 @@ class Economy(commands.Cog):
             title="Shots Fired",
             description=f"{ctx.author.mention}, Has just shot and killed {user.mention} in cold blood.",
             color=discord.Color.orange()
+        )
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def bomb(self, ctx, user: commands.MemberConverter=None):
+        user_id = ctx.author.id
+
+        # Check if the user has a 'bow' in their inventory
+        # if not dont let them run the hunt command
+        user_inventory = get_user_inventory(user_id)
+        if 'c4' not in user_inventory:
+            embed = discord.Embed(
+                title="Unable to bomb",
+                description=f"{ctx.author.mention}, You need C4 to blow someone up! Craft one using `{prefix}craft c4` view recipes using `{prefix}recipes`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        if user is None:
+            embed = discord.Embed(
+                title="Suicide",
+                description=f"{ctx.author.mention}, has just blown up a c4 in their face!",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        embed = discord.Embed(
+            title="Bombing",
+            description=f"{ctx.author.mention}, has just bombed and killed {user.mention} with c4!",
+            color=discord.Color.orange(),
         )
         await ctx.send(embed=embed)
 
