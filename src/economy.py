@@ -47,7 +47,7 @@ class Economy(commands.Cog):
     # Command to give money to a user (TO REMOVE DO /GIVE <USER> -<amount>)
     @commands.command()
     @commands.check(is_admin) # Only one user can do this (put the id in config.json)
-    async def give(self, ctx, user: commands.MemberConverter, amount: int):
+    async def give(self, ctx, c, amount: int):
         update_user_balance(user.id, amount)
         embed = discord.Embed(
             title="Coins Given!",
@@ -771,6 +771,37 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=result_embed)
 
+    @commands.command()
+    async def shoot(self, ctx, user: commands.MemberConverter=None):
+        user_id = ctx.author.id
+
+        # Check if the user has a 'bow' in their inventory
+        # if not dont let them run the hunt command
+        user_inventory = get_user_inventory(user_id)
+        if 'gun' not in user_inventory:
+            embed = discord.Embed(
+                title="Unable to shoot",
+                description=f"{ctx.author.mention}, You need a gun to shoot people! Find one using `{prefix}scrap`!",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        if user is None:
+            embed = discord.Embed(
+                title="Suicide",
+                description=f"{ctx.author.mention} has just shot their self!",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        embed = discord.Embed(
+            title="Shots Fired",
+            description=f"{ctx.author.mention}, Has just shot and killed {user.mention} in cold blood.",
+            color=discord.Color.orange()
+        )
+        await ctx.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_ready(self):
