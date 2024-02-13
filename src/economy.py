@@ -47,7 +47,7 @@ class Economy(commands.Cog):
     # Command to give money to a user (TO REMOVE DO /GIVE <USER> -<amount>)
     @commands.command()
     @commands.check(is_admin) # Only one user can do this (put the id in config.json)
-    async def give(self, ctx, c, amount: int):
+    async def give(self, ctx, user: commands.MemberConverter, amount: int):
         update_user_balance(user.id, amount)
         embed = discord.Embed(
             title="Coins Given!",
@@ -640,13 +640,18 @@ class Economy(commands.Cog):
 
 
     @commands.command(aliases=['bal'])
-    async def balance(self, ctx):
-        user_id = ctx.author.id
+    async def balance(self, ctx, user: commands.MemberConverter=None):
+        if user is not None:
+            user_id = user.id
+        elif user is None:
+            user = ctx.author
+            user_id = ctx.author.id
+
         pocket_money = get_user_balance(user_id)
         bank_balance = get_user_bank_balance(user_id)
 
         embed = discord.Embed(
-            title=f"**{ctx.author.display_name}'s** Balance",
+            title=f"**{user.display_name}'s** Balance",
             description=f'Money On hand: {pocket_money} coins\nBank Balance: {bank_balance}/{max_bank_size} coins',
             color=discord.Color.green()
         )
@@ -665,8 +670,8 @@ class Economy(commands.Cog):
             return
 
 
-        robber_id = str(ctx.author.id)
-        victim_id = str(victim.id)
+        robber_id = ctx.author.id
+        victim_id = victim.id
 
         # Check for cooldown
         if robber_id in robbery_cooldown and time.time() - robbery_cooldown[robber_id] < 3600:
@@ -834,6 +839,50 @@ class Economy(commands.Cog):
             color=discord.Color.orange(),
         )
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def trade(self, ctx, user: commands.MemberConverter=None, item_name: str=None):
+        user_id = ctx.author.id
+
+        if user is None:
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, Incorrect usage. Please use: `{prefix}trade <@user> <item2give>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        if item_name is None:
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, Incorrect usage. Please use: `{prefix}trade <@user> <item2give>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        user_inventory = get_user_inventory(user_id)
+
+        if item_name not in user_inventory:
+            embed = discord.Embed(
+                title="Item not found",
+                description=f"{ctx.author.mention}, You dont have {item_name} in your inventory!",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        add_item_to_inventory(user.id, item_name)
+        remove_item_from_inventory(user_id, item_name)
+
+        embed = discord.Embed(
+            title="Trade successfull",
+            description=f"{ctx.author.mention}, You have given {item_name} to {user}!",
+            color=discord.Color.orange(),
+        )
+        await ctx.send(embed=embed)
+
 
     @commands.Cog.listener()
     async def on_ready(self):
