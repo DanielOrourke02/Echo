@@ -7,23 +7,23 @@ from eco_support import *
 # COSMETICS VIEW
 
 
-class CosmeticsView(View):
+class CosmeticsView(discord.ui.View):
     def __init__(self, current_page, num_pages):
         super().__init__()
         self.current_page = current_page
         self.num_pages = num_pages
 
     @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
-    async def previous_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def previous_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
         if self.current_page > 0:
             self.current_page -= 1
-            await send_cosmetics_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+            await send_cosmetics_page(interaction.channel, self.current_page, 10, self.num_pages, self)
 
     @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
-    async def next_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def next_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
         if self.current_page < self.num_pages - 1:
             self.current_page += 1
-            await send_cosmetics_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+            await send_cosmetics_page(interaction.channel, self.current_page, 10, self.num_pages, self)
 
 
 async def send_cosmetics_page(channel, current_page, items_per_page, num_pages, view):
@@ -75,23 +75,23 @@ economy_command_descriptions = {
 }
 
 
-class EconomyView(View):
+class EconomyView(discord.ui.View):
     def __init__(self, current_page, num_pages):
         super().__init__()
         self.current_page = current_page
         self.num_pages = num_pages
 
     @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
-    async def previous_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def previous_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
         if self.current_page > 0:
             self.current_page -= 1
-            await send_economy_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+            await send_economy_page(interaction.channel, self.current_page, 10, self.num_pages, self)
 
     @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
-    async def next_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def next_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
         if self.current_page < self.num_pages - 1:
             self.current_page += 1
-            await send_economy_page(interaction.message.channel, self.current_page, 10, self.num_pages, self)
+            await send_economy_page(interaction.channel, self.current_page, 10, self.num_pages, self)
 
 
 async def send_economy_page(channel, current_page, items_per_page, num_pages, view):
@@ -200,7 +200,7 @@ class Help(commands.Cog):
         current_page = 0
         view = CosmeticsView(current_page, num_pages)
         await send_cosmetics_page(ctx, current_page, items_per_page, num_pages, view)
-
+        
 
     @commands.Cog.listener()
     async def on_ready(self):
