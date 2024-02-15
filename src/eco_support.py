@@ -78,7 +78,8 @@ shop_items = {
     "middle": {"name": "Middle class (role)", "cost": 50000},
     "upper": {"name": "Upper class elite (role)", "cost": 100000},
     "protagonist": {"name": "THE PROTAGONIST (role)", "cost": 500000},
-    "bait": {"name": "Bait for fishing", "cost": 250}
+    "bait": {"name": "Bait for fishing", "cost": 250},
+    "printer": {"name": "Money Printer (you can get caught)", "cost": 10000}
 }
 
 fish_data = {
@@ -393,3 +394,73 @@ def log_sell(user_id, username , item_name, item_cost):
 # Check if the user invoking the command is the admin
 def is_admin(ctx):
     return ctx.author.id == config.get("ADMIN_ID")
+
+
+class MoneyPrintingOperation:
+    def __init__(self):
+        self.printing_speed = 10  # Number of bills printed per second
+        self.max_printing_amount = 20000  # Maximum amount that can be printed
+        self.max_chance = 0.3  # Maximum chance of getting caught (changed to a lower value)
+        self.time_increase_per_thousand = 4 * 60  # Time taken to print one thousand (4 minutes)
+
+    async def print_money(self, ctx, amount_to_print):
+        user_id = ctx.author.id
+        total_printed = 0
+        total_time_taken = 0
+
+        # Randomly choose base chance of getting caught (adjusted to a lower range)
+        base_chance_of_detection = random.uniform(0.05, 0.2)
+
+        # Calculate the estimated time until job is done
+        estimated_batches = amount_to_print / 1000
+        estimated_time_remaining = estimated_batches * self.time_increase_per_thousand
+
+        # Output user's chance of getting caught and estimate until the job is done
+        embed = discord.Embed(
+            title="Money Printing Initiated",
+            description=f"Chance of getting caught: {base_chance_of_detection * 100:.2f}%\nEstimated time until job is done: {estimated_time_remaining / 60:.2f} minutes",
+            color=discord.Color.green()
+        )
+        await ctx.send(embed=embed)
+
+        while total_printed < amount_to_print:
+            # Calculate time taken to print next batch of bills
+            remaining_amount = amount_to_print - total_printed
+            batch_to_print = min(remaining_amount, self.printing_speed)
+            time_taken = batch_to_print / self.printing_speed
+
+            # Increase time taken based on amount printed
+            time_taken += (total_printed / 1000) * self.time_increase_per_thousand
+            total_time_taken += time_taken
+
+            # Simulate chance of getting caught
+            chance_of_detection = base_chance_of_detection + (total_printed / self.max_printing_amount)
+            if random.random() < chance_of_detection:
+                # User was caught
+                embed = discord.Embed(
+                    title="You were caught Money Printing!",
+                    description=f"You were caught! Your punishment is a fee of {amount_to_print * 0.75} money and the removal of your printer.",
+                    color=discord.Color.red()
+                )
+                await ctx.send(embed=embed)
+
+                # Deduct fee from user's balance
+                update_user_balance(user_id, -int(amount_to_print * 0.75))
+                return
+
+            # Update total printed amount
+            total_printed += batch_to_print
+
+            # Pause simulation for time taken to print batch
+            await asyncio.sleep(time_taken)
+
+        # Money print job successful
+        embed = discord.Embed(
+            title="Money Print Job Successful",
+            description=f"Money printing completed in {total_time_taken / 60:.2f} minutes. Your balance has increased by: {total_printed}",
+            color=discord.Color.green()
+        )
+        await ctx.send(embed=embed)
+
+        # Increase user's balance
+        update_user_balance(user_id, total_printed)
