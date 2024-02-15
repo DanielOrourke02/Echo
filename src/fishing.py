@@ -56,6 +56,7 @@ class Fishing(commands.Cog):
 
         # Process the outcome and update player's inventory
         add_item_to_inventory(user_id, outcome)
+        remove_item_from_inventory(user_id, 'bait')
 
         # Update user balance (subtract the cost of bait)
         update_user_balance(user_id, -50)
