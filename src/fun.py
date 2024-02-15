@@ -247,6 +247,56 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed)
 
 
+    @commands.command(aliases=['emojiadd', 'addemoji', 'emoji', 'emojis'])
+    async def add_emoji(self, ctx, name: str=None, url: str=None):
+        if name is None:
+            embed = discord.Embed(
+                title="Emoji missing name",
+                description=f"{ctx.author.mention}, Failed to add that emoji! please provide a name!",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        elif url is None:
+            embed = discord.Embed(
+                title="Emoji missing url/image",
+                description=f"{ctx.author.mention}, Failed to add that emoji! Please provide a url of the emoji: e.g `https://example.com/emoji.png`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        await ctx.guild.create_custom_emoji(name=name, image=url)
+
+        embed = discord.Embed(
+            title="Added Emoji",
+            description=f"{ctx.author.mention}, Emoji {name} added successfully!",
+            color=embed_colour
+        )
+        await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['rem_emoji', 'rememoji'])
+    async def remove_emoji(self, ctx, emoji: discord.Emoji=None):
+        if emoji is None:
+            embed = discord.Embed(
+                title="Missing Emoji to delete",
+                description=f"{ctx.author.mention}, Failed to delete that emoji! Please provide the actual emoji! e.g 💀",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        await emoji.delete()
+
+        embed = discord.Embed(
+            title="Remove emoji",
+            description=f"{ctx.author.mention}, Emoji removed successfully!",
+            color=embed_colour
+        )
+
+        await ctx.send(embed=embed)
+
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Fun Cog Loaded! {Fore.RESET}')
