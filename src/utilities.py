@@ -46,7 +46,6 @@ except FileNotFoundError:
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
 
-
 # LOAD VARIABLES FROM CONFIG.JSON
 token = config.get("TOKEN")
 
@@ -75,6 +74,10 @@ max_bank_size = config.get("bank_size")
 
 # max gamble amount
 max_bet = config.get("max_gamble_amount")
+
+# Admin logging channel
+
+logging_channel_id = config.get("LOGGING_CHANNEL")
 
 # ----------------------------------------------------------MODERATION FUNCTIONS----------------------------------------------------------
 
