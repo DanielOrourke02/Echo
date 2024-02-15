@@ -132,7 +132,9 @@ class Help(commands.Cog):
             "joke": "Get a random joke.",
             "user_info": "Get user on a user.",
             "server_info": "Get the server info.",
-            "avatar": "Get someones avatar or your own"
+            "avatar": "Get someones avatar or your own",
+            "shoot <@user>": "Shoot someone (gun/m4a1 needed)",
+            "bomb <@user>": "Bomb someone (c4 needed)"
         }
 
         embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=discord.Color.green())
