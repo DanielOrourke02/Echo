@@ -776,6 +776,7 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=result_embed)
 
+    
     @commands.command()
     async def shoot(self, ctx, user: commands.MemberConverter=None):
         user_id = ctx.author.id
@@ -783,31 +784,19 @@ class Economy(commands.Cog):
         # Check if the user has a 'bow' in their inventory
         # if not dont let them run the hunt command
         user_inventory = get_user_inventory(user_id)
-        if 'gun' or 'm4a1' not in user_inventory:
+        if 'gun' in user_inventory:
+            pass
+        elif 'm4a1' in user_inventory:
+            pass
+        else:
             embed = discord.Embed(
                 title="Unable to shoot",
                 description=f"{ctx.author.mention}, You need to find a gun or craft an m4a1 to shoot people! Find a gun using `{prefix}scrap` or craft an m4a1 using `{prefix}craft m4a1` view recipes using `{prefix}recipes`!",
                 color=embed_error
             )
             await ctx.send(embed=embed)
-            return
-        
-        if user is None:
-            embed = discord.Embed(
-                title="Suicide",
-                description=f"{ctx.author.mention} has just shot themself!",
-                color=embed_error
-            )
-            await ctx.send(embed=embed)
-            return
-        
-        embed = discord.Embed(
-            title="Shots Fired",
-            description=f"{ctx.author.mention}, Has just shot and killed {user.mention} in cold blood.",
-            color=discord.Color.orange()
-        )
-        await ctx.send(embed=embed)
 
+    
     @commands.command()
     async def bomb(self, ctx, user: commands.MemberConverter=None):
         user_id = ctx.author.id
@@ -840,6 +829,7 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=embed)
 
+    
     @commands.command()
     async def trade(self, ctx, user: commands.MemberConverter=None, item_name: str=None):
         user_id = ctx.author.id
