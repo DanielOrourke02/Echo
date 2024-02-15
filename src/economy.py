@@ -695,7 +695,7 @@ class Economy(commands.Cog):
             )
             await ctx.send(embed=embed)
             return
-
+            
         if random.randint(0, 9) < 4:  # 50% chance of success
             robbed_amount = int(get_user_balance(victim_id) * 0.20)  # 20% of victim's balance
             update_user_balance(robber_id, robbed_amount)
@@ -719,7 +719,7 @@ class Economy(commands.Cog):
                 color=embed_error()
             )
 
-        await ctx.send(embed=embed)
+            await ctx.send(embed=embed)
     
 #-----------------GAMBLING GAMES-----------------
 
