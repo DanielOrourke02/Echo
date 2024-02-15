@@ -707,6 +707,7 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You successfully robbed {robbed_amount} coins from {victim.mention}!",
                 color=discord.Color.green()
             )
+            await ctx.send(embed=embed)
         else:
             penalty_amount = int(get_user_balance(robber_id) * 0.20)  # 20% of robber's balance
             update_user_balance(robber_id, -penalty_amount)
