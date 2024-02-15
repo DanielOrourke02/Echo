@@ -695,7 +695,7 @@ class Economy(commands.Cog):
             )
             await ctx.send(embed=embed)
             return
-            
+
         if random.randint(0, 9) < 4:  # 50% chance of success
             robbed_amount = int(get_user_balance(victim_id) * 0.20)  # 20% of victim's balance
             update_user_balance(robber_id, robbed_amount)
@@ -777,7 +777,6 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=result_embed)
 
-    
     @commands.command()
     async def shoot(self, ctx, user: commands.MemberConverter=None):
         user_id = ctx.author.id
@@ -797,7 +796,23 @@ class Economy(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-    
+        
+        if user is None:
+            embed = discord.Embed(
+                title="Suicide",
+                description=f"{ctx.author.mention} has just shot themself!",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        embed = discord.Embed(
+            title="Shots Fired",
+            description=f"{ctx.author.mention}, Has just shot and killed {user.mention} in cold blood.",
+            color=discord.Color.orange()
+        )
+        await ctx.send(embed=embed)
+
     @commands.command()
     async def bomb(self, ctx, user: commands.MemberConverter=None):
         user_id = ctx.author.id
@@ -830,7 +845,6 @@ class Economy(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    
     @commands.command()
     async def trade(self, ctx, user: commands.MemberConverter=None, item_name: str=None):
         user_id = ctx.author.id
@@ -873,6 +887,58 @@ class Economy(commands.Cog):
             color=discord.Color.orange(),
         )
         await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['print'])
+    async def money_print(self, ctx, amount: int = None):
+        user_id = ctx.author.id
+
+        if amount is None:
+            embed = discord.Embed(
+                title="Amount to print needed",
+                description=f"{ctx.author.mention}, Incorrect usage. Please use: `{prefix}print <amount>`. Remember, you can get caught!",
+                color=discord.Color.red()
+            )
+            await ctx.send(embed=embed)
+            return
+
+        user_inventory = get_user_inventory(user_id)
+        if 'printer' not in user_inventory:
+            embed = discord.Embed(
+                title="Unable to money print",
+                description=f"{ctx.author.mention}, You need a money printer to print money illegally! Buy one from `{prefix}shop` or `{prefix}buy printer`. Remember, you can get caught!",
+                color=discord.Color.red()
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        if amount < 0:
+            embed = discord.Embed(
+                title="Unable to money print",
+                description=f"{ctx.author.mention}, You can only print positive amounts of money! Remember, you can get caught!",
+                color=discord.Color.red()
+            )
+            await ctx.send(embed=embed)
+            return
+        elif amount > 20000:
+            embed = discord.Embed(
+                title="Unable to money print",
+                description=f"{ctx.author.mention}, You cannot print more than 20000 at once! Remember, you can get caught!",
+                color=discord.Color.red()
+            )
+            await ctx.send(embed=embed)
+            return
+        elif get_user_balance(user_id) < 0:
+            embed = discord.Embed(
+                title="Unable to money print",
+                description=f"{ctx.author.mention}, You need atleast 1 money to start money printing.",
+                color=discord.Color.red()
+            )
+            await ctx.send(embed=embed)
+            return
+
+        operation = MoneyPrintingOperation()
+        await operation.print_money(ctx, amount)
 
 
     @commands.Cog.listener()
