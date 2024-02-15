@@ -25,15 +25,15 @@ bot = commands.Bot(command_prefix=config.get('prefix'), intents=intents, help_co
 
 # function that loads cogs
 async def setup_bot():
-    bot.add_cog(Crafting(bot))
-    bot.add_cog(Economy(bot))
-    bot.add_cog(Fun(bot))
-    bot.add_cog(Farming(bot))
-    bot.add_cog(Help(bot))
-    bot.add_cog(Moderation(bot))
-    bot.add_cog(Blackjack(bot))
-    bot.add_cog(Slots(bot))
-    bot.add_cog(Fishing(bot))
+    await bot.add_cog(Crafting(bot))
+    await bot.add_cog(Economy(bot))
+    await bot.add_cog(Fun(bot))
+    await bot.add_cog(Farming(bot))
+    await bot.add_cog(Help(bot))
+    await bot.add_cog(Moderation(bot))
+    await bot.add_cog(Blackjack(bot))
+    await bot.add_cog(Slots(bot))
+    await bot.add_cog(Fishing(bot))
 
 
 @bot.event
@@ -44,6 +44,19 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help"))  # set presence to 'Listening to .help'
 
     guilds(bot)  # call guilds function, this will output what guilds the bot is in (if enabled in config)
+
+
+@bot.event
+async def on_message_delete(message):
+    channel = bot.get_channel(logging_channel_id)
+    
+    embed = discord.Embed(
+        title="Message Deleted",
+        description=f"**Message sent by:** {message.author.mention}\n"
+                    f"**Content:** {message.content}",
+        color=discord.Color.red()
+    )
+    await channel.send(embed=embed)
 
 
 # Use an asynchronous function to run the setup and the bot
