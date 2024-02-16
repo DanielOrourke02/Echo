@@ -53,7 +53,7 @@ class Slots(commands.Cog):
         s2 = random.randint(1, items-1)
         s3 = random.randint(1, items-1)
 
-        win_rate = 30/100
+        win_rate = 45/100
 
         if random.random() < win_rate:
             symbols_weights = [3.5, 7, 15, 25, 55] # 
