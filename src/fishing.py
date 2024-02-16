@@ -37,12 +37,14 @@ class Fishing(commands.Cog):
     @commands.command()
     async def fish(self, ctx):
         user_id = str(ctx.author.id)
+        item_info = combined_items['bait'] # id
+        item_sell_price = item_info["sell"] # price
 
         # Check if they have bait in their inventory
         if 'bait' not in get_user_inventory(user_id):
             embed = discord.Embed(
                 title="No bait (thats bait)",
-                description=f"{ctx.author.mention}, You need bait for fishing! Buy some using: `{prefix}buy bait` (250 per bait)",
+                description=f"{ctx.author.mention}, You need bait for fishing! Buy some using: `{prefix}buy bait` ({item_sell_price} per bait)",
                 color=embed_colour
             )
             await ctx.send(embed=embed)
@@ -57,9 +59,6 @@ class Fishing(commands.Cog):
         # Process the outcome and update player's inventory
         add_item_to_inventory(user_id, outcome)
         remove_item_from_inventory(ctx.author.id, 'bait')
-
-        item_info = combined_items['bait'] # id
-        item_sell_price = item_info["sell"] # price
 
         # Update user balance (subtract the cost of bait)
         update_user_balance(user_id, -item_sell_price)
