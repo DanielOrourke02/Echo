@@ -58,8 +58,11 @@ class Fishing(commands.Cog):
         add_item_to_inventory(user_id, outcome)
         remove_item_from_inventory(ctx.author.id, 'bait')
 
+        item_info = combined_items['bait'] # id
+        item_sell_price = item_info["sell"] # price
+
         # Update user balance (subtract the cost of bait)
-        update_user_balance(user_id, -50)
+        update_user_balance(user_id, -item_sell_price)
 
         # Update fish caught leaderboard
         self.fish_caught[user_id]['fish_count'] += 1
