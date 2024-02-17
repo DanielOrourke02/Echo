@@ -4,46 +4,6 @@ from utilities import *
 from eco_support import *
 
 
-# COSMETICS VIEW
-
-
-class CosmeticsView(discord.ui.View):
-    def __init__(self, current_page, num_pages):
-        super().__init__()
-        self.current_page = current_page
-        self.num_pages = num_pages
-
-    @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
-    async def previous_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
-        if self.current_page > 0:
-            self.current_page -= 1
-            await send_cosmetics_page(interaction.channel, self.current_page, 10, self.num_pages, self)
-
-    @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
-    async def next_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
-        if self.current_page < self.num_pages - 1:
-            self.current_page += 1
-            await send_cosmetics_page(interaction.channel, self.current_page, 10, self.num_pages, self)
-
-
-async def send_cosmetics_page(channel, current_page, items_per_page, num_pages, view):
-    start_index = current_page * items_per_page
-    end_index = (current_page + 1) * items_per_page
-    page_items = list(combined_items.items())[start_index:end_index]
-
-    embed = discord.Embed(title=f"Cosmetics | Page {current_page + 1}")
-
-    for item_id, item_info in page_items:
-        name = item_info["name"]
-        sell_price = item_info["sell"]
-        embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price}", inline=True)
-
-    await channel.send(embed=embed, view=view)
-
-
-# ECONOMY COMMAND VIEW
-
-
 economy_command_descriptions = {
     "balance": "Check your current bank and pocket balance.",
     "baltop": "Leaderboard of the richest people",
@@ -63,9 +23,6 @@ economy_command_descriptions = {
     "rob <@example>": "Rob a user and potentially steal 20% of their On Hand Money. But if you fail you lose 20% of your money",
     "plant <amount>": f"Plant {max_carrot_planted} crops and sell them for {carrot_sell} (buy price is {cost_per_carrot})",
     "harvest": "Harvest your planted crops.",
-    "fish": "Go fishing and sell fish for money.",
-    "fishc": "Show how many fishes you have caught and flex on other users.",
-    "leaderboard": "Top 10 fishes who have caught the most fish.",
     "craft <recipe_name>": "Craft items.",
     "recipes": "Shows craftable items and what you need for it.",
     "blackjacks <amount>": "Play a cool interactive blackjacks game.",
@@ -73,38 +30,6 @@ economy_command_descriptions = {
     "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
     "gamble <amount>": f"Gamble your money with 1/3 chance of winning (max {max_bet})",
 }
-
-
-class EconomyView(discord.ui.View):
-    def __init__(self, current_page, num_pages):
-        super().__init__()
-        self.current_page = current_page
-        self.num_pages = num_pages
-
-    @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
-    async def previous_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
-        if self.current_page > 0:
-            self.current_page -= 1
-            await send_economy_page(interaction.channel, self.current_page, 10, self.num_pages, self)
-
-    @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
-    async def next_button(self, button: discord.ui.Button, interaction: discord.MessageInteraction):
-        if self.current_page < self.num_pages - 1:
-            self.current_page += 1
-            await send_economy_page(interaction.channel, self.current_page, 10, self.num_pages, self)
-
-
-async def send_economy_page(channel, current_page, items_per_page, num_pages, view):
-    start_index = current_page * items_per_page
-    end_index = (current_page + 1) * items_per_page
-    page_items = list(economy_command_descriptions.items())[start_index:end_index]
-
-    embed = discord.Embed(title=f"Economy Commands | Page {current_page + 1}", description="List of available economy commands:", color=discord.Color.green())
-
-    for cmd, desc in page_items:
-        embed.add_field(name=f"{cmd}", value=desc, inline=True)
-
-    await channel.send(embed=embed, view=view)
 
 
 
@@ -175,8 +100,43 @@ class Help(commands.Cog):
         num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
 
         current_page = 0
-        view = EconomyView(current_page, num_pages)
-        await send_economy_page(ctx, current_page, items_per_page, num_pages, view)
+        start_index = current_page * items_per_page
+        end_index = min((current_page + 1) * items_per_page, total_items)
+
+        embed = discord.Embed(title=f"Economy Commands | Page {current_page + 1}", description="List of available economy commands:", color=embed_colour)
+
+        for cmd, desc in list(economy_command_descriptions.items())[start_index:end_index]:
+            embed.add_field(name=f"{cmd}", value=desc, inline=True)
+
+        message = await ctx.send(embed=embed)
+
+        if num_pages > 1:
+            await message.add_reaction('◀️')
+            await message.add_reaction('▶️')
+
+        def check(reaction, user):
+            return user == ctx.author and reaction.message.id == message.id and str(reaction.emoji) in ['◀️', '▶️']
+
+        while True:
+            try:
+                reaction, _ = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+                if str(reaction.emoji) == '▶️' and current_page < num_pages - 1:
+                    current_page += 1
+                elif str(reaction.emoji) == '◀️' and current_page > 0:
+                    current_page -= 1
+
+                start_index = current_page * items_per_page
+                end_index = min((current_page + 1) * items_per_page, total_items)
+
+                embed.clear_fields()
+                embed.title = f"Economy Commands | Page {current_page + 1}"
+                for cmd, desc in list(economy_command_descriptions.items())[start_index:end_index]:
+                    embed.add_field(name=f"{cmd}", value=desc, inline=True)
+
+                await message.edit(embed=embed)
+                await message.remove_reaction(reaction, ctx.author)
+            except asyncio.TimeoutError:
+                break
 
 
     @commands.command()
@@ -200,9 +160,48 @@ class Help(commands.Cog):
         num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
 
         current_page = 0
-        view = CosmeticsView(current_page, num_pages)
-        await send_cosmetics_page(ctx, current_page, items_per_page, num_pages, view)
-        
+        start_index = current_page * items_per_page
+        end_index = min((current_page + 1) * items_per_page, total_items)
+
+        embed = discord.Embed(title=f"Cosmetics | Page {current_page + 1}", color=embed_colour)
+
+        for item_id, item_info in list(combined_items.items())[start_index:end_index]:
+            name = item_info["name"]
+            sell_price = item_info["sell"]
+            embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price}", inline=True)
+
+        message = await ctx.send(embed=embed)
+
+        if num_pages > 1:
+            await message.add_reaction('◀️')
+            await message.add_reaction('▶️')
+
+        def check(reaction, user):
+            return user == ctx.author and reaction.message.id == message.id and str(reaction.emoji) in ['◀️', '▶️']
+
+        while True:
+            try:
+                reaction, _ = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+                if str(reaction.emoji) == '▶️' and current_page < num_pages - 1:
+                    current_page += 1
+                elif str(reaction.emoji) == '◀️' and current_page > 0:
+                    current_page -= 1
+
+                start_index = current_page * items_per_page
+                end_index = min((current_page + 1) * items_per_page, total_items)
+
+                embed.clear_fields()
+                embed.title = f"Cosmetics | Page {current_page + 1}"
+                for item_id, item_info in list(combined_items.items())[start_index:end_index]:
+                    name = item_info["name"]
+                    sell_price = item_info["sell"]
+                    embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price}", inline=True)
+
+                await message.edit(embed=embed)
+                await message.remove_reaction(reaction, ctx.author)
+            except asyncio.TimeoutError:
+                break
+
 
     @commands.Cog.listener()
     async def on_ready(self):
