@@ -40,8 +40,8 @@ cosmetics_items = {
     "mythical_sword": {"name": "Mythical sword", "sell": 12500, "chance": 5},
 
     # Tools
-    "shovel": {"name": "Shovel used for digging", "sell": 1000, "chance": 50},
-    "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 45},
+    "shovel": {"name": "Shovel used for digging", "sell": 1000, "chance": 23},
+    "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 20},
 
     # Other items (High to low chance)
     "infinity": {"name": "Infinity Gauntlet", "sell": 25000, "chance": 1},
@@ -78,15 +78,7 @@ shop_items = {
     "middle": {"name": "Middle class (role)", "cost": 50000},
     "upper": {"name": "Upper class elite (role)", "cost": 100000},
     "protagonist": {"name": "THE PROTAGONIST (role)", "cost": 500000},
-    "bait": {"name": "Bait for fishing", "cost": 250},
     "printer": {"name": "Money Printer (you can get caught)", "cost": 10000}
-}
-
-fish_data = {
-    "trash": {"name": "Plastic Trash", "sell": 250, "chance": 70},
-    "cod": {"name": "A cod, nothing special", "sell": 300, "chance": 25},
-    "lemo": {"name": "Lemo, rare fish", "sell": 350, "chance": 20},
-    "monkey": {"name": "Monkey fish Legenday", "sell": 700, "chance": 10},
 }
 
 # role colours
