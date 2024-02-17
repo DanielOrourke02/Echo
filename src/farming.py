@@ -30,7 +30,7 @@ class Farming(commands.Cog):
         # Check if the user has planted in the last 24 hours or has no plants planted
         if user_id in last_planting_time:
             time_since_last_plant = datetime.datetime.now() - last_planting_time[user_id]
-            if time_since_last_plant < datetime.timedelta(hours=24):
+            if time_since_last_plant < datetime.timedelta(hours=config.get('carrot_growth_duration')):
                 embed.title = "Wait a Little Longer"
                 embed.description = f"{ctx.author.mention}, You can only plant carrots once every 24 hours. Please wait a bit longer before planting again."
                 embed.color = embed_error
