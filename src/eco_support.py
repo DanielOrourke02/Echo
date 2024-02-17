@@ -92,7 +92,7 @@ role_colors = {
 }
 
 
-combined_items = {**cosmetics_items, **craftables, **fish_data}
+combined_items = {**cosmetics_items, **craftables}
 
 ABS_PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -438,6 +438,7 @@ class MoneyPrintingOperation:
 
                 # Deduct fee from user's balance
                 update_user_balance(user_id, -int(amount_to_print * 0.75))
+                remove_item_from_inventory(user_id, "printer")
                 return
 
             # Update total printed amount
