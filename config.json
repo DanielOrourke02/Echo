@@ -13,19 +13,19 @@
 
     "show_guilds": "true",
 
-    "daily_reward": 1000,
+    "daily_reward": 2500,
 
     "carrot_plant_price": 100,
 
-    "carrot_sell_price": 110,
+    "carrot_sell_price": 115,
 
-    "max_carrots_planted": 250,
+    "max_carrots_planted": 350,
 
     "carrot_growth_duration": 24,
 
-    "bank_size": 250000,
+    "bank_size": 300000,
 
-    "max_gamble_amount": 15000,
+    "max_gamble_amount": 25000,
 
     "lottery_cooldown": 30,
 
