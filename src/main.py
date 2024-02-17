@@ -14,7 +14,6 @@ from moderation import Moderation
 from slots import Slots
 from help import Help
 from fun import Fun
-from fishing import Fishing
 
 
 intents = discord.Intents.all()
@@ -33,8 +32,6 @@ async def setup_bot():
     await bot.add_cog(Moderation(bot))
     await bot.add_cog(Blackjack(bot))
     await bot.add_cog(Slots(bot))
-    await bot.add_cog(Fishing(bot))
-
 
 @bot.event
 async def on_ready():
