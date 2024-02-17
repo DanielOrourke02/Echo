@@ -442,6 +442,17 @@ class Economy(commands.Cog):
         item_name = item_info["name"] # name
         item_sell_price = item_info["sell"] # price
 
+
+
+        if item_id == "gold":
+            item_info = shop_items["gold"]
+            item_name = item_info["name"]
+            item_sell_price = item_info["cost"]
+        elif item_id == "silver":
+            item_info = shop_items["silver"]
+            item_name = item_info["name"]
+            item_sell_price = item_info["cost"]
+
         # Update user's balance
         update_user_balance(user_id, item_sell_price)
 
@@ -844,6 +855,7 @@ class Economy(commands.Cog):
             color=discord.Color.orange(),
         )
         await ctx.send(embed=embed)
+
 
     @commands.command()
     async def trade(self, ctx, user: commands.MemberConverter=None, item_name: str=None):
