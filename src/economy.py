@@ -708,10 +708,6 @@ class Economy(commands.Cog):
             return
 
         if random.randint(0, 9) < 4:  # 50% chance of success
-            robbed_amount = int(get_user_balance(victim_id) * 0.20)  # 20% of victim's balance
-            update_user_balance(robber_id, robbed_amount)
-            update_user_balance(victim_id, -robbed_amount)
-
             # Embed for success
             embed = discord.Embed(
                 title="Robbery Success",
@@ -719,10 +715,11 @@ class Economy(commands.Cog):
                 color=discord.Color.green()
             )
             await ctx.send(embed=embed)
-        else:
-            penalty_amount = int(get_user_balance(robber_id) * 0.20)  # 20% of robber's balance
-            update_user_balance(robber_id, -penalty_amount)
 
+            robbed_amount = int(get_user_balance(victim_id) * 0.20)  # 20% of victim's balance
+            update_user_balance(robber_id, robbed_amount)
+            update_user_balance(victim_id, -robbed_amount)
+        else:
             # Embed for failure
             embed = discord.Embed(
                 title="Robbery Failed",
@@ -731,6 +728,8 @@ class Economy(commands.Cog):
             )
 
             await ctx.send(embed=embed)
+            penalty_amount = int(get_user_balance(robber_id) * 0.20)  # 20% of robber's balance
+            update_user_balance(robber_id, -penalty_amount)
     
 #-----------------GAMBLING GAMES-----------------
 
