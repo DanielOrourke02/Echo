@@ -48,8 +48,6 @@ add more gambling games
 
 `Buttons` - Buttons will no longer work after a bot restart (ticket button and verify button)
 
-`json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)` - Just delete whatever json file is erroring (only happens with empty json files)
-
 
 ## General Commands
 
@@ -87,9 +85,6 @@ add more gambling games
 | `hunt`                   | hunt for cosmetics and money. (with a bow)            |
 | `dig`                    | Dig for cosmetics and money. (with a shovel)          |
 | `scrap`                  | Find cosmetics and money.                             |
-| `fish`                   | Go fishing and sell fish for money.                   |
-| `fishc`                  | Get the amount of fish you have caught.               |
-| `leaderboard`            | Get the top 10 users with the most caught fish        |
 | `inventory`              | Lists items in your inventory.                        |
 | `pay <amount>`           | Pay someone money.                                    |
 | `deposit <amount/max`    | Deposit money into your bank (earns interest).        |
@@ -101,7 +96,7 @@ add more gambling games
 | `recipes`                | Shows craftable items and required materials.         |
 | `lottery`                | Participate in a lottery for a chance to win money.   |
 | `gamble <amount>`        | Gamble your money with a 1/3 chance of winning.       |
-| `blackjacks <amount>`    | Play a cool interactive blackjacks game               |
+| `blackjack <amount>`    | Play a cool interactive blackjacks game               |
 | `gamble <amount>`        | Gamble away your money without a chance of winning.   |
 
 ## Moderation Commands
