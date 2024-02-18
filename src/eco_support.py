@@ -44,10 +44,10 @@ cosmetics_items = {
     "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 20},
 
     # Other items (High to low chance)
-    "infinity": {"name": "Infinity Gauntlet", "sell": 30000, "chance": 1},
-    "david4": {"name": "David's 4th ball", "sell": 25000, "chance": 2},
-    "stick": {"name": "Stick", "sell": 15000, "chance": 10},
-    "gun": {"name": "Glock-18", "sell": 8000, "chance": 15},
+    "infinity": {"name": "Infinity Gauntlet", "sell": 30000, "chance": 5},
+    "david4": {"name": "David's 4th ball", "sell": 25000, "chance": 7},
+    "stick": {"name": "Stick", "sell": 15000, "chance": 15},
+    "gun": {"name": "Glock-18", "sell": 8000, "chance": 18},
     "tech": {"name": "Electronics", "sell": 1000, "chance": 20},
     "weed": {"name": "Weed", "sell": 5000, "chance": 25},
     "sulphur": {"name": "Sulphur", "sell": 500, "chance": 40},
