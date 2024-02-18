@@ -387,8 +387,8 @@ def is_admin(ctx):
 class MoneyPrintingOperation:
     def __init__(self):
         self.printing_speed = 10  # Number of bills printed per second
-        self.max_printing_amount = 20000  # Maximum amount that can be printed
-        self.time_increase_per_thousand = 4 * 60  # Time taken to print one thousand (4 minutes)
+        self.max_printing_amount = 50000  # Maximum amount that can be printed
+        self.time_increase_per_thousand = 1 * 60  # Time taken to print one thousand (1 minutes)
 
     async def print_money(self, ctx, amount_to_print):
         user_id = ctx.author.id
@@ -396,7 +396,7 @@ class MoneyPrintingOperation:
         total_time_taken = 0
 
         # Randomly choose chance of getting caught
-        base_chance_of_detection = random.uniform(0.25, 0.60)
+        base_chance_of_detection = random.uniform(0.15, 0.50)
 
         # Calculate the estimated time until job is done
         estimated_batches = amount_to_print / 1000
