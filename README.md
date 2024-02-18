@@ -18,8 +18,6 @@ make code much neater and remove all DRY (dont repeat yourself)
 
 add fertelizer (for plants to speed up process)
 
-trading (items)
-
 add more gambling games
 
 # Installation
