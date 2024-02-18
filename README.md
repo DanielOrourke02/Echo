@@ -16,8 +16,6 @@ A cool bot with lots and lots of commands and many different features. Scroll do
 
 fix farming (a litte bugged)
 
-fix money printing (rates for winning are too low)
-
 Add a GUI control dashboard
 
 make code much neater and remove all DRY (dont repeat yourself)
