@@ -44,9 +44,9 @@ cosmetics_items = {
     "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 20},
 
     # Other items (High to low chance)
-    "infinity": {"name": "Infinity Gauntlet", "sell": 25000, "chance": 1},
-    "david4": {"name": "David's 4th ball", "sell": 15000, "chance": 2},
-    "stick": {"name": "Stick", "sell": 10000, "chance": 10},
+    "infinity": {"name": "Infinity Gauntlet", "sell": 30000, "chance": 1},
+    "david4": {"name": "David's 4th ball", "sell": 25000, "chance": 2},
+    "stick": {"name": "Stick", "sell": 15000, "chance": 10},
     "gun": {"name": "Glock-18", "sell": 8000, "chance": 15},
     "tech": {"name": "Electronics", "sell": 1000, "chance": 20},
     "weed": {"name": "Weed", "sell": 5000, "chance": 25},
@@ -72,13 +72,9 @@ craftables = {
 
 
 shop_items = {
-    "slave": {"name": "Slave (role)", "cost": 5000},
-    "poor": {"name": "Poor (role)", "cost": 10000},
-    "working": {"name": "Working class (role)", "cost": 25000},
-    "middle": {"name": "Middle class (role)", "cost": 50000},
-    "upper": {"name": "Upper class elite (role)", "cost": 100000},
-    "protagonist": {"name": "THE PROTAGONIST (role)", "cost": 500000},
-    "printer": {"name": "Money Printer (you can get caught)", "cost": 10000}
+    "printer": {"name": "Money Printer (you can get caught)", "cost": 10000},
+    "silver": {"name": "Silver, Store your money in silver", "cost": 1000},
+    "gold": {"name": "Gold Store your money in gold", "cost": 10000},
 }
 
 # role colours
@@ -392,7 +388,6 @@ class MoneyPrintingOperation:
     def __init__(self):
         self.printing_speed = 10  # Number of bills printed per second
         self.max_printing_amount = 20000  # Maximum amount that can be printed
-        self.max_chance = 0.3  # Maximum chance of getting caught (changed to a lower value)
         self.time_increase_per_thousand = 4 * 60  # Time taken to print one thousand (4 minutes)
 
     async def print_money(self, ctx, amount_to_print):
@@ -400,8 +395,8 @@ class MoneyPrintingOperation:
         total_printed = 0
         total_time_taken = 0
 
-        # Randomly choose base chance of getting caught (adjusted to a lower range)
-        base_chance_of_detection = random.uniform(0.05, 0.2)
+        # Randomly choose chance of getting caught
+        base_chance_of_detection = random.uniform(0.25, 0.60)
 
         # Calculate the estimated time until job is done
         estimated_batches = amount_to_print / 1000
@@ -426,7 +421,8 @@ class MoneyPrintingOperation:
             total_time_taken += time_taken
 
             # Simulate chance of getting caught
-            chance_of_detection = base_chance_of_detection + (total_printed / self.max_printing_amount)
+            chance_of_detection = base_chance_of_detection
+            
             if random.random() < chance_of_detection:
                 # User was caught
                 embed = discord.Embed(
