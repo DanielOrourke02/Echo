@@ -24,6 +24,8 @@ add more gambling games
 
 fix rob command
 
+Polish project, fix all bugs and release v4
+
 # Installation
 
 (first have python installled from the python website or micrisoft store)
