@@ -14,8 +14,6 @@ A cool bot with lots and lots of commands and many different features. Scroll do
 
 ### todo
 
-fix farming (a litte bugged)
-
 Add a GUI control dashboard
 
 make code much neater and remove all DRY (dont repeat yourself)
@@ -23,6 +21,8 @@ make code much neater and remove all DRY (dont repeat yourself)
 add fertelizer (for plants to speed up process)
 
 add more gambling games
+
+fix rob command
 
 # Installation
 
