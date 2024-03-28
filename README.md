@@ -44,6 +44,12 @@ Polish project, fix all bugs and release v4
 
 4. for windows simply run `win-run.bat` and for linux do the following `chmod +x linux-run.sh` then `./linux-run.sh` (untested I tink those commands work). All requirements will be installed (you can disable this by setting skip-installation to true)
 
+<h3 align="left">Connect with me:</h3>
+<p align="left">
+</p>
+<h3 align="left">Hire Me: https://discord.gg/kNWkT8xWg6 Or DM ME: mal023</h3>
+</p>
+
 # KNOWN BUGS
 
 `Buttons` - Buttons will no longer work after a bot restart (ticket button and verify button)
