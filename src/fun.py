@@ -17,7 +17,7 @@ class Fun(commands.Cog):
 
 
     @commands.command()
-    async def say(self, ctx, message: str=None):
+    async def say(self, ctx, *, message: str=None):
         if message is None:
             embed = discord.Embed(
                 title="Incorrect say usage",
