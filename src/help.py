@@ -9,6 +9,7 @@ economy_command_descriptions = {
     "baltop": "Leaderboard of the richest people",
     "daily": "Claim your daily reward.",
     "shop": "View the available items in the shop.",
+    "trade <@user> <item_id>": "Gives an item to a player",
     "cosmetics": "Lists all findable items and their sell prices.",
     "buy <item_id>": "Buy an item from the shop.",
     "sell <item_id>": "Sells item for its value",
