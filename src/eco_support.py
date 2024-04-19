@@ -52,7 +52,6 @@ cosmetics_items = {
     "weed": {"name": "Weed", "sell": 5000, "chance": 25},
     "sulphur": {"name": "Sulphur", "sell": 500, "chance": 40},
     "charcoal": {"name": "Charcoal", "sell": 300, "chance": 50},
-    "tape": {"name": "Tape", "sell": 200, "chance": 60},
     "clock": {"name": "Alarm Clock", "sell": 700, "chance": 30},
     "roll": {"name": "Roll paper for weed", "sell": 1500, "chance": 30},
     "potato": {"name": "Potato", "sell": 100, "chance": 70},
@@ -62,6 +61,7 @@ cosmetics_items = {
 # List of all items you can craft
 craftables = {
     "joint": {"name": "Weed rolled in paper", "sell": 10000},
+    "poo": {"name": "Its poo made by the gods", "sell": 2000},
     "c4": {"name": "C4 BOMB", "sell": 25000},
     "excalibur": {"name": "The Excalibur", "sell": 35000},
     "m4a1": {"name": "Assault Rifle", "sell": 30000},
@@ -72,7 +72,6 @@ craftables = {
 
 
 shop_items = {
-    "printer": {"name": "Money Printer (you can get caught)", "cost": 10000},
     "silver": {"name": "Silver, Store your money in silver", "cost": 1000},
     "gold": {"name": "Gold Store your money in gold", "cost": 10000},
 }
@@ -118,11 +117,15 @@ crafting_recipes = {
     "c4": {
         "sulphur": 2,
         "charcoal": 1,
-        "tape": 3,
         "clock": 1,
         "potato": 5,  # Because why not?
         "tech": 2,
         "result": "c4" # C4 Bomb for bombing kids
+    },
+    "poo": {
+        "charcoal": 3,
+        "sulphur": 1,
+
     },
     "joint": {
         "roll": 1,
@@ -382,74 +385,3 @@ def log_sell(user_id, username , item_name, item_cost):
 # Check if the user invoking the command is the admin
 def is_admin(ctx):
     return ctx.author.id == config.get("ADMIN_ID")
-
-
-class MoneyPrintingOperation:
-    def __init__(self):
-        self.printing_speed = 10  # Number of bills printed per second
-        self.max_printing_amount = 50000  # Maximum amount that can be printed
-        self.time_increase_per_thousand = 1 * 60  # Time taken to print one thousand (1 minutes)
-
-    async def print_money(self, ctx, amount_to_print):
-        user_id = ctx.author.id
-        total_printed = 0
-        total_time_taken = 0
-
-        # Randomly choose chance of getting caught
-        base_chance_of_detection = random.uniform(0.15, 0.50)
-
-        # Calculate the estimated time until job is done
-        estimated_batches = amount_to_print / 1000
-        estimated_time_remaining = estimated_batches * self.time_increase_per_thousand
-
-        # Output user's chance of getting caught and estimate until the job is done
-        embed = discord.Embed(
-            title="Money Printing Initiated",
-            description=f"Chance of getting caught: {base_chance_of_detection * 100:.2f}%\nEstimated time until job is done: {estimated_time_remaining / 60:.2f} minutes",
-            color=discord.Color.green()
-        )
-        await ctx.send(embed=embed)
-
-        while total_printed < amount_to_print:
-            # Calculate time taken to print next batch of bills
-            remaining_amount = amount_to_print - total_printed
-            batch_to_print = min(remaining_amount, self.printing_speed)
-            time_taken = batch_to_print / self.printing_speed
-
-            # Increase time taken based on amount printed
-            time_taken += (total_printed / 1000) * self.time_increase_per_thousand
-            total_time_taken += time_taken
-
-            # Simulate chance of getting caught
-            chance_of_detection = base_chance_of_detection
-            
-            if random.random() < chance_of_detection:
-                # User was caught
-                embed = discord.Embed(
-                    title="You were caught Money Printing!",
-                    description=f"You were caught! Your punishment is a fee of {amount_to_print * 0.75} money and the removal of your printer.",
-                    color=discord.Color.red()
-                )
-                await ctx.send(embed=embed)
-
-                # Deduct fee from user's balance
-                update_user_balance(user_id, -int(amount_to_print * 0.75))
-                remove_item_from_inventory(user_id, "printer")
-                return
-
-            # Update total printed amount
-            total_printed += batch_to_print
-
-            # Pause simulation for time taken to print batch
-            await asyncio.sleep(time_taken)
-
-        # Money print job successful
-        embed = discord.Embed(
-            title="Money Print Job Successful",
-            description=f"Money printing completed in {total_time_taken / 60:.2f} minutes. Your balance has increased by: {total_printed}",
-            color=discord.Color.green()
-        )
-        await ctx.send(embed=embed)
-
-        # Increase user's balance
-        update_user_balance(user_id, total_printed)
