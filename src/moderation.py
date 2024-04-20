@@ -256,6 +256,58 @@ class Moderation(commands.Cog):
         save_locked_channels()
         await inter.response.send_message("Server unlocked.")
 
+    # DEFINE THE ADMIN ID IN THE CONFIG
+
+    @commands.command(aliases=['config', 'view', 'view_config', 'cfig'])
+    @commands.check(is_admin) # only runs for one user id (the owner)
+    async def config_view(self, ctx):
+        # Create an embed to display config data
+        embed = discord.Embed(title='Reading config.json', description='Here are the config details:', color=embed_colour)
+        
+        # Add config details to the embed
+        # config is defined in utilities.py
+        for key, value in config.items():
+            if key.lower() == 'token':
+                value = '[hidden for security reasons]'  # Replace token value with asterisks
+            embed.add_field(name=f'`{key}`', value=f'`{value}`', inline=False)
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.check(is_admin) # only runs for one user id (owner)
+    async def config_edit(self, ctx, key=None, value=None):
+        if key is None:
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, Incorrect usage. Please use (**CASE SENSITIVE**): `{prefix}config_edit <name> <new_value>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        if value is None:
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, Incorrect usage. Please use (**CASE SENSITIVE**): `{prefix}config_edit <name> <new_value>`",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        # Update the config dictionary
+        config[key] = value
+
+        # Save the updated config to the config file
+        with open('config.json', 'w') as file:
+            json.dump(config, file, indent=4)
+
+        # Create an embed to confirm the update
+        embed = discord.Embed(title='Config Updated', color=embed_colour)
+        embed.add_field(name='**Variable**', value=key, inline=False)
+        embed.add_field(name='**New Value**', value=value, inline=False)
+
+        await ctx.send(embed=embed)
+
 
     @commands.Cog.listener()
     async def on_ready(self):
