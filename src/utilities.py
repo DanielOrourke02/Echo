@@ -10,7 +10,7 @@ from io import BytesIO
 from time import ctime
 from card import Card
 from helpers import *
-
+from discord.ext import commands
 
 import requests
 import discord
@@ -81,6 +81,9 @@ logging_channel_id = config.get("LOGGING_CHANNEL")
 
 # ----------------------------------------------------------MODERATION FUNCTIONS----------------------------------------------------------
 
+# Check if the user invoking the command is the admin
+def is_admin(ctx):
+    return ctx.author.id == config.get("ADMIN_ID")
 
 # Unlock channels after the specified duration
 async def unlock_channel_after_delay(channel, delay):
