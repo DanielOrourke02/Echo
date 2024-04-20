@@ -53,7 +53,7 @@ cosmetics_items = {
     "sulphur": {"name": "Sulphur", "sell": 500, "chance": 40},
     "charcoal": {"name": "Charcoal", "sell": 300, "chance": 50},
     "clock": {"name": "Alarm Clock", "sell": 700, "chance": 30},
-    "roll": {"name": "Roll paper for weed", "sell": 1500, "chance": 30},
+    "roll": {"name": "Roll", "sell": 1500, "chance": 32},
     "potato": {"name": "Potato", "sell": 100, "chance": 70},
 }
 
@@ -74,18 +74,9 @@ craftables = {
 shop_items = {
     "silver": {"name": "Silver, Store your money in silver", "cost": 1000},
     "gold": {"name": "Gold Store your money in gold", "cost": 10000},
+    "shovel": {"name": "Buy a shovel for digging", "cost": 10000},
+    "bow": {"name": "Buy a bow for hunting", "cost": 15000},
 }
-
-# role colours
-role_colors = {
-    "slave": discord.Color.light_grey(),                # grey
-    "poor": discord.Color.dark_blue(),                  # Dark Blue
-    "Working class": discord.Color.orange(),            # orange
-    "Middle class": discord.Color.green(),              # green
-    "Upper class elite": discord.Color.purple(),        # purple
-    "THE PROTAGONIST": discord.Color.gold()             # gold/yellow
-}
-
 
 combined_items = {**cosmetics_items, **craftables}
 
@@ -150,27 +141,6 @@ except FileNotFoundError:
     user_balances = {}
     user_bank_balances = {}
     user_carrot_plantations = {}
-
-
-async def assign_role_to_user(ctx, role_name):
-    role = discord.utils.get(ctx.guild.roles, name=role_name)
-
-    if role is None:
-        # Determine the color for the new role
-        role_color = role_colors.get(role_name, discord.Color.default())
-
-        # Role not found, create it
-        try:
-            role = await ctx.guild.create_role(name=role_name, color=role_color)
-        except discord.Forbidden:
-            print(f"Bot does not have permission to create roles in the guild.")
-            return
-        except discord.HTTPException as e:
-            print(f"Error creating role: {e}")
-            return
-
-    # Assign the role to the user
-    await ctx.author.add_roles(role)
 
 
 def load_user_plants():
