@@ -144,7 +144,7 @@ Polish project, fix all bugs and release v4
 | Poo               | 3 charcoal, 1 sulphur                         | Just poo                                         |
 | Joint             | 1 roll, 1 weed                                | Get high asf                                     |
 
-## Findable Items
+## Findable Items (ingame)
 
 I call them 'cosmetics', but they are items you get from running: dig, hunt and scrap. These items can be used to craft items that sell for more e.g Joint, C4
 
