@@ -174,12 +174,6 @@ class Economy(commands.Cog):
             add_item_to_inventory(user.id, item_name) # add the item to their inventory
             log_purchase(user.id, 1, user.name, shop_items[item_name]['name'], item_cost) # log the purchase
 
-            # Check if the item has (role) in its name and assign the role
-            # Role values and colours are in 'eco_support.py'
-            if "(role)" in shop_items[item_name]['name'].lower(): # if the item name has (role) inside the str we know its a role you can buy
-                role_name = shop_items[item_name]['name'].split(" (")[0]  # Extract role name
-                await assign_role_to_user(ctx, role_name) # give role to the author/user
-
         embed = discord.Embed(
             title="Purchase Successful",
             description=f"{ctx.author.mention}, 💵 You have successfully bought **{shop_items[item_name]['name']} for {item_cost} zesty coins**.",
