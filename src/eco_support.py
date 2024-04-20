@@ -381,7 +381,3 @@ def log_purchase(user_id, mode ,username , item_name, item_cost):
 def log_sell(user_id, username , item_name, item_cost):
     with open("sell_log.txt", "a") as log_file:
         log_file.write(f"User {user_id} | {username} sell {item_name} for {item_cost} coins.\n")
-
-# Check if the user invoking the command is the admin
-def is_admin(ctx):
-    return ctx.author.id == config.get("ADMIN_ID")
