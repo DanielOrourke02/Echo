@@ -24,6 +24,8 @@ class Economy(commands.Cog):
             for item, count in item_counts.items():
                 embed.add_field(name=item, value=f"Count: {count}", inline=True)
 
+            embed.set_footer(text=f"Made by mal023")
+
             # Send the inventory as an embed
             await ctx.send(embed=embed)
         else:
@@ -35,7 +37,8 @@ class Economy(commands.Cog):
 
             # Create an embed to display the inventory
             embed = discord.Embed(title=f"{user.display_name}'s Inventory", color=embed_error)
-            
+            embed.set_footer(text=f"Made by mal023")
+
             # Add fields for each unique item and its count
             for item, count in item_counts.items():
                 embed.add_field(name=item, value=f"Count: {count}", inline=True)
@@ -54,6 +57,8 @@ class Economy(commands.Cog):
             description=f"Admin {ctx.author.display_name} has given **{amount} zesty coins** to {user.display_name}.",
             color=discord.Color.green()
         )
+
+        embed.set_footer(text=f"Made by mal023")
 
         # Send the embed
         await ctx.send(embed=embed)
@@ -76,6 +81,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You don't have permission to use this command.",
                 color=embed_error
             )
+
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
     
 
@@ -88,6 +96,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Please specify an amount to pay. Usage: `{prefix}pay <@user> <amount>`",
                 color=embed_error
             )
+
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -97,6 +108,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Please specify a user. Usage: `{prefix}pay <@user> <amount>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return         
 
@@ -109,6 +123,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Yeah nah you cant pay yourself.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
             return
 
@@ -118,6 +135,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, go get some money you're way too poor buddy.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -130,6 +150,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 💵 You just paid {user.display_name} **{amount} zesty coins**!",
             color=discord.Color.green()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+
         await ctx.send(embed=embed)
 
 
@@ -142,6 +165,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Item not found in the shop.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         elif item_name is None:
@@ -150,6 +176,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Please specify an item name. Usage: `{prefix}buy <item_name> <amount>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -167,6 +196,9 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, Your so poor you don't have enough to buy this 🤫.",
                     color=embed_error
                 )
+                
+                embed.set_footer(text=f"Made by mal023")
+                
                 await ctx.send(embed=embed)
                 return
 
@@ -179,6 +211,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 💵 You have successfully bought **{shop_items[item_name]['name']} for {item_cost} zesty coins**.",
             color=discord.Color.green()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -194,6 +229,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, digging with your hands? We arn't animals, **go buy or find a shovel**.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -204,6 +242,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You're on a **15min break** buddy 🤫 don't chat to me.",
                 color=discord.Color.orange()
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -224,6 +265,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 🎉 You found: **{won_item['name']}**! Check your inventory with `{prefix}inventory`.",
             color=discord.Color.orange()
         )
+       
+        embed.set_footer(text=f"Made by mal023")
+       
         await ctx.send(embed=embed)
 
         amount = random.randint(1000, 1600) # random amount of money
@@ -236,6 +280,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 💵 You found: **{amount} zesty coins**! Your new balance is: **{get_user_balance(ctx.author.id)} zesty coins** (still kinda poor tho).",
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -252,6 +299,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You need a **bow** too shoot arrows... **Go buy or find one.**",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -262,6 +312,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You're on a **15min break. Go away**.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -282,6 +335,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 🎉 You found: **{won_item['name']}**! Check your inventory with `{prefix}inventory`",
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
         amount = random.randint(600, 1300) # random money amount
@@ -294,6 +350,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 💵 You found: **{amount} zesty coins**! Your new balance is: **{get_user_balance(ctx.author.id)} zesty coins**.",
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -307,6 +366,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, **5min cooldown** lmao.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -327,6 +389,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 🎉 You found: **{won_item['name']}**! Check your inventory with `{prefix}inventory`",
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
         amount = random.randint(400, 800)
@@ -339,6 +404,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, 💵 You found: **{amount} coins**! Your new balance is: **{get_user_balance(ctx.author.id)} zesty coins**.",
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -352,6 +420,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You begged in the past **30s. Wait the cooldown**.",
                 color=discord.Color.orange()
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -364,6 +435,9 @@ class Economy(commands.Cog):
             description=f'{ctx.author.mention}, **you begged for it** and someone gave you 💵 **{amount} zesty coins**.',
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
         # Correctly update the last beg time
@@ -380,6 +454,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Nah its called **'daily' for a reason**. What are you tryna do.",
                 color=discord.Color.orange()
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -391,6 +468,9 @@ class Economy(commands.Cog):
             description=f'{ctx.author.mention}, You have claimed your daily reward of 💵 **{daily_reward} zesty coins**!',
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
         # Update user's last claim time (if needed)
@@ -407,6 +487,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Incorrect usage. Please use: `{prefix}sell <item> <amount>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -423,6 +506,9 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, That Item ID is invalid/doesnt exist.",
                     color=embed_error
                 )
+                
+                embed.set_footer(text=f"Made by mal023")
+                
                 await ctx.send(embed=embed)
                 return
 
@@ -436,9 +522,14 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, You don't have this in your inventory.",
                     color=discord.Color.orange()
                 )
+                
+                embed.set_footer(text=f"Made by mal023")
+                
                 await ctx.send(embed=embed)
                 return
 
+            # this is poor logic and flawed code
+            # but it works so idc
             if item_id == "gold":
                 item_info = shop_items["gold"]
                 item_name = item_info["name"]
@@ -463,6 +554,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, You sold **{item_name} for 💵 {item_sell_price} zesty coins**. Your new balance is: 💵 **{get_user_balance(user_id)} zesty coins**!",
             color=discord.Color.orange()
         )
+
+        embed.set_footer(text=f"Made by mal023")
+
         await ctx.send(embed=embed)
 
 
@@ -479,6 +573,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, you need 💵 **{entry_fee} zesty coins** to enter the lottery.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
             return
 
@@ -492,6 +589,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention} has entered the Lottery! (Entry fee: **{entry_fee} zesty coins**)!",
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
         # Check if lottery pool has enough members to draw
@@ -499,12 +599,17 @@ class Economy(commands.Cog):
             winner_id = random.choice(list(lottery_pool)) # random winner
             win_price = len(lottery_pool) * entry_fee
             update_user_balance(winner_id, win_price)
+
             embed = discord.Embed(
                 title="🎉Lottery Winner!🎉",
                 description=f"Congratulations <@{winner_id}>! You won the 💵 **{win_price} zesty coins** lottery prize!",
                 color=discord.Color.green()
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
+
             lottery_pool.clear() # clear the lottery pool for a new lottery
 
         # If not enough participants, start a refund timer
@@ -513,11 +618,15 @@ class Economy(commands.Cog):
             if len(lottery_pool) < required_participants:
                 try:
                     await refund_lottery_tickets()
+
                     embed = discord.Embed(
                         title="Not enough Participants!!",
                         description=f"Refunded lottery tickets. **Not enough participants**!",
                         color=discord.Color.orange()
                     )
+
+                    embed.set_footer(text=f"Made by mal023")
+
                     await ctx.send(embed=embed)
                 except Exception as e:
                     embed = discord.Embed(
@@ -525,6 +634,9 @@ class Economy(commands.Cog):
                         description=f"Error while refunding lottery tickets. Alert an admin.",
                         color=embed_error
                     )
+
+                    embed.set_footer(text=f"Made by mal023")
+
                     await ctx.send(embed=embed)
                     print(f'{Fore.CYAN}Error while attempting to refund lottery tickets. {Fore.RED}ERROR: {e}{Fore.RESET}')
                 
@@ -548,6 +660,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Incorrect deposit usage, please use: `{prefix}deposit <amount>`",
                 color=embed_error
             )
+
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
             return
         else:
@@ -559,6 +674,9 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, Please enter a valid amount.",
                     color=embed_error
                 )
+
+                embed.set_footer(text=f"Made by mal023")
+
                 await ctx.send(embed=embed)
                 return
 
@@ -568,6 +686,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Please enter a valid amount.",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
             return
 
@@ -583,6 +704,9 @@ class Economy(commands.Cog):
             description=f'{ctx.author.mention}, 💵 **{amount_to_deposit} zesty coins** has been deposited to your sussy account.',
             color=embed_colour
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -594,6 +718,9 @@ class Economy(commands.Cog):
                 description=f'{ctx.author.mention}, Incorrect withdraw usage. Please use: `{prefix}withdraw <amount>`',
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -603,6 +730,9 @@ class Economy(commands.Cog):
                 description=f'{ctx.author.mention}, Invalid withdraw amount. Please try again.',
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -615,6 +745,9 @@ class Economy(commands.Cog):
             description=f'{ctx.author.mention}, 💵 **{amount} zesty coins** have been withdrawn from your sussy account.',
             color=discord.Color.green()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -646,6 +779,8 @@ class Economy(commands.Cog):
             color=discord.Color.orange()
         )
 
+        embed.set_footer(text=f"Made by mal023")
+
         # Sending the leaderboard
         await ctx.send(embed=embed)
 
@@ -666,6 +801,9 @@ class Economy(commands.Cog):
             description=f'On Hand: **{pocket_money} zesty coins**\nBank Balance: **{bank_balance}/{max_bank_size} zesty coins**',
             color=discord.Color.green()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
     
@@ -680,6 +818,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Please specify an amount to gamble. Usage: `{prefix}gamble <amount>`",
                 color=discord.Color.orange()
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -695,6 +836,9 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, Please enter a valid amount or 'max'.",
                     color=discord.Color.orange()
                 )
+                
+                embed.set_footer(text=f"Made by mal023")
+                
                 await ctx.send(embed=embed)
                 return
 
@@ -704,6 +848,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Invalid bet amount. You can bet up to {max_bet} coins.",
                 color=discord.Color.orange()
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -743,6 +890,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You need to find a gun or craft an m4a1 to shoot people! Find a gun using `{prefix}scrap` or craft an m4a1 using `{prefix}craft m4a1` view recipes using `{prefix}recipes`!",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -753,6 +903,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention} has just shot themself!",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -761,6 +914,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, Has just **shot and killed {user.mention}** in cold blood.",
             color=discord.Color.orange()
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -776,6 +932,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You need C4 to blow someone up! Craft one using `{prefix}craft c4` view recipes using `{prefix}recipes`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -785,6 +944,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, has just **blown up!**",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -793,6 +955,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, has just **bombed and killed {user.mention}** with c4!",
             color=discord.Color.orange(),
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -806,6 +971,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Incorrect usage. Please use: `{prefix}trade <@user> <item2give>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -815,6 +983,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, Incorrect usage. Please use: `{prefix}trade <@user> <item2give>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -826,6 +997,9 @@ class Economy(commands.Cog):
                 description=f"{ctx.author.mention}, You **dont have {item_name}** in your inventory!",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -837,6 +1011,9 @@ class Economy(commands.Cog):
             description=f"{ctx.author.mention}, You have **given {item_name} to {user}**!",
             color=discord.Color.orange(),
         )
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
