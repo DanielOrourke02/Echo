@@ -29,6 +29,9 @@ class Slots(commands.Cog):
                 description=f"{ctx.author.mention}, You do not have enough money to gamble that amount",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         elif self.check_bet(ctx, bet=bet) is True:
@@ -37,6 +40,9 @@ class Slots(commands.Cog):
                 description=f"{ctx.author.mention}, Please enter a bet amount. Usage: `{prefix}slots <bet>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
             
@@ -116,6 +122,7 @@ class Slots(commands.Cog):
         )
 
         embed.set_image(url=f"attachment://{unique_filename}")
+        
         await message.edit(content=None, embed=embed)
 
         os.remove(fp)
