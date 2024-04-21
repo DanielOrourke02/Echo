@@ -20,6 +20,8 @@ class Farming(commands.Cog):
             embed.description = f"{ctx.author.mention}, Please enter the amount you want to plant. Usage: `{prefix}plant <amount>`"
             embed.color = embed_error
 
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
             return
 
@@ -32,8 +34,11 @@ class Farming(commands.Cog):
             time_since_last_plant = datetime.datetime.now() - last_planting_time[user_id]
             if time_since_last_plant < datetime.timedelta(hours=config.get('carrot_growth_duration')):
                 embed.title = "Wait a Little Longer"
-                embed.description = f"{ctx.author.mention}, You can only plant carrots once every 24 hours. Please wait a bit longer before planting again."
+                embed.description = f"{ctx.author.mention}, You can only plant carrots once every {config.get('carrot_growth_duration')} hours. Please wait a bit longer before planting again."
                 embed.color = embed_error
+
+                embed.set_footer(text=f"Made by mal023")
+
                 await ctx.send(embed=embed)
                 return
 
@@ -41,6 +46,9 @@ class Farming(commands.Cog):
             embed.title = "Too Many Carrots"
             embed.description = f"{ctx.author.mention}, You cannot plant more than {max_carrot_planted} carrots."
             embed.color = embed_error
+
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
             return
 
@@ -48,20 +56,31 @@ class Farming(commands.Cog):
             embed.title = "Not Enough Balance"
             embed.description = f"{ctx.author.mention}, You need ${total_cost} to plant {amount} carrots"
             embed.color = embed_error
+
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
             return
 
         # Check if the user has no plants planted
         if not user_has_plants(user_id):
-            plant_carrots(user_id, amount)
-            last_planting_time[user_id] = datetime.datetime.now()  # Update the last planting time
             embed.title = "Carrots Planted"
             embed.description = f"{ctx.author.mention}, You have planted {amount} carrots."
+
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
+
+            plant_carrots(user_id, amount)
+
+            last_planting_time[user_id] = datetime.datetime.now()  # Update the last planting time
         else:
             embed.title = "Planting Error"
             embed.description = f"{ctx.author.mention}, You already have plants planted. Harvest them before planting again."
             embed.color = embed_error
+
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
 
 
@@ -84,12 +103,15 @@ class Farming(commands.Cog):
                 del user_plantations[user_id]  # Removing the plantation record
 
                 embed = discord.Embed(title="Success", description=f"{ctx.author.mention}, You have successfully harvested {harvested_amount} carrots and earned ${total_profit}.", color=discord.Colour.green())
+                embed.set_footer(text=f"Made by mal023")
                 await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Info", description=f"{ctx.author.mention}, Your carrots are not ready yet. They are {int(growth_percentage)}% grown.", color=embed_error)
+                embed.set_footer(text=f"Made by mal023")
                 await ctx.send(embed=embed)
         else:
             embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You don't have any crops planted.", color=embed_error)
+            embed.set_footer(text=f"Made by mal023")
             await ctx.send(embed=embed)
 
         save_user_plants(user_plantations) # save data
