@@ -1,46 +1,79 @@
-<h1 align="center">Hi 👋, I'm Daniel Jones</h1>
-<h3 align="center">I'm a passionate Python and C++ developer</h3>
-<h3 align="center">Welcome To my github project!👋</h3>
+<h1 align="center">
+  <br>
+  Echo Bot v3
+  <br>
+</h1>
 
-# More about me and my projects
+<p align="center">Admin, AutoMod, Economy, Fun, Invite, Information, Moderation, Owner, Social, Suggestion, Ticket, Utility and More...</p>
 
-[📁 Active Projects](https://github.com/DanielJones02/Active-Projects)
+<br>
 
-# Echo Bot
+<p align="center">
+  <a href="#-resource-links">Resource Links</a>
+  •
+  <a href="#-prerequisites">Prerequisites</a>
+  •
+  <a href="#-getting-started">Getting Started</a>
+</p>
 
-A cool bot with lots and lots of commands and many different features. Scroll down to see the installation and the list of all the commands.
+<br>
 
-# MAJOR UPDATE COMMING SOON (BUG FIXES)
+## 🔗 Resource Links
 
-### todo
+- 🤖 Demo Bot: Comming soon
+- 🤝 Support Server: [Join Here](https://discord.gg/kNWkT8xWg6)
+- 🤝 Hire me: [Join Here](https://discord.gg/kNWkT8xWg6) or dm `mal023`
+- 📂 Documentation URL: comming soon
 
-Add a GUI control dashboard
+## 📦 Prerequisites
 
-make code much neater and remove all DRY (dont repeat yourself)
+- [Python3.12](https://www.python.org/downloads/release/python-3120/)
+  - [Python install help](https://www.youtube.com/watch?v=nU2Egc3Zx3Q) 
+- [Git](https://git-scm.com/downloads)
+- Windows Or Linux
 
-add fertelizer (for plants to speed up process)
+## 🚀 Getting Started
 
-add more gambling games
+## Windows Installation
 
-Polish project, fix all bugs and release v4
+- Open the terminal and run the following commands
 
-# Installation
+```git clone https://github.com/DanielJones02/Echo```
 
-(first have python installled from the python website or micrisoft store)
+- Open the directory in windows file explorer
 
-1. `git clone https://github.com/DanielJones02/Echo` or `download the latest release`
+- Open config.json and add the following values
 
-2. `cd Echo`, clone into the directory.
+  - Your bot token
+  - Your bot invite link
+  - Your user ID
 
-3. Open config.json and do the following:
+- Then double click `win_run.bat`, any requirements will be auto installed, and your bot will start.
 
- - Add your bot token (required for the bot to work)
+## Linux Installation
 
- - Add your user id for admin commands (required for config editing and reading from discord
+- Open the terminal and run the following commands:
 
- - add your bot invite link (scroll down for all the permissions needed) (optional)
+```
+git clone https://github.com/DanielJones02/Echo
+cd Echo
+nano config.json
+```
 
-4. for windows simply run `win-run.bat` and for linux do the following `chmod +x linux-run.sh` then `./linux-run.sh` (untested I tink those commands work). All requirements will be installed (you can disable auto installation by setting skip-installation to true)
+- Add the following data to config.json:
+
+  - Your bot token
+  - Your bot invite link
+  - Your user ID
+
+- After that run the following commands to run the bot:
+
+```
+chmod +x linux_run.sh
+./linux_run.sh
+```
+
+- Requirements will be auto installed and the bot will start
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
