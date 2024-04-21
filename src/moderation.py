@@ -35,6 +35,9 @@ class Moderation(commands.Cog):
         view.add_item(button)
 
         embed = discord.Embed(title="Support Tickets", description=message, color=embed_colour)
+
+        embed.set_footer(text=f"Made by mal023")
+
         await ctx.send(embed=embed, view=view)
 
 
@@ -50,6 +53,8 @@ class Moderation(commands.Cog):
             embed.description = f"{ctx.author.mention}, Incorrect usage. Please try: `{prefix}setup_verify <@role> <message>`"
             embed.color = embed_error
 
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -70,6 +75,9 @@ class Moderation(commands.Cog):
         view.add_item(button)
 
         embed = discord.Embed(title="Verification Panel", description=message, color=embed_colour)
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed, view=view)
 
 
@@ -80,6 +88,9 @@ class Moderation(commands.Cog):
             await member.kick(reason=reason)
             await member.send(f"You have been kicked in {ctx.guild.name} by an admin. Reason: {reason}") # dm user 
             embed = discord.Embed(title="Kick", description=f"{member.mention} has been kicked.\nReason: {reason}", color=discord.Color.red())
+            
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
         except discord.Forbidden:
             await ctx.send(f"{ctx.author.mention}, I do not have permission to kick {member.mention}.")
@@ -92,6 +103,9 @@ class Moderation(commands.Cog):
             await member.ban(reason=reason)
             await member.send(f"You have been banned in {ctx.guild.name} by an admin. Reason: {reason}") # dm user 
             embed = discord.Embed(title="Ban", description=f"{member.mention} has been banned.\nReason: {reason}", color=discord.Color.red())
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
         except discord.Forbidden:
             await ctx.send(f"{ctx.author.mention}, I do not have permission to ban {member.mention}.")
@@ -117,8 +131,10 @@ class Moderation(commands.Cog):
         # Create an embed for the confirmation message
         embed = discord.Embed(title="User Muted", description=f"{member.mention} has been muted.", color=discord.Color.red())
         embed.add_field(name="Reason", value=reason)
-        embed.set_footer(text=f"Muted by {ctx.author}")
+        embed.add_field(text=f"Muted by {ctx.author}")
 
+        embed.set_footer(text=f"Made by mal023")
+        
         # Send the embed
         await ctx.send(embed=embed)
 
@@ -142,7 +158,9 @@ class Moderation(commands.Cog):
         # Create an embed for the confirmation message
         embed = discord.Embed(title="User Unmuted", description=f"{member.mention} has been unmuted.", color=discord.Color.green())
         embed.add_field(name="Reason", value=reason)
-        embed.set_footer(text=f"Unmuted by {ctx.author}")
+        embed.add_field(text=f"Unmuted by {ctx.author}")
+
+        embed.set_footer(text=f"Made by mal023")
 
         # Send the embed
         await ctx.send(embed=embed)
@@ -153,16 +171,25 @@ class Moderation(commands.Cog):
     async def clear(self, ctx, amount: int = None):
         if amount is None:
             embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You need to specify the number of messages to clear.", color=embed_colour)
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
         if amount > 1000:
             embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You can only clear up to 1000 messages at a time.", color=embed_colour) 
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
         await ctx.channel.purge(limit=amount + 1)
         embed = discord.Embed(title="Messages Cleared", description=f"{amount} messages have been cleared.", color=embed_colour) 
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
@@ -176,12 +203,18 @@ class Moderation(commands.Cog):
         seconds = convert_to_seconds(duration)
         if seconds is None:
             embed = discord.Embed(title="Error", description="Invalid duration format. Use s, m, h, or d.", color=embed_colour) 
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
         # Change channel permissions
         await channel.set_permissions(ctx.guild.default_role, send_messages=False)
         embed = discord.Embed(title="Channel Locked", description=f"{channel.mention} locked for {duration}. Reason: {reason}", color=embed_colour)  
+        
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
         # Convert datetime to string before including it in a serializable context
@@ -271,6 +304,8 @@ class Moderation(commands.Cog):
                 value = '[hidden for security reasons]'  # Replace token value with asterisks
             embed.add_field(name=f'`{key}`', value=f'`{value}`', inline=False)
 
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -282,6 +317,9 @@ class Moderation(commands.Cog):
                 description=f"{ctx.author.mention}, Incorrect usage. Please use (**CASE SENSITIVE**): `{prefix}config_edit <name> <new_value>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
         
@@ -291,6 +329,9 @@ class Moderation(commands.Cog):
                 description=f"{ctx.author.mention}, Incorrect usage. Please use (**CASE SENSITIVE**): `{prefix}config_edit <name> <new_value>`",
                 color=embed_error
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
@@ -306,6 +347,8 @@ class Moderation(commands.Cog):
         embed.add_field(name='**Variable**', value=key, inline=False)
         embed.add_field(name='**New Value**', value=value, inline=False)
 
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
