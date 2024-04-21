@@ -30,6 +30,8 @@ economy_command_descriptions = {
     "slots <amount>": "Gamble away your money without a chance of winning.",
     "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
     "gamble <amount>": f"Gamble your money with 1/3 chance of winning (max {max_bet})",
+     "shoot <@user>": "Shoot someone (gun/m4a1 needed)",
+    "bomb <@user>": "Bomb someone (c4 needed)"
 }
 
 
@@ -58,14 +60,14 @@ class Help(commands.Cog):
             "joke": "Get a random joke.",
             "user_info": "Get user on a user.",
             "server_info": "Get the server info.",
-            "avatar": "Get someones avatar or your own",
-            "shoot <@user>": "Shoot someone (gun/m4a1 needed)",
-            "bomb <@user>": "Bomb someone (c4 needed)"
+            "avatar": "Get someones avatar or your own"
         }
 
         embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=discord.Color.green())
         for cmd, desc in command_descriptions.items():
             embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
+
+        embed.set_footer(text=f"Made by mal023")
 
         await ctx.send(embed=embed)
 
@@ -91,12 +93,14 @@ class Help(commands.Cog):
         for cmd, desc in moderation_descriptions.items():
             embed.add_field(name=f"{prefix}{cmd}", value=desc, inline=True)
 
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
     @commands.command(aliases=['eco'])
     async def economy(self, ctx):
-        items_per_page = 10
+        items_per_page = 15
         total_items = len(economy_command_descriptions)
         num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
 
@@ -108,6 +112,8 @@ class Help(commands.Cog):
 
         for cmd, desc in list(economy_command_descriptions.items())[start_index:end_index]:
             embed.add_field(name=f"{cmd}", value=desc, inline=True)
+
+        embed.set_footer(text=f"Made by mal023")
 
         message = await ctx.send(embed=embed)
 
@@ -151,12 +157,14 @@ class Help(commands.Cog):
         for item_id, item_info in shop_items.items():
             embed.add_field(name=f"{item_info['name']} (ID: {item_id})", value=f"Cost: {item_info['cost']} coins", inline=False)
 
+        embed.set_footer(text=f"Made by mal023")
+        
         await ctx.send(embed=embed)
 
 
     @commands.command(aliases=['cosmos', 'cos', 'cosmetic'])
     async def cosmetics(self, ctx):
-        items_per_page = 10
+        items_per_page = 15
         total_items = len(combined_items)
         num_pages = (total_items // items_per_page) + (1 if total_items % items_per_page != 0 else 0)
 
@@ -171,6 +179,8 @@ class Help(commands.Cog):
             sell_price = item_info["sell"]
             embed.add_field(name=f"{item_id}: {name}", value=f"Sell Price: {sell_price}", inline=True)
 
+        embed.set_footer(text=f"Made by mal023")
+        
         message = await ctx.send(embed=embed)
 
         if num_pages > 1:
