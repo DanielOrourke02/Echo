@@ -21,7 +21,7 @@ class Slots(commands.Cog):
             return False
 
 
-    @commands.command(brief='Slot machine\nbet must be 1-3', usage='slots *[bet]', aliases=['slot'])
+    @commands.command(brief='Slot machine', usage='slots *[bet]', aliases=['slot'])
     async def slots(self, ctx: commands.Context, bet: int=None):
         if self.check_bet(ctx, bet=bet) is False:
             embed = discord.Embed(
@@ -59,7 +59,7 @@ class Slots(commands.Cog):
         s2 = random.randint(1, items-1)
         s3 = random.randint(1, items-1)
 
-        win_rate = 45/100
+        win_rate = 25/100
 
         if random.random() < win_rate:
             symbols_weights = [3.5, 7, 15, 25, 55] # 
