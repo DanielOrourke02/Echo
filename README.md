@@ -38,7 +38,9 @@
 
 - Open the terminal and run the following commands
 
-```git clone https://github.com/DanielJones02/Echo```
+```
+git clone https://github.com/DanielJones02/Echo
+```
 
 - Open the directory in windows file explorer
 
