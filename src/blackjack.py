@@ -173,17 +173,25 @@ class Blackjack(commands.Cog):
                 description=f"Please specify an amount to gamble. Usage: `{prefix}blackjack <amount>`",
                 color=discord.Color.orange()
             )
+            
+            embed.set_footer(text=f"Made by mal023")
+
             await ctx.send(embed=embed)
+            
             return
 
         # Check if the user has enough balance for the bet
         if self.check_bet(ctx, bet) == False:
             bal = get_user_balance(ctx.author.id)
+
             embed = discord.Embed(
                 title="BROKE ASF",
                 description=f'You dont have enough money to place that bet. You currently have {bal} and you need {bet - bal} more.',
                 color=embed_error
             )
+
+            embed.set_footer(text=f"Made by mal023")
+            
             await ctx.send(embed=embed)
             return
 
