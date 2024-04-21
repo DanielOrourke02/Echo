@@ -24,7 +24,7 @@ class Fun(commands.Cog):
         if message is None:
             embed = discord.Embed(
                 title="Incorrect say command usage",
-                description=f"{ctx.author.mention}, Please specify a message. Usage: `{prefix}say <message>`",
+                description=f"{ctx.author.mention}, Please specify a message. Usage: `{prefix}say <title> <message>`",
                 color=embed_error
             )
 
