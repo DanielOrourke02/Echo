@@ -106,7 +106,7 @@ chmod +x linux_run.sh
 | `membercount`             | Get the member count of the server.              |
 | `calculator <+-*/>`       | Perform basic calculations.                      |
 | `joke`                    | Get a random joke.                               |
-| `user_info <@user>        | Get info on a user                               |
+| `user_info <@user>`       | Get info on a user                               |
 | `server_info`             | Get the servers info                             |
 
 ## Economy Commands
