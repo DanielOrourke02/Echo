@@ -10,6 +10,7 @@ from blackjack import Blackjack
 from crafting import Crafting
 from farming import Farming
 from economy import Economy
+from cook import Cooking
 from moderation import Moderation
 from slots import Slots
 from help import Help
@@ -32,6 +33,8 @@ async def setup_bot():
     await bot.add_cog(Moderation(bot))
     await bot.add_cog(Blackjack(bot))
     await bot.add_cog(Slots(bot))
+    await bot.add_cog(Cooking(bot))
+
 
 @bot.event
 async def on_ready():
