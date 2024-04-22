@@ -74,8 +74,11 @@ craftables = {
 shop_items = {
     "silver": {"name": "Silver, Store your money in silver", "cost": 1000},
     "gold": {"name": "Gold Store your money in gold", "cost": 10000},
-    "shovel": {"name": "Buy a shovel for digging", "cost": 10000},
-    "bow": {"name": "Buy a bow for hunting", "cost": 15000},
+    "shovel": {"name": "Buy a shovel for digging", "cost": 1000},
+    "bow": {"name": "Buy a bow for hunting", "cost": 1000},
+    "stove": {"name": "A stove used for cooing", "cost": 25000},
+    "red": {"name": "Red phosphorus", "cost": 4000},
+    "chemical": {"name": "Special Chemical", "cost": 19000},
 }
 
 combined_items = {**cosmetics_items, **craftables}
@@ -254,69 +257,58 @@ def update_bank_balance(user_id, amount):
     user_bank_balances[str(user_id)] = get_bank_balance(user_id) + amount
     save_user_data()
 
+# COOLDOWN FUNCTIONS
+
+global current_time
+
+current_time = time.time()
+
+def can_sell_meth(user_id):
+    try:
+        last_sell_time = user_balances.get(f"{user_id}_last_sell", 0)
+        cooldown_remaining = current_time - last_sell_time
+    except Exception as e:
+        print(e)
+
+    return cooldown_remaining >= 1 * 3600  # 1 hour in seconds
+
 
 def can_claim_daily(user_id):
     last_claim_time = user_balances.get(f"{user_id}_last_claim", 0)
-    current_time = time.time()
     cooldown_remaining = current_time - last_claim_time
-
-    #print(f"Last scavenge time: {last_claim_time}")
-    #print(f"Current time: {current_time}")
-    #print(f"Cooldown remaining: {cooldown_remaining}")
 
     return cooldown_remaining >= 24 * 3600  # 24 hours in seconds
 
 
 def can_dig(user_id):
     last_dig_time = user_balances.get(f"{user_id}_last_dig", 0)
-    current_time = time.time()
     cooldown_remaining = current_time - last_dig_time
-
-    #print(f"Last dig time: {last_dig_time}")
-    #print(f"Current time: {current_time}")
-    #print(f"Cooldown remaining: {cooldown_remaining}")
 
     return cooldown_remaining >= 15 * 60  # 15 minutes in seconds
     
 
 def can_hunt(user_id):
     last_hunt_time = user_balances.get(f"{user_id}_last_hunt", 0)
-    current_time = time.time()
     cooldown_remaining = current_time - last_hunt_time
-
-    #print(f"Last hunt time: {last_hunt_time}")
-    #print(f"Current time: {current_time}")
-    #print(f"Cooldown remaining: {cooldown_remaining}")
 
     return cooldown_remaining >= 10 * 60  # 10 minutes in seconds
 
 
 def can_scavenge(user_id):
     last_scavenge_time = user_balances.get(f"{user_id}_last_scavenge", 0)
-    current_time = time.time()
     cooldown_remaining = current_time - last_scavenge_time
-
-    #print(f"Last scavenge time: {last_scavenge_time}")
-    #print(f"Current time: {current_time}")
-    #print(f"Cooldown remaining: {cooldown_remaining}")
 
     return cooldown_remaining >= 5 * 60  # 5 minutes in seconds
 
 
 def can_beg(user_id):
     last_beg_time = user_balances.get(f"{user_id}_last_beg", 0)
-    current_time = time.time()
     cooldown_remaining = current_time - last_beg_time
-
-    #print(f"Last beg time: {last_beg_time}")
-    #print(f"Current time: {current_time}")
-    #print(f"Cooldown remaining: {cooldown_remaining}")
 
     return cooldown_remaining >= 30  # 30 seconds
 
 
 def plant_carrots(user_id, amount):
-    current_time = time.time()
     grow_duration = 3600 * 24  # 24 hours in seconds
     cost_per_carrot = 100
     total_cost = amount * cost_per_carrot
