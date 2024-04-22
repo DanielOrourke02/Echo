@@ -184,7 +184,8 @@ chmod +x linux_run.sh
 | Complete_Gauntlet | 1 infinity, 1 leg.sword, 1 david4             | The most powerful item in the game               |
 | C4                | 2 sulphur, 1 charcoal, 1 clock, 5 potatoes, 2 tech | C4 Bomb for bombing people                  |
 | Poo               | 3 charcoal, 1 sulphur                         | Just poo                                         |
-| Joint             | 1 roll, 1 weed                                | Get high asf                                     |
+| Joint             | 1 roll, 1 weed                                | Sell joints                                      |
+| meth              | 1 chemical, 1 red, create using `!cook`       | sell meth by using `!streets`                    |
 
 ## Findable Items (ingame)
 
