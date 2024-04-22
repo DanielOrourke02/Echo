@@ -30,8 +30,10 @@ economy_command_descriptions = {
     "slots <amount>": "Gamble away your money without a chance of winning.",
     "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
     "gamble <amount>": f"Gamble your money with 1/3 chance of winning (max {max_bet})",
-     "shoot <@user>": "Shoot someone (gun/m4a1 needed)",
-    "bomb <@user>": "Bomb someone (c4 needed)"
+    "shoot <@user>": "Shoot someone (gun/m4a1 needed)",
+    "bomb <@user>": "Bomb someone (c4 needed)",
+    "cook": "Cook 5 Crystal Meth",
+    "streets": "Sell 5 bags of cystal Meth for 4k each. NOTE: Police exist",
 }
 
 
