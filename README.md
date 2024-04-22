@@ -140,6 +140,8 @@ chmod +x linux_run.sh
 | `gamble <amount>`        | Gamble your money with a 1/3 chance of winning.       |
 | `blackjack <amount>`     | Play a cool interactive blackjacks game.              |
 | `slots <amount>`         | Play slots with a small chance of winning big.        |
+| `cook`                   | Use 1 Chemical and 1 red to create 5 meth.            |
+| `streets`                | Sell 5 meth for 4k each once per hour (police exist)  |
 
 ## Moderation Commands
 
@@ -165,6 +167,11 @@ chmod +x linux_run.sh
 |--------|--------------------------------------------|-------|
 | Silver | Store your money in silver                 | 1000  |
 | Gold   | Store your money in gold                   | 10000 |
+| shovel | Buy a shovel for digging                   | 1000  |
+| bow    | Buy a bow for hunting                      | 1000  |
+| stove  | Buy a stove for cooking                    | 25000 |
+| chemical | Chemical used for cooking goods          | 4000  |
+| red    | a red substance used for cooking goods     | 4000  |
 
 
 ## Craftable Items (ingame)
