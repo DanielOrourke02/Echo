@@ -20,6 +20,8 @@ Its very messy I know but I will tidy it up.
 
 DATA_FILE = 'user_data.json'
 
+COOLDOWN_FILE = 'cooldowns.json'
+
 user_bank_balances = {}  # Holds users' bank 
 
 last_planting_time = {}
@@ -27,9 +29,13 @@ last_planting_time = {}
 robbery_cooldown = {}  # Dictionary to track cooldowns
 
 lottery_pool = set()
+
 required_participants = 5 # chance = code break
+
 entry_fee = config.get('entry_fee')
+
 refund_timer = config.get('lottery_cooldown') # seconds
+
 daily_reward = config.get('daily_reward')
 
 # List of all cosmetics
@@ -49,7 +55,7 @@ cosmetics_items = {
     "stick": {"name": "Stick", "sell": 15000, "chance": 15},
     "gun": {"name": "Glock-18", "sell": 8000, "chance": 18},
     "tech": {"name": "Electronics", "sell": 1000, "chance": 20},
-    "weed": {"name": "Weed", "sell": 5000, "chance": 25},
+    "weed": {"name": "Weed", "sell": 5000, "chance": 30},
     "sulphur": {"name": "Sulphur", "sell": 500, "chance": 40},
     "charcoal": {"name": "Charcoal", "sell": 300, "chance": 50},
     "clock": {"name": "Alarm Clock", "sell": 700, "chance": 30},
@@ -119,7 +125,7 @@ crafting_recipes = {
     "poo": {
         "charcoal": 3,
         "sulphur": 1,
-
+        "result": "poo"
     },
     "joint": {
         "roll": 1,
@@ -133,6 +139,20 @@ crafting_recipes = {
 if not os.path.exists(DATA_FILE):
     with open(DATA_FILE, 'w') as f:
         json.dump({}, f)
+
+if not os.path.exists(COOLDOWN_FILE):
+    with open(COOLDOWN_FILE, 'w') as f:
+        json.dump({}, f)
+
+def load_cooldowns():
+    try:
+        with open(COOLDOWN_FILE, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # Create the file if it doesn't exist
+        with open(COOLDOWN_FILE, 'w') as f:
+            json.dump({}, f)
+        return {}
 
 try:
     with open(DATA_FILE, 'r') as f:
@@ -154,6 +174,11 @@ def load_user_plants():
         return {}
 
 
+def save_cooldowns(cooldowns):
+    with open(COOLDOWN_FILE, 'w') as f:
+        json.dump(cooldowns, f)
+
+
 def save_user_plants(data):
     with open('user_plants.json', 'w') as f:
         json.dump(data, f, indent=4)
@@ -167,6 +192,7 @@ def save_user_data():
 def user_has_plants(user_id):
     user_plantations = load_user_plants()
     return str(user_id) in user_plantations
+
 
 def update_plants():
     global user_carrot_plantations
@@ -257,78 +283,94 @@ def update_bank_balance(user_id, amount):
     user_bank_balances[str(user_id)] = get_bank_balance(user_id) + amount
     save_user_data()
 
+
 # COOLDOWN FUNCTIONS
 
-global current_time
 
-current_time = time.time()
+def get_current_time():
+    return time.time()
 
-def can_sell_meth(user_id):
+
+def get_cooldown_remaining(user_id, action, cooldowns, cooldown_duration):
     try:
-        last_sell_time = user_balances.get(f"{user_id}_last_sell", 0)
-        cooldown_remaining = current_time - last_sell_time
+        last_action_time = cooldowns.get(f"{user_id}_{action}", 0)
+        current_time = get_current_time()
+
+        return current_time - last_action_time
     except Exception as e:
         print(e)
 
-    return cooldown_remaining >= 1 * 3600  # 1 hour in seconds
+
+def can_perform_action(user_id, action, cooldown_duration):
+    cooldowns = load_cooldowns()
+    cooldown_remaining = get_cooldown_remaining(user_id, action, cooldowns, cooldown_duration)
+    return cooldown_remaining >= cooldown_duration
+
+
+def update_last_action_time(user_id, action):
+    try:
+        cooldowns = load_cooldowns()
+        cooldowns[f"{user_id}_{action}"] = get_current_time()
+
+        save_cooldowns(cooldowns)
+    except Exception as e:
+        print(e)
+
+
+def can_sell_meth(user_id):
+    return can_perform_action(user_id, "sell", 1 * 3600)  # 1 hour in seconds
+
+
+def can_rob(user_id):
+    return can_perform_action(user_id, "rob", 1 * 3600)  # 1 hour in seconds
 
 
 def can_claim_daily(user_id):
-    last_claim_time = user_balances.get(f"{user_id}_last_claim", 0)
-    cooldown_remaining = current_time - last_claim_time
-
-    return cooldown_remaining >= 24 * 3600  # 24 hours in seconds
+    return can_perform_action(user_id, "claim", 24 * 3600)  # 24 hours in seconds
 
 
 def can_dig(user_id):
-    last_dig_time = user_balances.get(f"{user_id}_last_dig", 0)
-    cooldown_remaining = current_time - last_dig_time
+    return can_perform_action(user_id, "dig", 15 * 60)  # 15 minutes in seconds
 
-    return cooldown_remaining >= 15 * 60  # 15 minutes in seconds
-    
 
 def can_hunt(user_id):
-    last_hunt_time = user_balances.get(f"{user_id}_last_hunt", 0)
-    cooldown_remaining = current_time - last_hunt_time
-
-    return cooldown_remaining >= 10 * 60  # 10 minutes in seconds
+    return can_perform_action(user_id, "hunt", 10 * 60)  # 10 minutes in seconds
 
 
 def can_scavenge(user_id):
-    last_scavenge_time = user_balances.get(f"{user_id}_last_scavenge", 0)
-    cooldown_remaining = current_time - last_scavenge_time
-
-    return cooldown_remaining >= 5 * 60  # 5 minutes in seconds
+    return can_perform_action(user_id, "scavenge", 5 * 60)  # 5 minutes in seconds
 
 
 def can_beg(user_id):
-    last_beg_time = user_balances.get(f"{user_id}_last_beg", 0)
-    cooldown_remaining = current_time - last_beg_time
+    return can_perform_action(user_id, "beg", 30)  # 30 seconds
 
-    return cooldown_remaining >= 30  # 30 seconds
+
+def can_plant(user_id):
+    return can_perform_action(user_id, "plant", growth_duration * 3600)  # 12 hours in seconds
 
 
 def plant_carrots(user_id, amount):
-    grow_duration = 3600 * 24  # 24 hours in seconds
-    cost_per_carrot = 100
     total_cost = amount * cost_per_carrot
 
-    # Update balance and record plantation details
-    update_user_balance(user_id, -total_cost)  # Deducting the cost for planting
-    user_plantations = load_user_plants()
-    
-    # Store user's ID, planted amount, and time planted
-    user_plantations[str(user_id)] = {
-        'amount_planted': amount,
-        'time_planted': current_time,
-    }
-    
-    save_user_plants(user_plantations)
+    try:
+        # Update balance and record plantation details
+        update_user_balance(user_id, -total_cost)  # Deducting the cost for planting
+
+        user_plantations = load_user_plants()
+
+        # Store user's ID, planted amount, and time planted
+        user_plantations[str(user_id)] = {
+            'amount_planted': amount,
+            'time_planted': get_current_time(),
+        }
+
+        save_user_plants(user_plantations)
+    except Exception as e:
+        print(e)
 
 
 def set_last_claim_time(user_id):
-    user_balances[f"{user_id}_last_claim"] = time.time()
-    save_user_data()
+    update_last_action_time(user_id, "claim")
 
 
 def log_purchase(user_id, mode ,username , item_name, item_cost):
