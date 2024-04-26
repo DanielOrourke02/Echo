@@ -43,11 +43,22 @@ class Moderation(commands.Cog):
 
     # Verification Setup Command
     @commands.command()
-    async def setup_verify(self, ctx, verify_role: str=None, message: str=None):
+    async def setup_verify(self, ctx, verify_role: str=None, *, message: str=None):
         view = View()
         button = Button(label="Verify", style=discord.ButtonStyle.green)
 
-        if verify_role or message is None:
+        if verify_role is None:
+            embed = discord.Embed(color=embed_error)
+            embed.title = "Incorrect usage"
+            embed.description = f"{ctx.author.mention}, Incorrect usage. Please try: `{prefix}setup_verify <@role> <message>`"
+            embed.color = embed_error
+
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
+            return
+
+        if message is None:
             embed = discord.Embed(color=embed_error)
             embed.title = "Incorrect usage"
             embed.description = f"{ctx.author.mention}, Incorrect usage. Please try: `{prefix}setup_verify <@role> <message>`"
@@ -126,10 +137,11 @@ class Moderation(commands.Cog):
 
         # Assign the "Muted" role to the specified user
         await member.add_roles(mute_role, reason=f"Muted by {ctx.author} for reason: {reason}")
+
         await member.send(f"You have been muted in {ctx.guild.name} by an admin. Reason: {reason}") # dm user 
 
         # Create an embed for the confirmation message
-        embed = discord.Embed(title="User Muted", description=f"{member.mention} has been muted.", color=discord.Color.red())
+        embed = discord.Embed(title="User Muted", description=f"{member.mention} has been muted.", color=embed_error)
         embed.add_field(name="Reason", value=reason)
         embed.add_field(text=f"Muted by {ctx.author}")
 
@@ -143,12 +155,18 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_roles=True)
     async def unmute(self, ctx, member: discord.Member, reason: str = "No reason provided"):
         # Get the "Muted" role
-        mute_role = discord.utils.get(ctx.guild.roles, name="Muted")
+        mute_role = discord.utils.get(ctx.guild.roles, name="muted")
 
         if not mute_role:
-            # If the "Muted" role doesn't exist, you can handle this as you prefer.
-            # For example, you can send a message saying the role doesn't exist or create it.
-            await ctx.send(f"{ctx.author.mention}, The 'Muted' role doesn't exist.")
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, The 'muted' role doesn't exist.",
+                color=embed_error
+            )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
             return
 
         # Remove the "Muted" role from the specified user
@@ -193,16 +211,28 @@ class Moderation(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['lockchannel', 'channel_lock', 'channellock', 'lockthis'])
     @commands.has_permissions(manage_channels=True)
     async def lock_channel(self, ctx, channel: discord.TextChannel = None, duration: str = None, reason: str = "No reason provided"):
         # If channel is not provided, use the current channel
         channel = channel or ctx.channel
 
+        if channel is None or duration is None:
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, Incorrect usage, please try: `{prefix}lock_channel #channel 1s/m/h/d reason",
+                color=embed_error
+            )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
+            return
+
         # Convert duration to seconds
         seconds = convert_to_seconds(duration)
         if seconds is None:
-            embed = discord.Embed(title="Error", description="Invalid duration format. Use s, m, h, or d.", color=embed_colour) 
+            embed = discord.Embed(title="Error", description="Invalid duration format. Use s, m, h, or d.", color=embed_error) 
             
             embed.set_footer(text=f"Made by mal023")
             
@@ -211,7 +241,7 @@ class Moderation(commands.Cog):
 
         # Change channel permissions
         await channel.set_permissions(ctx.guild.default_role, send_messages=False)
-        embed = discord.Embed(title="Channel Locked", description=f"{channel.mention} locked for {duration}. Reason: {reason}", color=embed_colour)  
+        embed = discord.Embed(title="Channel Locked", description=f"{channel.mention} locked for {duration}. Reason: {reason}", color=embed_error)  
         
         embed.set_footer(text=f"Made by mal023")
         
@@ -228,16 +258,31 @@ class Moderation(commands.Cog):
         await asyncio.sleep(seconds)
         if channel.id in locked_channels:  # Check if still locked
             await channel.set_permissions(ctx.guild.default_role, send_messages=True)
+
             del locked_channels[channel.id]
             save_locked_channels()
-            await channel.send(f"Channel unlocked automatically after {duration}.")
+
+            embed = discord.Embed(
+                tite="Channel Unlocked",
+                description=f"Channel unlocked automatically after {duration}.",
+                color=discord.Color.green()
+            )
+
+            embed.set_footer(text=f"Made by mal023")
+
+            await channel.send(embed=embed)
 
 
     @commands.command()
     @commands.has_permissions(manage_channels=True)
     async def unlock_channel(self, ctx, channel: discord.TextChannel = None):
-        if not channel:
+        if channel is None:
             await ctx.send("Please mention the channel you want to unlock.")
+            embed = discord.Embed(title="Mention channel Plz", description=f"Please mention the channel you want to unlock: {prefix}unlockchannel #channel", color=embed_error) 
+            
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
             return
 
         await channel.set_permissions(ctx.guild.default_role, send_messages=True)
@@ -245,19 +290,39 @@ class Moderation(commands.Cog):
             del locked_channels[channel.id]
             save_locked_channels()
 
-        await ctx.send(f"Channel {channel.mention} unlocked.")
+        embed = discord.Embed(
+            tite="Channel Unlocked",
+            description=f"{channel.mention} has been unlocked.",
+            color=discord.Color.green()
+        )
+
+        embed.set_footer(text=f"Made by mal023")
+
+        await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['lockserver', 'serverlock', 'server_lock'])
     @commands.has_permissions(administrator=True)
     async def lock_server(self, ctx, duration: str = None, reason: str = "No reason provided"):
-        if not duration:
-            await ctx.send("Please specify a duration for the lock. Use s, m, h, or d.")
+        if duration is None:
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, Incorrect usage, please try: `{prefix}lockserver 1s/m/h/d reason",
+                color=embed_error
+            )
+
+            embed.set_footer(text=f"Made by mal023")
+
+            await ctx.send(embed=embed)
             return
 
         seconds = convert_to_seconds(duration)
         if seconds is None:
-            await ctx.send("Invalid duration format. Use s, m, h, or d.")
+            embed = discord.Embed(title="Error", description="Invalid duration format. Use s, m, h, or d.", color=embed_error) 
+            
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
             return
 
         for channel in ctx.guild.text_channels:
@@ -265,7 +330,16 @@ class Moderation(commands.Cog):
             locked_channels[channel.id] = {"unlock_time": datetime.datetime.now() + datetime.timedelta(seconds=seconds)}
 
         save_locked_channels()
-        await ctx.send(f"Server locked for {duration}. Reason: {reason}")
+
+        embed = discord.Embed(
+            title="Incorrect usage",
+            description=f"{ctx.author.mention}, Server locked for {duration}. Reason: {reason}",
+            color=embed_error
+        )
+
+        embed.set_footer(text=f"Made by mal023")
+
+        await ctx.send(embed=embed)
 
         await asyncio.sleep(seconds)
         for channel_id in list(locked_channels.keys()):
@@ -275,7 +349,16 @@ class Moderation(commands.Cog):
                 del locked_channels[channel_id]
 
         save_locked_channels()
-        await ctx.send("Server unlocked automatically after the duration.")
+
+        embed = discord.Embed(
+            title="Incorrect usage",
+            description=f"Server unlocked automatically after the duration.",
+            color=discord.Color.green()
+        )
+
+        embed.set_footer(text=f"Made by mal023")
+
+        await ctx.send(embed=embed)
 
 
     @commands.command()
@@ -287,7 +370,15 @@ class Moderation(commands.Cog):
                 del locked_channels[str(channel.id)]
         
         save_locked_channels()
-        await inter.response.send_message("Server unlocked.")
+
+        embed = discord.Embed(
+            title="Incorrect usage",
+            description=f"Server unlocked.",
+            color=discord.Color.green()
+        )
+        embed.set_footer(text=f"Made by mal023")
+
+        await inter.response.send_message(embed=embed)
 
     # DEFINE THE ADMIN ID IN THE CONFIG
 
