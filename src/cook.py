@@ -97,7 +97,47 @@ class Cooking(commands.Cog):
 
 
     @commands.command()
-    async def streets(self, ctx):
+    async def streets(self, ctx, amount: int=None):
+        user_id = ctx.author.id
+        user_inventory = get_user_inventory(user_id)
+
+        if amount is None:
+            embed = discord.Embed(
+                title="Incorrect usage",
+                description=f"{ctx.author.mention}, incorrect usage. Please try: `{prefix}streets <amount2sell>",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        if amount > 15:
+            embed = discord.Embed(
+                title="Max Meth sell",
+                description=f"{ctx.author.mention}, You can only sell 15 meth all at once!",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
+        if amount <= 0:
+            embed = discord.Embed(
+                title="Invalid amount",
+                description=f"{ctx.author.mention}, please enter a valid amount greater than zero.",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        meth_count = sum(item == 'meth' for item in user_inventory)
+        if meth_count < amount:
+            embed = discord.Embed(
+                title="Insufficient meth",
+                description=f"{ctx.author.mention}, You only have {meth_count} meth to sell, which is less than the requested amount of {amount}.",
+                color=embed_error
+            )
+            await ctx.send(embed=embed)
+            return
+
         try:
             user_id = ctx.author.id
             
@@ -112,14 +152,11 @@ class Cooking(commands.Cog):
                     
                 await ctx.send(embed=embed)
                 return
-
-
-            user_inventory = get_user_inventory(user_id)
             
             if 'meth' not in user_inventory:
                 embed = discord.Embed(
                     title="Unable to sell",
-                    description=f"{ctx.author.mention}, You need at least 5 meth to start selling! Get some using `{prefix}cook`",
+                    description=f"{ctx.author.mention}, You don't have any meth to sell! Cook some using `{prefix}cook`!",
                     color=embed_error
                 )
 
@@ -129,7 +166,7 @@ class Cooking(commands.Cog):
 
                 return
 
-            user_balances[f"{user_id}_last_sell"] = time.time()
+            update_last_action_time(user_id, "sell")
 
             conversations = [
                 "Hey, do you have the special item in stock? Can I buy?",
@@ -158,7 +195,7 @@ class Cooking(commands.Cog):
 
             meth_sell_price = 4000
 
-            for i in range(5):
+            for i in range(amount):
                 try:
                     conversation = random.choice(conversations)
                     conversations.remove(conversation)  # Remove the chosen conversation from the list to avoid repetition
@@ -189,7 +226,9 @@ class Cooking(commands.Cog):
 
                 try:
                     response = await self.bot.wait_for('message', timeout=30.0, check=check)
+
                     print("Response received:", response.content.lower())  # Debug print statement
+
                     if response.content.lower() == 'sell':
                         if '..' in conversation.lower():
                             total_profit = len(conversation) * meth_sell_price
@@ -212,14 +251,15 @@ class Cooking(commands.Cog):
                             # Successful sale
                             embed = discord.Embed(
                                 title="You just sold meth.",
-                                description=f"{ctx.author.mention}, Successfully sold 1 meth for ",
-                                color=discord.Color.orange(),
+                                description=f"{ctx.author.mention}, Successfully sold 1 meth for {meth_sell_price}",
+                                color=discord.Color.green(),
                             )
                             embed.set_footer(text=f"Made by mal023")
 
                             await message.edit(embed=embed)
 
                             update_user_balance(user_id, meth_sell_price)
+                            remove_item_from_inventory(user_id, 'meth')
                     else:
                         embed = discord.Embed(
                             title="Pass",
@@ -229,7 +269,6 @@ class Cooking(commands.Cog):
                         embed.set_footer(text=f"Made by mal023")
 
                         await message.edit(embed=embed)
-
                 except asyncio.TimeoutError:
                     embed = discord.Embed(
                         title="Too slow",
