@@ -59,6 +59,10 @@ git clone https://github.com/DanielJones02/Echo
 ```
 git clone https://github.com/DanielJones02/Echo
 cd Echo
+```
+- Now open config.json (in the terminal), or open it in notepad++ if you prefer.
+
+```
 nano config.json
 ```
 
