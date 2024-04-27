@@ -91,6 +91,8 @@ chmod +x linux_run.sh
 
 `Buttons` - Buttons will no longer work after a bot restart (ticket button and verify button)
 
+`streets` - Command is still in beta, the command is still very buggy and bugs out alot. I am working on a fix.
+
 
 ## General Commands
 
