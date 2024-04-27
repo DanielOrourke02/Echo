@@ -792,7 +792,7 @@ class Economy(commands.Cog):
         
         await ctx.send(embed=embed)
 
-
+    # 510
     @commands.command(aliases=['top', 'balancetop', 'balance_top'])
     async def baltop(self, ctx):
         # Check if the file exists and is not empty
@@ -800,19 +800,24 @@ class Economy(commands.Cog):
             await ctx.send("No data available.")
             return
 
+        # get all the users balances
         try:
             with open('user_data.json', 'r') as f:
                 data = json.load(f)
                 user_balances = data.get("user_balances", {})
+                user_bank_balances = data.get("user_bank_balances", {})
         except json.JSONDecodeError:
             await ctx.send("Error reading user data.")
             return
 
-        # Extracting user ID and balance, ignoring other keys
-        balances = {user_id: data for user_id, data in user_balances.items() if user_id.isdigit() and isinstance(data, int)}
+        on_hand = {user_id: data for user_id, data in user_balances.items() if user_id.isdigit() and isinstance(data, int)}
+        bank_bal = {user_id: data for user_id, data in user_bank_balances.items() if user_id.isdigit() and isinstance(data, int)}
+        
+        # Example: Calculating total balance for each user
+        combined_balances = {user_id: on_hand.get(user_id, 0) + bank_bal.get(user_id, 0) for user_id in set(on_hand) | set(bank_bal)}
 
         # Sorting the dictionary by balance and getting top 10
-        top_balances = dict(sorted(balances.items(), key=lambda item: item[1], reverse=True)[:10]) # complex asf idk how it works
+        top_balances = dict(sorted(combined_balances.items(), key=lambda item: item[1], reverse=True)[:10])
 
         # Creating an embedded message with orange color
         embed = discord.Embed(
@@ -827,6 +832,7 @@ class Economy(commands.Cog):
         await ctx.send(embed=embed)
 
 
+    # 501
     @commands.command(aliases=['bal'])
     async def balance(self, ctx, user: commands.MemberConverter=None):
         if user is not None:
@@ -1100,20 +1106,31 @@ class Economy(commands.Cog):
             if user_balance < amount_to_rob:
                 embed = discord.Embed(
                     title="Insufficient Balance",
-                    description="You don't have enough balance to rob.",
+                    description=f"{ctx.author.mention}, You don't have enough balance to rob.",
                     color=embed_error
                 )
                 
                 embed.set_footer(text="Made by mal023")
 
                 await ctx.send(embed=embed)
-
                 return
 
+            if target_balance <= 0:
+                embed = discord.Embed(
+                    title=f"Your target has no money!",
+                    description=f"{ctx.author.mention}, Why rob a poor person! Instead, rob the rich and give to the poor.",
+                    color=embed_error
+                )
+                
+                embed.set_footer(text="Made by mal023")
+
+                await ctx.send(embed=embed)
+                return
+            
             # Calculate the chance of success (40%)
             success_chance = random.random()
 
-            # Perform the robbery with the determined success chance
+            # Perform the robbery with 40% chance of success
             if success_chance <= 0.4:
                 # Success: Rob the target
                 update_user_balance(user_id, amount_to_rob)
