@@ -69,6 +69,11 @@ carrot_sell = config.get("carrot_sell_price")
 max_carrot_planted = config.get("max_carrots_planted")
 growth_duration = 3600 * config.get("carrot_growth_duration")
 
+
+# Meth sell price
+
+meth_sell_price = config.get("meth_sell_price")
+
 # max bank size
 max_bank_size = config.get("bank_size")
 
