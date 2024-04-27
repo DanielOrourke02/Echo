@@ -79,6 +79,29 @@ class Economy(commands.Cog):
             await ctx.send(embed=embed)
 
 
+    # Command to reset the cooldowns file
+    # so if you run this all current cooldowns are wiped
+    # good for debugging (and cheating but thats not nice)
+    @commands.command()
+    @commands.check(is_admin) # Only one user can do this (put the id in config.json)
+    async def cool_bypass(self, ctx):
+        if os.path.exists('cooldowns.json'):
+            # If the file exists, clear its contents
+            with open('cooldowns.json', 'w') as f:
+                f.write('{}')
+
+        embed = discord.Embed(
+            title="Cooldowns Wiped",
+            description=f"Admin {ctx.author.display_name} has just wiped all cooldowns! (except for interest on banks and farming)",
+            color=discord.Color.green()
+        )
+
+        embed.set_footer(text=f"Made by mal023")
+
+        # Send the embed
+        await ctx.send(embed=embed)
+
+
     # Command to remove items from a users inventory
     @commands.command()
     @commands.check(is_admin) # Only one user can do this (put the id in config.json)
