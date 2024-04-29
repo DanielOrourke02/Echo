@@ -238,7 +238,7 @@ class Economy(commands.Cog):
         item_cost = shop_items[item_name]['cost'] # get the item cost
         user_balance = get_user_balance(user.id) # get the user balance
 
-        total = 0
+        total = amount * item_cost
 
         for i in range(amount):
             if user_balance < item_cost: # if they dont have enough output an error message
@@ -252,8 +252,6 @@ class Economy(commands.Cog):
                 
                 await ctx.send(embed=embed)
                 return
-
-            total += total + item_cost
 
             update_user_balance(user.id, -item_cost) # update their user balance
             add_item_to_inventory(user.id, item_name) # add the item to their inventory
