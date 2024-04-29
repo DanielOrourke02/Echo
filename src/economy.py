@@ -1148,11 +1148,11 @@ class Economy(commands.Cog):
                 await ctx.send(embed=embed)
                 return
             
-            # Calculate the chance of success (40%)
+            # Calculate the chance of success (45%)
             success_chance = random.random()
 
-            # Perform the robbery with 40% chance of success
-            if success_chance <= 0.4:
+            # Perform the robbery with 45% chance of success
+            if success_chance <= 0.45:
                 # Success: Rob the target
                 update_user_balance(user_id, amount_to_rob)
                 update_user_balance(target_id, -amount_to_rob)
