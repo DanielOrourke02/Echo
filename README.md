@@ -97,22 +97,27 @@ chmod +x linux_run.sh
 
 If you want a feature added or something fixed/changed. Send me a DM (mal023) or make an issue! I'm open to all suggestions!
 
+Anything labeled on this list the has a `(MAYBE)` means that its an idea that I would like to add, but i'm unsure if I could or will add it.
+
 - [x] Fix rob command
 - [x] Fix buy command
 - [ ] Fix `.streets` command (error with not picking up messages)
+- [ ] Update help, cosmetics and the economy command (make it look better)
+- [ ] Make all embeds look better and simpler (more clean)
+- [ ] Add economy game tutorial
+- [ ] Add docker installation
 - [ ] Add Mac support
 - [ ] Add proper documentation/installation guide
 - [ ] Jobs (working on now)
 - [ ] Add properties (MAYBE)
-- [ ] Own property to be able to plant more crops (MAYBE)
-- [ ] Leveling System
-- [ ] Special Events (double xp/money unsure)
-- [ ] Dropped wallets (at random times)
+- [ ] Add Leveling System (MAYBE)
+- [ ] Add Special Events (MAYBE)
+- [ ] Add Dropped wallets (MAYBE)
 - [ ] Increase rob command luck (shop item) (MAYBE)
-- [ ] Money Printing (add it back)
-- [ ] Heists
-- [ ] Pets
-- [ ] Giveaway command (not related to the economy game)
+- [ ] Add Money Printing (MAYBE)
+- [ ] Add Heists (MAYBE)
+- [ ] Add Pets (MAYBE)
+- [ ] Add Giveaway command (not related to the economy game)
 
 ## General Commands
 
