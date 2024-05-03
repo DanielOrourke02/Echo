@@ -93,6 +93,24 @@ chmod +x linux_run.sh
 
 `streets` - Command is still in beta, the command is still very buggy and bugs out alot. I am working on a fix.
 
+# TODO LIST
+
+- [x] Fix rob command
+- [x] Fix buy command
+- [ ] Fix `.streets` command (error with not picking up messages)
+- [ ] Add Mac support
+- [ ] Add proper documentation/installation guide
+- [ ] Jobs (working on now)
+- [ ] Add properties (MAYBE)
+- [ ] Own property to be able to plant more crops (MAYBE)
+- [ ] Leveling System
+- [ ] Special Events (double xp/money unsure)
+- [ ] Dropped wallets (at random times)
+- [ ] Increase rob command luck (shop item) (MAYBE)
+- [ ] Money Printing (add it back)
+- [ ] Heists
+- [ ] Pets
+- [ ] Giveaway command (not related to the economy game)
 
 ## General Commands
 
