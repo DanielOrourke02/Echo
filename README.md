@@ -20,7 +20,7 @@
 
 ## 🔗 Resource Links
 
-- 🤖 Demo Bot: Comming soon
+- 🤖 Demo Bot: [Echo](https://discord.com/oauth2/authorize?client_id=1075434463217066014&permissions=1651750693974&scope=bot)
 - 🤝 Support Server: [Join Here](https://discord.gg/kNWkT8xWg6)
 - 🤝 Hire me: [Join Here](https://discord.gg/kNWkT8xWg6) or dm `mal023`
 - 📂 Documentation URL: comming soon
