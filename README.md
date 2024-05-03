@@ -196,27 +196,27 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 
 | Item   | Description                                | Cost  |
 |--------|--------------------------------------------|-------|
-| Silver | Store your money in silver                 | 1000  |
-| Gold   | Store your money in gold                   | 10000 |
-| shovel | Buy a shovel for digging                   | 1000  |
-| bow    | Buy a bow for hunting                      | 1000  |
-| stove  | Buy a stove for cooking                    | 25000 |
-| chemical | Chemical used for cooking goods          | 4000  |
-| red    | a red substance used for cooking goods     | 4000  |
+| `Silver` | Store your money in silver                 | 1000  |
+| `Gold`   | Store your money in gold                   | 10000 |
+| `shovel` | Buy a shovel for digging                   | 1000  |
+| `bow`    | Buy a bow for hunting                      | 1000  |
+| `stove`  | Buy a stove for cooking                    | 25000 |
+| `chemical` | Chemical used for cooking goods          | 4000  |
+| `red`    | a red substance used for cooking goods     | 4000  |
 
 
 ## Craftable Items (ingame)
 
 | Item               | Ingredients                                  | Description                                      |
 |--------------------|----------------------------------------------|--------------------------------------------------|
-| Excalibur         | 2 guns, 1 mythical_sword                      | A powerful sword that only the one can handle    |
-| M4A1              | 2 guns, 1 stick                               | Shoot down your enemies                          |
-| 8_Incher          | 1 stick, 1 david4                             | A unique and 8 inch weapon                       |
-| Complete_Gauntlet | 1 infinity, 1 leg.sword, 1 david4             | The most powerful item in the game               |
-| C4                | 2 sulphur, 1 charcoal, 1 clock, 5 potatoes, 2 tech | C4 Bomb for bombing people                  |
-| Poo               | 3 charcoal, 1 sulphur                         | Just poo                                         |
-| Joint             | 1 roll, 1 weed                                | Sell joints                                      |
-| meth              | 1 chemical, 1 red, create using `!cook`       | sell meth by using `!streets`                    |
+| `Excalibur`         | 2 guns, 1 mythical_sword                      | A powerful sword that only the one can handle    |
+| `M4A1`              | 2 guns, 1 stick                               | Shoot down your enemies                          |
+| `8_Incher`          | 1 stick, 1 david4                             | A unique and 8 inch weapon                       |
+| `Complete_Gauntlet` | 1 infinity, 1 leg.sword, 1 david4             | The most powerful item in the game               |
+| `C4`                | 2 sulphur, 1 charcoal, 1 clock, 5 potatoes, 2 tech | C4 Bomb for bombing people                  |
+| `Poo`               | 3 charcoal, 1 sulphur                         | Just poo                                         |
+| `Joint`             | 1 roll, 1 weed                                | Sell joints                                      |
+| `meth`              | 1 chemical, 1 red, create using `!cook`       | sell meth by using `!streets`                    |
 
 ## Findable Items (ingame)
 
@@ -224,22 +224,22 @@ I call them 'cosmetics', but they are items you get from running: dig, hunt and 
 
 | Item             | Description                     | Sell Value | Chance (%) |
 |------------------|---------------------------------|------------|-------------|
-| Rare Sword       | Rare Sword                      | 2500       | 25          |
-| Legendary Sword  | Legendary Sword                 | 5000       | 15          |
-| Mythical sword   | Mythical sword                  | 12500      | 5           |
-| Shovel           | Shovel used for digging         | 1000       | 23          |
-| Bow              | Bow used for hunting            | 1000       | 20          |
-| Infinity Gauntlet| Infinity Gauntlet               | 30000      | 5           |
-| David's 4th ball | David's 4th ball                | 25000      | 7           |
-| Stick            | Stick                           | 15000      | 15          |
-| Glock-18         | Glock-18                        | 8000       | 18          |
-| Electronics      | Electronics                     | 1000       | 20          |
-| Weed             | Weed                            | 5000       | 25          |
-| Sulphur          | Sulphur                         | 500        | 40          |
-| Charcoal         | Charcoal                        | 300        | 50          |
-| Alarm Clock      | Alarm Clock                     | 700        | 30          |
-| Roll             | Roll paper for weed             | 1500       | 30          |
-| Potato           | Potato                          | 100        | 70          |
+| `Rare Sword`       | Rare Sword                      | 2500       | 25          |
+| `Legendary Sword`  | Legendary Sword                 | 5000       | 15          |
+| `Mythical sword`   | Mythical sword                  | 12500      | 5           |
+| `Shovel`           | Shovel used for digging         | 1000       | 23          |
+| `Bow`              | Bow used for hunting            | 1000       | 20          |
+| `Infinity Gauntlet`| Infinity Gauntlet               | 30000      | 5           |
+| `David's 4th ball` | David's 4th ball                | 25000      | 7           |
+| `Stick`            | Stick                           | 15000      | 15          |
+| `Glock-18`         | Glock-18                        | 8000       | 18          |
+| `Electronics`      | Electronics                     | 1000       | 20          |
+| `Weed`             | Weed                            | 5000       | 25          |
+| `Sulphur`          | Sulphur                         | 500        | 40          |
+| `Charcoal`         | Charcoal                        | 300        | 50          |
+| `Alarm Clock`      | Alarm Clock                     | 700        | 30          |
+| `Roll`             | Roll paper for weed             | 1500       | 30          |
+| `Potato`           | Potato                          | 100        | 70          |
 
 
 
