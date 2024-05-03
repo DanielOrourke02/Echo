@@ -95,6 +95,8 @@ chmod +x linux_run.sh
 
 # TODO LIST
 
+If you want a feature added or something fixed/changed. Send me a DM (mal023) or make an issue! I'm open to all suggestions!
+
 - [x] Fix rob command
 - [x] Fix buy command
 - [ ] Fix `.streets` command (error with not picking up messages)
