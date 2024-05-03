@@ -108,7 +108,7 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 - [ ] Add docker installation
 - [ ] Add Mac support
 - [ ] Add proper documentation/installation guide
-- [ ] Jobs (working on now)
+- [ ] Jobs (MAYBE)
 - [ ] Add properties (MAYBE)
 - [ ] Add Leveling System (MAYBE)
 - [ ] Add Special Events (MAYBE)
