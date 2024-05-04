@@ -251,13 +251,6 @@ I call them 'cosmetics', but they are items you get from running: dig, hunt and 
 | `Potato`           | Potato                          | 100        | 70          |
 
 
-
-<h3 align="left">Connect with me:</h3>
-<p align="left">
-</p>
-<h3 align="left">Hire Me: https://discord.gg/kNWkT8xWg6 Or DM ME: mal023</h3>
-</p>
-
 <div align="center">
   <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/Visual_Studio_Icon_2019.svg.png" width="48" height="48" alt="Visual Studio" />
   <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/python.png" alt="Python" />
