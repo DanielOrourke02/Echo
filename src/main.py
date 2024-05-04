@@ -7,10 +7,10 @@ from utilities import *
 from eco_support import *
 
 from blackjack import Blackjack
-from crafting import Crafting
-from farming import Farming
+from extensions import Crafting
+from extensions import Farming
+from extensions import Cooking
 from economy import Economy
-from cook import Cooking
 from moderation import Moderation
 from slots import Slots
 from help import Help
