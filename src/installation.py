@@ -17,6 +17,8 @@ def SETUP_INSTALL():
 
 
     if CONFIG.get("skip_installtion") == "false":
+        os.system('pip install git+https://github.com/Rapptz/discord.py') # for discord.ui 
+
         for package in REQUIRED_PACKAGES: # loop and install required packages
             INSTALLING_PACKAGES(package)
     else:
