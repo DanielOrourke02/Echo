@@ -93,6 +93,13 @@ chmod +x linux_run.sh
 
 `streets` - Command is still in beta, the command is still very buggy and bugs out alot. I am working on a fix.
 
+`RuntimeWarning: Enable tracemalloc to get the object allocation traceback` - This means you have the wrong version of pycord installed. Run the following commands to fix it:
+
+```
+py -3 -m pip uninstall py-cord
+pip install git+https://github.com/Rapptz/discord.py
+```
+
 # TODO LIST
 
 If you want a feature added or something fixed/changed. Send me a DM (mal023) or make an issue! I'm open to all suggestions!
