@@ -6,7 +6,11 @@ from eco_support import *
 
 
 
+
+
 # FARMING COG
+
+
 
 
 
@@ -144,7 +148,11 @@ def farming_setup(bot):
 
 
 
+
+
 # CRAFTING COG
+
+
 
 
 
@@ -253,7 +261,11 @@ def crafting_setup(bot):
 
 
 
+
+
 # COOKING COG
+
+
 
 
 
@@ -447,8 +459,6 @@ class Cooking(commands.Cog):
 
             chosen_conversations = []
 
-            meth_sell_price = 4000
-
             for i in range(amount):
                 try:
                     conversation = random.choice(conversations)
@@ -489,6 +499,8 @@ class Cooking(commands.Cog):
 
                     if response.content.lower() == 'sell':
                         if '..' in conversation.lower():
+                            total_profit = len(conversation) * meth_sell_price
+
                             for _ in range(loop_count):
                                 remove_item_from_inventory(user_id, 'meth')
 
@@ -572,3 +584,167 @@ class Cooking(commands.Cog):
 
 def economy_setup(bot):
     bot.add_cog(Cooking(bot))
+
+
+
+
+
+# WALLETS COG
+
+
+
+
+
+class Droped_Wallets(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Wallets Cog Loaded! {Fore.RESET}')
+
+
+def Droped_Wallets_setup(bot):
+    bot.add_cog(Droped_Wallets(bot))
+
+
+
+
+
+# HEISTS COG
+
+
+
+
+
+class Heists(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Heists Cog Loaded! {Fore.RESET}')
+
+
+def Heists_setup(bot):
+    bot.add_cog(Heists(bot))
+
+
+
+
+
+# JOBS COG
+
+
+
+
+
+class Jobs(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Jobs Cog Loaded! {Fore.RESET}')
+
+
+def Jobs_setup(bot):
+    bot.add_cog(Jobs(bot))
+
+
+
+
+
+# SPECIAL EVENTS COG
+
+
+
+
+
+class Events(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Events Cog Loaded! {Fore.RESET}')
+
+
+def Events_setup(bot):
+    bot.add_cog(Events(bot))
+
+
+
+
+
+# PROPERTIES COG
+
+
+
+
+
+class Properties(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Properties Cog Loaded! {Fore.RESET}')
+
+
+def Properties_setup(bot):
+    bot.add_cog(Properties(bot))
+
+
+
+
+
+# MONEY PRINTING COG
+
+
+
+
+
+class Printing(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Money Printing Cog Loaded! {Fore.RESET}')
+
+
+def Printing_setup(bot):
+    bot.add_cog(Printing(bot))
+
+
+
+
+# EXAMPLE COG (add your own extensions)
+# Go back to main.py and import your cog
+# then add it to the 'setup_bot' function
+
+"""
+class Example(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
+    @commands.command()
+    async def example(self, ctx):
+        embed = discord.Embed(
+            title="Example",
+            description=f"{ctx.author.mention}, This is an example command! ",
+            color=embed_colour,
+        )
+
+        embed.set_footer(text=f"Made by mal023")
+
+        await ctx.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Example Cog Loaded! {Fore.RESET}')
+
+def example_setup(bot):
+    bot.add_cog(Example(bot))
+"""
