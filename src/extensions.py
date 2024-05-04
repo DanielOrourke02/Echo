@@ -489,11 +489,8 @@ class Cooking(commands.Cog):
 
                     if response.content.lower() == 'sell':
                         if '..' in conversation.lower():
-                            total_profit = len(conversation) * meth_sell_price
-
                             for _ in range(loop_count):
                                 remove_item_from_inventory(user_id, 'meth')
-                                update_user_balance(user_id, -total_profit)
 
                             embed = discord.Embed(
                                 title="Got caught!",
