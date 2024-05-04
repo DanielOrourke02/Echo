@@ -81,11 +81,13 @@ chmod +x linux_run.sh
 
 - Requirements will be auto installed and the bot will start
 
-<h3 align="left">Connect with me:</h3>
-<p align="left">
-</p>
-<h3 align="left">Hire Me: https://discord.gg/kNWkT8xWg6 Or DM ME: mal023</h3>
-</p>
+<h2 align="center">
+  <br>
+  Connect with me
+  <br>
+</h2>
+
+<p align="center">Hire Me: https://discord.gg/kNWkT8xWg6 Or DM ME: mal023</p>
 
 # KNOWN BUGS
 
