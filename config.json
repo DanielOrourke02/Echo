@@ -1,36 +1,20 @@
 {
     "TOKEN": "BOT_TOKEN_HERE",
-
     "bot_invite_link": "YOUR_BOT_INVITE_LINK_HERE",
-
     "prefix": ".",
-
     "ADMIN_ID": 123456,
-
     "LOGGING_CHANNEL": 12345678,
-
     "skip_installtion": "false",
-
     "show_guilds": "true",
-
-    "daily_reward": 1000,
-
+    "daily_reward": 10000,
     "meth_sell_price": 4000,
-
     "carrot_plant_price": 100,
-
     "carrot_sell_price": 125,
-
     "max_carrots_planted": 1000,
-
     "carrot_growth_duration": 12,
-
     "bank_size": 500000,
-
     "max_gamble_amount": 500000,
-
     "lottery_cooldown": 30,
-
     "entry_fee": 1000
 }
 
