@@ -1115,6 +1115,18 @@ class Economy(commands.Cog):
                 embed.set_footer(text="Made by mal023")
                 await ctx.send(embed=embed)
                 return
+                
+            if user == ctx.author:
+                embed = discord.Embed(
+                    title="You can't rob yourself!",
+                    description=f"{ctx.author.mention}, You can't rob yourself!",
+                    color=embed_error
+                )
+                embed.set_footer(text="Made by mal023")
+                
+                await ctx.send(embed=embed)
+                return
+
 
             # Get the balance of the command invoker and the target
             user_balance = get_user_balance(user_id)
