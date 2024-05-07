@@ -3,7 +3,12 @@
     "bot_invite_link": "YOUR_BOT_INVITE_LINK_HERE",
     "prefix": ".",
     "ADMIN_ID": 123456,
+    
     "LOGGING_CHANNEL": 12345678,
+    "MESSAGE_DELETE_ALERT": "false",
+    "LINK_BAN": "true",
+    "BANNED_LINKS": ["discord.gg"],
+    
     "skip_installtion": "false",
     "show_guilds": "true",
     "daily_reward": 10000,
