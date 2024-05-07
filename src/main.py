@@ -44,19 +44,40 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help"))  # set presence to 'Listening to .help'
 
     guilds(bot)  # call guilds function, this will output what guilds the bot is in (if enabled in config)
+    
+    
+@bot.event
+async def on_message(message):
+    if link_ban == 'true':
+        if any(link in message.content for link in BANNED_LINKS):
+            await message.delete()
 
+            embed = discord.Embed(
+                title="Discord Links Are Forbidden!",
+                description=f"{message.author.mention} Discord links are not allowed in this server.",
+                color=discord.Color.red()
+            )
+
+            embed.set_footer(text="Made by mal023")
+
+            await message.channel.send(embed=embed)
+            return
+
+    await bot.process_commands(message)
+        
 
 @bot.event
 async def on_message_delete(message):
-    channel = bot.get_channel(logging_channel_id)
-    
-    embed = discord.Embed(
-        title="Message Deleted",
-        description=f"**Message sent by:** {message.author.mention}\n"
-                    f"**Content:** {message.content}",
-        color=discord.Color.red()
-    )
-    await channel.send(embed=embed)
+    if message_delete == 'true':
+        channel = bot.get_channel(logging_channel_id)
+        
+        embed = discord.Embed(
+            title="Message Deleted",
+            description=f"**Message sent by:** {message.author.mention}\n"
+                        f"**Content:** {message.content}",
+            color=discord.Color.red()
+        )
+        await channel.send(embed=embed)
 
 
 # Use an asynchronous function to run the setup and the bot
