@@ -55,6 +55,12 @@ bot_invite = config.get("bot_invite_link")
 # prefix
 prefix = config.get('prefix')
 
+# Moderation
+
+message_delete = config.get('MESSAGE_DELETE_ALERT')
+link_ban = config.get('LINK_BAN')
+BANNED_LINKS = config.get('BANNED_LINKS', [])
+
 # show guilds the bot is in at launch
 show_guilds = config.get("show_guilds")
 
@@ -69,9 +75,7 @@ carrot_sell = config.get("carrot_sell_price")
 max_carrot_planted = config.get("max_carrots_planted")
 growth_duration = 3600 * config.get("carrot_growth_duration")
 
-
 # Meth sell price
-
 meth_sell_price = config.get("meth_sell_price")
 
 # max bank size
@@ -81,7 +85,6 @@ max_bank_size = config.get("bank_size")
 max_bet = config.get("max_gamble_amount")
 
 # Admin logging channel
-
 logging_channel_id = config.get("LOGGING_CHANNEL")
 
 # ----------------------------------------------------------MODERATION FUNCTIONS----------------------------------------------------------
