@@ -774,7 +774,7 @@ class Economy(commands.Cog):
 
 
     @commands.command()
-    async def withdraw(self, ctx, amount: int=None):
+    async def withdraw(self, ctx, amount=None):
         if amount is None: # if they didnt enter an amount
             embed = discord.Embed(
                 title="Incorrect withdraw usage!",
@@ -786,8 +786,25 @@ class Economy(commands.Cog):
             
             await ctx.send(embed=embed)
             return
-        
-        elif amount <= 0 or amount > get_bank_balance(ctx.author.id): # check if they have that amount to withdraw
+
+        if amount == 'max' or amount == 'all':
+            amount = get_bank_balance(ctx.author.id)
+        else:
+            try:
+                amount = int(amount)
+            except ValueError:
+                embed = discord.Embed(
+                    title="Invalid Withdraw amount",
+                    description=f"{ctx.author.mention}, Please enter a valid amount.",
+                    color=embed_error
+                )
+
+                embed.set_footer(text=f"Made by mal023")
+
+                await ctx.send(embed=embed)
+                return        
+
+        if amount <= 0 or amount > get_bank_balance(ctx.author.id): # check if they have that amount to withdraw
             embed = discord.Embed(
                 title="Invalid withdraw amount",
                 description=f'{ctx.author.mention}, Invalid withdraw amount. Please try again.',
@@ -812,8 +829,8 @@ class Economy(commands.Cog):
         embed.set_footer(text=f"Made by mal023")
         
         await ctx.send(embed=embed)
-
-    # 510
+        
+        
     @commands.command(aliases=['top', 'balancetop', 'balance_top'])
     async def baltop(self, ctx):
         # Check if the file exists and is not empty
@@ -853,27 +870,29 @@ class Economy(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    # 501
     @commands.command(aliases=['bal'])
     async def balance(self, ctx, user: commands.MemberConverter=None):
-        if user is not None:
-            user_id = user.id
-        elif user is None:
-            user = ctx.author
-            user_id = ctx.author.id
+        try:
+            if user is not None:
+                user_id = user.id
+            elif user is None:
+                user = ctx.author
+                user_id = ctx.author.id
 
-        pocket_money = get_user_balance(user_id)
-        bank_balance = get_user_bank_balance(user_id)
+            pocket_money = get_user_balance(user_id)
+            bank_balance = get_user_bank_balance(user_id)
 
-        embed = discord.Embed(
-            title=f"**{user.display_name}'s** Balance",
-            description=f'On Hand: **{pocket_money} zesty coins**\nBank Balance: **{bank_balance}/{max_bank_size} zesty coins**',
-            color=discord.Color.green()
-        )
-        
-        embed.set_footer(text=f"Made by mal023")
-        
-        await ctx.send(embed=embed)
+            embed = discord.Embed(
+                title=f"**{user.display_name}'s** Balance",
+                description=f'On Hand: **{pocket_money} zesty coins**\nBank Balance: **{bank_balance}/{max_bank_size} zesty coins**',
+                color=discord.Color.green()
+            )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
+        except Exception as e:
+            print(e)
 
     
 #-----------------GAMBLING GAMES-----------------
@@ -1113,9 +1132,10 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
                 embed.set_footer(text="Made by mal023")
+                
                 await ctx.send(embed=embed)
                 return
-                
+
             if user == ctx.author:
                 embed = discord.Embed(
                     title="You can't rob yourself!",
@@ -1126,7 +1146,6 @@ class Economy(commands.Cog):
                 
                 await ctx.send(embed=embed)
                 return
-
 
             # Get the balance of the command invoker and the target
             user_balance = get_user_balance(user_id)
