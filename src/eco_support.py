@@ -3,21 +3,6 @@
 from utilities import *
 
 
-"""
-
-THIS IS SO MESSY OMG
-
-IK ITS SO BAD
-
-IM SORRY FOR ALL PEOPLE TRYING TO UNDERSTAND MY ECONOMY GAME
-
-This contains all the main functions, variables, array etc for all economy game
-related content.
-
-Its very messy I know but I will tidy it up.
-
-"""
-
 DATA_FILE = 'user_data.json'
 
 COOLDOWN_FILE = 'cooldowns.json'
@@ -215,7 +200,8 @@ def update_plants():
     # Save the updated data
     save_user_plants(user_carrot_plantations)
 
-def update_bank_interest(user_id):
+
+def update_bank_interest(user_id, max_bank_size):
     # Retrieve last interest update time for the user
     last_interest_update = user_bank_balances.get(f"{user_id}_last_interest_update", 0)
 
@@ -223,24 +209,23 @@ def update_bank_interest(user_id):
     time_difference = time.time() - last_interest_update
 
     # If 24 hours have passed, apply interest 24 * 60 * 60 == 1 day/24 hours
-    if time_difference >= 24 * 60 * 60:
+    if time_difference >= 3:
+        print("updated bank interest!")
         # Calculate interest amount (10% of current bank balance)
-        interest_amount = int(get_bank_balance(user_id) * 0.10)
+        bank_balance = get_bank_balance(user_id)
+        interest_amount = int(bank_balance * 0.10)
 
         # Cap the interest at whatever the max bank size is
-        interest_amount = min(interest_amount, max_bank_size)
+        interest_amount = min(interest_amount, max_bank_size - bank_balance)
 
-        # Update bank balance with interest
         update_bank_balance(user_id, interest_amount)
 
-        # Update last interest update time
         user_bank_balances[f"{user_id}_last_interest_update"] = time.time()
         save_user_data()
-
-
+        
 
 def get_user_bank_balance(user_id):
-    update_bank_interest(user_id)  # Update interest before returning balance
+    update_bank_interest(user_id, max_bank_size)  # Update interest before returning balance
     return user_bank_balances.get(str(user_id), 0)
 
 
