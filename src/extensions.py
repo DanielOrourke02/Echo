@@ -486,14 +486,17 @@ class Cooking(commands.Cog):
                 message = await ctx.send(embed=embed)
                     
                 def check(m):
-                    print(f"Checking message: {m.content} from {m.author} in {m.channel}")  # Debug print
-                    condition = m.author == ctx.author and m.channel == ctx.channel and m.content.lower() in ['sell', 'pass']
-                    print(f"Condition met: {condition}")  # Debug print
-                    return condition
-
+                    try:
+                        print(f"Checking message: {m.content} from {m.author} in {m.channel}")  # Debug print
+                        condition = m.author == ctx.author and m.channel == ctx.channel and m.content.lower() in ['sell', 'pass']
+                        print(f"Condition met: {condition}")  # Debug print
+                        return condition
+                    except Exception as e:
+                        print(e)
+                        return e
 
                 try:
-                    response = await self.bot.wait_for('message', timeout=30.0, check=check)
+                    response = await self.bot.wait_for('message', timeout=15.0, check=check)
 
                     print("Response received:", response.content.lower())  # Debug print statement
 
@@ -553,7 +556,7 @@ class Cooking(commands.Cog):
 
                     embed = discord.Embed(
                         title="Error",
-                        description=f"An error occurred while processing your request. Please try again later.",
+                        description=f"An error occurred while processing your request. Please try again later. {e}",
                         color=embed_error,
                     )
 
