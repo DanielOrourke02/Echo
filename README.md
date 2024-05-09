@@ -112,13 +112,14 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 
 - [x] Fix rob command
 - [x] Fix buy command
+- [x] automoderation
+- [x] add 'max' and 'all' to the withdraw command
 - [ ] Fix `.streets` command (error with not picking up messages)
 - [ ] Update help, cosmetics and the economy command (make it look better)
 - [ ] Make all embeds look better and simpler (more clean)
 - [ ] Add economy game tutorial
 - [ ] Add docker installation
 - [ ] Add Mac support
-- [ ] Add proper documentation/installation guide
 - [ ] Jobs (MAYBE)
 - [ ] Add properties (MAYBE)
 - [ ] Add Leveling System (MAYBE)
@@ -171,8 +172,8 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 | `bomb <@user>`           | Bomb a user with C4                                   |
 | `inventory`              | Lists items in your inventory.                        |
 | `pay <amount>`           | Pay someone money.                                    |
-| `deposit <amount/max`    | Deposit money into your bank (earns interest).        |
-| `withdraw <amount>`      | Withdraw money from your bank.                        |
+| `deposit <amount/max>`   | Deposit money into your bank (earns interest).        |
+| `withdraw <amount/max>`  | Withdraw money from your bank.                        |
 | `rob <@user>`            | Rob a user and potentially steal some of their money. |
 | `plant <amount/max>`     | Plant crops to sell later at a profit.                |
 | `harvest`                | Harvest your planted crops.                           |
