@@ -30,7 +30,7 @@
 - [Python3.12](https://www.python.org/downloads/release/python-3120/)
   - [Python install help](https://www.youtube.com/watch?v=nU2Egc3Zx3Q) 
 - [Git](https://git-scm.com/downloads)
-- Windows Or Linux
+- [Windows](https://www.microsoft.com/en-gb/windows) Or [Linux](https://ubuntu.com/)
 
 ## 🚀 Getting Started
 
