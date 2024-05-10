@@ -34,6 +34,9 @@
 
 ## 🚀 Getting Started
 
+> [!WARNING]
+> I have not tested this on mac. But in theory it should work.
+
 ## Windows Installation
 
 - Open the terminal and run the following commands
