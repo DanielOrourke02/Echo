@@ -17,12 +17,6 @@ lottery_pool = set()
 
 required_participants = 5 # chance = code break
 
-entry_fee = config.get('entry_fee')
-
-refund_timer = config.get('lottery_cooldown') # seconds
-
-daily_reward = config.get('daily_reward')
-
 # List of all cosmetics
 cosmetics_items = {
     # Swords
