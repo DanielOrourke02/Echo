@@ -833,51 +833,72 @@ class Economy(commands.Cog):
         
     @commands.command(aliases=['top', 'balancetop', 'balance_top'])
     async def baltop(self, ctx):
-        # Check if the file exists and is not empty
-        if not os.path.exists('user_data.json') or os.path.getsize('user_data.json') == 0: # access money json file and get the top 10 people
-            await ctx.send("No data available.")
-            return
-
-        # get all the users balances
         try:
-            with open('user_data.json', 'r') as f:
-                data = json.load(f)
-                user_balances = data.get("user_balances", {})
-                user_bank_balances = data.get("user_bank_balances", {})
-        except json.JSONDecodeError:
-            await ctx.send("Error reading user data.")
-            return
+            # Initialize an empty list to store user balances
+            user_balances = []
 
-        on_hand = {user_id: data for user_id, data in user_balances.items() if user_id.isdigit() and isinstance(data, int)}
-        bank_bal = {user_id: data for user_id, data in user_bank_balances.items() if user_id.isdigit() and isinstance(data, int)}
-        
-        # Example: Calculating total balance for each user
-        combined_balances = {user_id: on_hand.get(user_id, 0) + bank_bal.get(user_id, 0) for user_id in set(on_hand) | set(bank_bal)}
+            # Loop through all members of the server
+            for member in ctx.guild.members:
+                # Skip bot accounts
+                if member.bot:
+                    continue
 
-        # Sorting the dictionary by balance and getting top 10
-        top_balances = dict(sorted(combined_balances.items(), key=lambda item: item[1], reverse=True)[:10])
+                # Get balances and inventory for each user
+                pocket_money = get_user_balance(member.id)
+                bank_balance = get_user_bank_balance(member.id)
+                user_inventory = get_user_inventory(member.id)
 
-        # Creating an embedded message with orange color
-        embed = discord.Embed(
-            title="💵Top Balances💵",
-            description="\n".join([f"<@{user_id}>: {balance}" for user_id, balance in top_balances.items()]),
-            color=discord.Color.orange()
-        )
+                # Calculate the total value of items in the inventory
+                total_inventory_value = sum(combined_items[item_id]["sell"] if item_id in combined_items and item_id != 'meth' else shop_items[item_id]["cost"] for item_id in user_inventory if item_id != 'meth')
 
-        embed.set_footer(text=f"Made by mal023")
+                # Calculate the total balance
+                total_balance = pocket_money + bank_balance + total_inventory_value
 
-        # Sending the leaderboard
-        await ctx.send(embed=embed)
+                # Append user balance to the list
+                user_balances.append((member.id, total_balance))
+
+            # Sort user balances by total balance in descending order
+            user_balances.sort(key=lambda x: x[1], reverse=True)
+
+            # Get the user's rank
+            user_id = ctx.author.id
+            user_rank = next((rank + 1 for rank, (member_id, _) in enumerate(user_balances) if member_id == user_id), None)
+
+            # Create the embed
+            embed = discord.Embed(
+                title="💰 Highest Networths 💰",
+                color=discord.Color.green()
+            )
+
+            # Add each user's balance to embed
+            for rank, (member_id, balance) in enumerate(user_balances[:10], start=1): # only show the highest 3
+                member = ctx.guild.get_member(member_id)
+                if member:
+                    embed.add_field(name=f"**#{rank}** - {member.display_name}", value=f"💰 **{balance} zesty coins**", inline=False)
+
+            # Add a line break
+            embed.add_field(name="\u200b", value="\u200b", inline=False)
+
+            # Add user's rank
+            if user_rank is not None:
+                embed.add_field(name="Your Rank", value=f"Your net worth rank is **#{user_rank}**", inline=False)
+            else:
+                embed.add_field(name="Your Rank", value="**You are not ranked in the top net worths.**", inline=False)
+
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
+
+        except Exception as e:
+            await ctx.send(e)
+            print(e)
 
 
     @commands.command(aliases=['bal'])
     async def balance(self, ctx, user: commands.MemberConverter=None):
         try:
-            if user is not None:
-                user_id = user.id
-            elif user is None:
-                user = ctx.author
-                user_id = ctx.author.id
+            user = user or ctx.author
+            user_id = user.id
 
             pocket_money = get_user_balance(user_id)
             bank_balance = get_user_bank_balance(user_id)
@@ -892,10 +913,45 @@ class Economy(commands.Cog):
             
             await ctx.send(embed=embed)
         except Exception as e:
-            await ctx.send(f"Error: **{e}**")
+            await ctx.send(e)
+            print(e)
+            
+    
+    @commands.command(aliases=['networth', 'net', 'worth', 'netowrth', 'netwoth'])
+    async def character(self, ctx, user: commands.MemberConverter=None):
+        try:
+            user = user or ctx.author
+
+            pocket_money = get_user_balance(user.id)
+            bank_balance = get_user_bank_balance(user.id)
+            user_inventory = get_user_inventory(user.id)
+            
+            # Calculate the total value of items in the inventory
+            total_inventory_value = sum(combined_items[item_id]["sell"] if item_id in combined_items else shop_items[item_id]["cost"] for item_id in user_inventory)
+
+            # Calculate the total balance
+            total_balance = pocket_money + bank_balance + total_inventory_value
+
+            embed = discord.Embed(
+                title=f"💰 {user.display_name}'s Balance 💰",
+                description=f'💼 Wallet: **{pocket_money} zesty coins**💼\n🏦 Bank Account: **{bank_balance}/{max_bank_size} zesty coins**🏦\n\n🛍️ Assets: **{total_inventory_value}** zesty coins🛍️',
+                color=discord.Color.green()
+            )
+            
+            # Set thumbnail as user's avatar
+            embed.set_thumbnail(url=user.avatar.url if user.avatar else user.default_avatar_url)
+
+            # Add total balance at the bottom of the embed in big text
+            embed.add_field(name="💰 NETWORTH 💰", value=f"**{total_balance}** zesty coins", inline=False)
+
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(e)
             print(e)
 
-    
+
 #-----------------GAMBLING GAMES-----------------
 
 
