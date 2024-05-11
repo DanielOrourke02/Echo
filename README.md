@@ -160,7 +160,8 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 | Command                  | Description                                           |
 |--------------------------|-------------------------------------------------------|
 | `balance`                | Checks your current bank and pocket balance.          |
-| `baltop`                 | Displays the richest people leaderboard.              |
+| `networth`               | Checks your total networth (assets included)          |
+| `baltop`                 | Displays the richest people leaderboard (networth)    |
 | `daily`                  | Claims your daily reward.                             |
 | `shop`                   | Views available items in the shop.                    |
 | `trade <@user> <item_id>`| Gives an item to a player.                            |
