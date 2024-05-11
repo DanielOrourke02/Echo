@@ -6,7 +6,8 @@ from eco_support import *
 
 economy_command_descriptions = {
     "balance": "Check your current bank and pocket balance.",
-    "baltop": "Leaderboard of the richest people",
+    "networth": "Check your networth (assets included)",
+    "baltop": "Leaderboard of the richest people (networth)",
     "daily": "Claim your daily reward.",
     "shop": "View the available items in the shop.",
     "trade <@user> <item_id>": "Gives an item to a player",
