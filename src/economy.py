@@ -892,6 +892,7 @@ class Economy(commands.Cog):
             
             await ctx.send(embed=embed)
         except Exception as e:
+            await ctx.send(f"Error: **{e}**")
             print(e)
 
     
