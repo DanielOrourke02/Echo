@@ -472,6 +472,7 @@ class Cooking(commands.Cog):
                     else:
                         chosen_conversations.append(conversation)
                 except Exception as e:
+                    await ctx.send(f"Error: **{e}**")
                     print(e)
 
             embed = discord.Embed(title="Selling on the streets", description="Respond by entering 'sell' or 'pass' in chat.", color=embed_colour)
@@ -492,6 +493,7 @@ class Cooking(commands.Cog):
                         print(f"Condition met: {condition}")  # Debug print
                         return condition
                     except Exception as e:
+                        await ctx.send(f"Error: **{e}**")
                         print(e)
                         return e
 
