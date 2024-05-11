@@ -1,16 +1,15 @@
 from typing import List, Tuple, Union
-from discord.ext import commands
 from discord.ui import Button, View
-from discord import Interaction
+from discord.ext import commands
 from PIL import Image, ImageDraw
+from discord import Interaction
 from collections import Counter
 from datetime import datetime
 from colorama import Fore
+from pathlib import Path
 from io import BytesIO
 from time import ctime
 from card import Card
-from helpers import *
-from discord.ext import commands
 
 import requests
 import discord
@@ -185,3 +184,26 @@ async def lock_function(bot, save_locked_channels, unlock_channel_after_delay):
         del locked_channels[channel_id]
 
     save_locked_channels()  # Save the updated state
+
+
+# ----------------------------------------------------------MAKE EMBED FUCNTION----------------------------------------------------------
+
+
+def make_embed(title=None, description=None, color=None, author=None,
+               image=None, link=None, footer=None) -> discord.Embed:
+    """Wrapper for making discord embeds"""
+    embed = discord.Embed(
+        title=title,
+        description=description,
+        url=link,
+        color=color if color else discord.Color.random()
+    )
+    if author: 
+        embed.set_author(name=author)
+    if image: 
+        embed.set_image(url=image)
+    if footer: 
+        embed.set_footer(text=footer)
+    else: 
+        embed.set_footer(text=datetime.now().strftime("%m/%d/%Y %H:%M:%S"))
+    return embed
