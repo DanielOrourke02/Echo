@@ -493,7 +493,6 @@ class Cooking(commands.Cog):
                         print(f"Condition met: {condition}")  # Debug print
                         return condition
                     except Exception as e:
-                        await ctx.send(f"Error: **{e}**")
                         print(e)
                         return e
 
