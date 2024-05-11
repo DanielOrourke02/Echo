@@ -204,7 +204,7 @@ def update_bank_interest(user_id, max_bank_size):
 
     # If 24 hours have passed, apply interest 24 * 60 * 60 == 1 day/24 hours
     if time_difference >= 24 * 60 * 60:
-        print("updated bank interest!")
+        #print("updated bank interest!")
         # Calculate interest amount (10% of current bank balance)
         bank_balance = get_bank_balance(user_id)
         interest_amount = int(bank_balance * 0.10)
