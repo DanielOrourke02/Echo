@@ -10,6 +10,7 @@ economy_command_descriptions = {
     "baltop": "Leaderboard of the richest people (networth)",
     "daily": "Claim your daily reward.",
     "shop": "View the available items in the shop.",
+    "drop": "Set the Wallet Drop channel.",
     "trade <@user> <item_id>": "Gives an item to a player",
     "cosmetics": "Lists all findable items and their sell prices.",
     "buy <item_id>": "Buy an item from the shop.",
@@ -29,7 +30,6 @@ economy_command_descriptions = {
     "recipes": "Shows craftable items and what you need for it.",
     "blackjacks <amount>": "Play a cool interactive blackjacks game.",
     "slots <amount>": "Gamble away your money without a chance of winning.",
-    "lottery": "Pay 1k in a chance to win 5K (required 5 people).",
     "gamble <amount>": f"Gamble your money with 1/3 chance of winning (max {max_bet})",
     "shoot <@user>": "Shoot someone (gun/m4a1 needed)",
     "bomb <@user>": "Bomb someone (c4 needed)",
@@ -49,6 +49,7 @@ class Help(commands.Cog):
         command_descriptions = {
             "help": "Shows this message",
             "moderation": "List moderator commands.",
+            "tutorial": "Choose a tutorial (economy game, moderation etc).",
             "economy": "List economy commands.",
             "invite": "Invite the bot to your server.",
             "ping": "Get the bot's current latency.",
@@ -215,6 +216,44 @@ class Help(commands.Cog):
                 await message.remove_reaction(reaction, ctx.author)
             except asyncio.TimeoutError:
                 break
+    
+            
+    @commands.command()
+    async def tutorial(self, ctx):
+        try:
+            view = View()
+            economy = Button(label="Economy", style=discord.ButtonStyle.green)     
+            
+            async def economy_tutorial(ctx, guild, member):
+                embed = discord.Embed(
+                    title="Economy Game Tutorial",
+                    description=f"This will be a short tutorial on how to make money with my extensive and addictive economy game. Please read this atleast twice!\n\n**1. How to make money**\n Making money in this game is actually very simple, there is a range of commands and methods to do this. (`{prefix}beg, {prefix}scrap, {prefix}dig, {prefix}hunt`). These are just a few, for some commands you will need an item to run it e.g to run the `{prefix}dig` command. You need to buy or find a shovel using `{prefix}scrap`. **AND REMEMBER, if you dont store your money in assets (items) or store it in the bank, you can and WILL get robbed.**.\n\n**2. Crafting**\nIf you run commands like {prefix}dig, {prefix}hunt or {prefix}scrap. You will be awarded zesty coins and items. With these items you can craft items that sell for more e.g `{prefix}craft complete_gauntlet` this items sells for 60K. Use `{prefix}recipes` for the list of craftable items and `{prefix}cosmetics` for the list of findable items.\n\n**3. Farming**\nWith money that you now have, you can plant crops, wait for them to grow, then sell them for profit (`{prefix}plant` and `{prefix}harvest`). Each plant costs {cost_per_carrot}, and they each sell for {carrot_sell}, you can plant a max of {max_carrot_planted} crops and they all take {growth_duration/3600} hours to grow.\n\n**4. Wallet Drops**\nEvery now and then, in a designated channel, a 'wallet' would drop, if you click 'claim' then the money in the wallet will go into your account. But, you have to be fast, other players can pick the wallet up before you.\n\n**5. Gambling**\nPlaying games like `{prefix}blackjack` (`{prefix}bj` for short) or `{prefix}gamble` is a HORRIBLE way to make money, but if you like gambling, go ahead. **'If you wanna put your entire networth on black, then thats gonna be some rags to richest story or the opposite :skull:.' - Wise words of mal (the creator)**\n\n**For a list of all the economy commands run `economy`**\n**For a list of all the findable items run `cosmetics`**",
+                    color=discord.Color.gold(),
+                )
+                
+                embed.set_footer(text=f"Made by mal023")
+                
+                await ctx.send(embed=embed)
+            
+            async def economy_tutorial_callback(interaction):
+                guild = interaction.guild
+                member = interaction.user
+                await economy_tutorial(ctx, guild, member)
+
+            economy.callback = economy_tutorial_callback
+            view.add_item(economy)        
+            
+            embed = discord.Embed(
+                title="Tutorial",
+                description="Click the button of the tutorial you want to do.",
+                color=discord.Color.gold(),
+            )
+            
+            embed.set_footer(text=f"Made by mal023")
+            
+            await ctx.send(embed=embed, view=view)
+        except Exception as e:
+            print(e)
 
 
     @commands.Cog.listener()
