@@ -7,14 +7,16 @@ from utilities import *
 from eco_support import *
 
 from blackjack import Blackjack
-from extensions import Crafting
-from extensions import Farming
-from extensions import Cooking
 from economy import Economy
 from moderation import Moderation
 from slots import Slots
 from help import Help
 from fun import Fun
+
+from extensions import Droped_Wallets_setup
+from extensions import Crafting
+from extensions import Farming
+from extensions import Cooking
 
 
 intents = discord.Intents.all()
@@ -34,6 +36,7 @@ async def setup_bot():
     await bot.add_cog(Blackjack(bot))
     await bot.add_cog(Slots(bot))
     await bot.add_cog(Cooking(bot))
+    await Droped_Wallets_setup(bot)
 
 
 @bot.event
@@ -65,20 +68,24 @@ async def on_message(message):
 
     await bot.process_commands(message)
         
-
-@bot.event
-async def on_message_delete(message):
-    if message_delete == 'true':
-        channel = bot.get_channel(logging_channel_id)
         
-        embed = discord.Embed(
-            title="Message Deleted",
-            description=f"**Message sent by:** {message.author.mention}\n"
-                        f"**Content:** {message.content}",
-            color=discord.Color.red()
-        )
-        await channel.send(embed=embed)
-
+if message_delete == 'true':
+    @bot.event
+    async def on_message_delete(message):
+        try:
+            channel = bot.get_channel(logging_channel_id)
+            embed = discord.Embed(
+                title="Message Deleted",
+                description=f"**Message sent by:** {message.author.mention}\n"
+                            f"**Content:** {message.content}",
+                color=discord.Color.red()
+            )
+            await channel.send(embed=embed)
+        except Exception as e:
+            print(e)
+        
+        # Delete the original message
+        await message.delete()
 
 # Use an asynchronous function to run the setup and the bot
 async def run_bot():
