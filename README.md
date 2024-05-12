@@ -133,6 +133,7 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 - [ ] Add Heists (MAYBE)
 - [ ] Add Pets (MAYBE)
 - [ ] Add mining (mine for diamonds, iron, then forge them into jewlery)
+- [ ] Add bounties (shoot or bomb to kill)
 - [ ] Add Giveaway command (not related to the economy game)
 
 ## General Commands
