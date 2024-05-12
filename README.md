@@ -117,6 +117,7 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 - [x] Fix buy command
 - [x] automoderation
 - [x] add 'max' and 'all' to the withdraw command
+- [x] Add Dropped wallets
 - [ ] Fix `.streets` command (error with not picking up messages)
 - [ ] Update help, cosmetics and the economy command (make it look better)
 - [ ] Make all embeds look better and simpler (more clean)
@@ -127,7 +128,6 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 - [ ] Add properties (MAYBE)
 - [ ] Add Leveling System (MAYBE)
 - [ ] Add Special Events (MAYBE)
-- [ ] Add Dropped wallets (MAYBE)
 - [ ] Increase rob command luck (shop item) (MAYBE)
 - [ ] Add Money Printing (MAYBE)
 - [ ] Add Heists (MAYBE)
@@ -162,6 +162,7 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 | `balance`                | Checks your current bank and pocket balance.          |
 | `networth`               | Checks your total networth (assets included)          |
 | `baltop`                 | Displays the richest people leaderboard (networth)    |
+| `drop`                   | (ADMIN ONLY) Set the wallet drop channel              |
 | `daily`                  | Claims your daily reward.                             |
 | `shop`                   | Views available items in the shop.                    |
 | `trade <@user> <item_id>`| Gives an item to a player.                            |
@@ -183,7 +184,6 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 | `harvest`                | Harvest your planted crops.                           |
 | `craft <recipe_name>`    | Craft items.                                          |
 | `recipes`                | Shows craftable items and required materials.         |
-| `lottery`                | Participate in a lottery for a chance to win money.   |
 | `gamble <amount>`        | Gamble your money with a 1/3 chance of winning.       |
 | `blackjack <amount>`     | Play a cool interactive blackjacks game.              |
 | `slots <amount>`         | Play slots with a small chance of winning big.        |
