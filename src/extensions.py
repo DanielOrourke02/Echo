@@ -160,8 +160,7 @@ def farming_setup(bot):
 class Crafting(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-
-
+        
     @commands.command()
     async def recipes(self, ctx):
         """
@@ -173,15 +172,32 @@ class Crafting(commands.Cog):
         Returns:
             None
         """
-        embed = discord.Embed(title="Crafting Recipes", color=discord.Colour.green())
-        
-        for recipe_name, ingredients in crafting_recipes.items():
-            recipe_text = ', '.join([f"{count}x {item}" for item, count in ingredients.items() if item != 'result'])
-            embed.add_field(name=recipe_name, value=recipe_text, inline=False)
+        try:
+            embed = discord.Embed(title="Crafting Recipes", description="The 🎉 emoji means you have the materials to craft that item!", color=discord.Colour.green())
 
-        embed.set_footer(text=f"Made by mal023")
+            user_id = ctx.author.id
+            user_inventory = get_user_inventory(user_id)
 
-        await ctx.send(embed=embed)
+            for recipe_id, recipe_details in crafting_recipes.items():
+                missing_items = {}
+                for ingredient, count in recipe_details.items():
+                    if ingredient != 'result' and (user_inventory.count(ingredient) < count):
+                        missing_items[ingredient] = count - user_inventory.count(ingredient)
+
+                if not missing_items:  # If there are no missing items for this recipe
+                    result_sell_price = craftables.get(recipe_id, {}).get('sell', 'unknown price')
+                    recipe_text = ', '.join([f"{count}x {combined_items[item]['name']}" for item, count in recipe_details.items() if item != 'result'])
+                    embed.add_field(name=f"{recipe_id} 🎉", value=f"**Sell price: {result_sell_price}**\n{recipe_text}", inline=False)
+                else:
+                    recipe_text = ', '.join([f"{count}x {combined_items[item]['name']}" for item, count in recipe_details.items() if item != 'result'])
+                    embed.add_field(name=f"{recipe_id}", value=f"**Sell price: {craftables.get(recipe_id, {}).get('sell', 'unknown price')}**\n{recipe_text}", inline=False)
+
+            embed.set_footer(text=f"Made by mal023")
+
+            await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(e)
+            print(e)
 
 
     @commands.command()
@@ -249,7 +265,8 @@ class Crafting(commands.Cog):
                 await ctx.send(embed=embed)
         except Exception as e:
             print(e)
-
+        
+        
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Crafting Cog Loaded! {Fore.RESET}')
@@ -472,7 +489,6 @@ class Cooking(commands.Cog):
                     else:
                         chosen_conversations.append(conversation)
                 except Exception as e:
-                    await ctx.send(f"Error: **{e}**")
                     print(e)
 
             embed = discord.Embed(title="Selling on the streets", description="Respond by entering 'sell' or 'pass' in chat.", color=embed_colour)
