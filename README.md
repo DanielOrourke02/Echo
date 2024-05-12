@@ -162,6 +162,7 @@ Anything labeled on this list the has a `(MAYBE)` means that its an idea that I 
 | `balance`                | Checks your current bank and pocket balance.          |
 | `networth`               | Checks your total networth (assets included)          |
 | `baltop`                 | Displays the richest people leaderboard (networth)    |
+| `tutorial`               | A tutorial command (economy game only rn)             |
 | `drop`                   | (ADMIN ONLY) Set the wallet drop channel              |
 | `daily`                  | Claims your daily reward.                             |
 | `shop`                   | Views available items in the shop.                    |
