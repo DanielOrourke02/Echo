@@ -1,6 +1,6 @@
+from discord.ext import commands, tasks
 from typing import List, Tuple, Union
 from discord.ui import Button, View
-from discord.ext import commands
 from PIL import Image, ImageDraw
 from discord import Interaction
 from collections import Counter
@@ -73,10 +73,6 @@ cost_per_carrot = config.get("carrot_plant_price")
 carrot_sell = config.get("carrot_sell_price")
 max_carrot_planted = config.get("max_carrots_planted")
 growth_duration = 3600 * config.get("carrot_growth_duration")
-
-# lottery variables
-entry_fee = config.get('entry_fee')
-refund_timer = config.get('lottery_cooldown') # seconds
 
 # Daily reward
 daily_reward = config.get('daily_reward')
