@@ -107,37 +107,6 @@ py -3 -m pip uninstall py-cord
 pip install git+https://github.com/Rapptz/discord.py
 ```
 
-# TODO LIST
-
-If you want a feature added or something fixed/changed. Send me a DM (mal023) or make an issue! I'm open to all suggestions!
-
-Anything labeled on this list the has a `(MAYBE)` means that its an idea that I would like to add, but i'm unsure if I could or will add it.
-
-- [x] Fix rob command
-- [x] Fix buy command
-- [x] automoderation
-- [x] add 'max' and 'all' to the withdraw command
-- [x] Add Dropped wallets
-- [ ] Fix `.streets` command (error with not picking up messages)
-- [ ] Update help, cosmetics and the economy command (make it look better)
-- [ ] Make all embeds look better and simpler (more clean)
-- [ ] Add economy game tutorial
-- [ ] Add docker installation
-- [ ] Add Mac support
-- [ ] Jobs (MAYBE)
-- [ ] Add properties (MAYBE)
-- [ ] Add Leveling System (MAYBE)
-- [ ] Add Special Events (MAYBE)
-- [ ] Increase rob command luck (shop item) (MAYBE)
-- [ ] Add Money Printing (MAYBE)
-- [ ] Add Heists (MAYBE)
-- [ ] Add Pets (MAYBE)
-- [ ] Add mining (mine for diamonds, iron, then forge them into jewlery)
-- [ ] Add bounties (shoot or bomb to kill)
-- [ ] Music
-- [ ] Typing racing
-- [ ] Add Giveaway command (not related to the economy game)
-
 ## General Commands
 
 | Command                   | Description                                      |
