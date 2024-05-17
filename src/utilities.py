@@ -1,149 +1,206 @@
+from discord.ext import commands, tasks
+from discord.ext.commands import BucketType
+from typing import List, Tuple, Union
+from discord.ui import Button, View
+from PIL import Image, ImageDraw
+from discord import Interaction
+from collections import Counter
+from datetime import datetime
+from colorama import Fore
+from pathlib import Path
+from io import BytesIO
+from time import ctime
+from card import Card
+
+import requests
+import discord
+import asyncio
+import random
+import bisect
+import qrcode
+import json
+import uuid
+import time
+import os
 
 
-from utilities import *
-from eco_support import *
+# Placeholder storage for buttons
+button_storage = {} 
+
+# embed colour (change it to discord.Color.{whatyouwant} or hex values)
+embed_colour = discord.Color.from_rgb(0, 255, 255)  # RGB values for cyan
+
+embed_error = discord.Color.red()
+
+# Just a cool logging variable
+t = f"{Fore.LIGHTYELLOW_EX}{ctime()}{Fore.RESET}"
+
+# Load the json file for locked channels
+try:
+    with open('locked_channels.json') as file:
+        locked_channels = json.load(file)
+except FileNotFoundError:
+    locked_channels = {}
+
+# Load onfiguration from JSON file
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+
+# LOAD VARIABLES FROM CONFIG.JSON
+token = config.get("TOKEN")
+
+# Bot invite
+bot_invite = config.get("bot_invite_link")
+
+# prefix
+prefix = config.get('prefix')
+
+# Moderation
+
+message_delete = config.get('MESSAGE_DELETE_ALERT')
+link_ban = config.get('LINK_BAN')
+BANNED_LINKS = config.get('BANNED_LINKS', [])
+
+# show guilds the bot is in at launch
+show_guilds = config.get("show_guilds")
+
+# welcome messages
+member_join = config.get("member_join_message")
+welcome_channel_id = config.get("welcome_channel")
+welcome_message = config.get("welcome_message")
+
+# carrot values
+cost_per_carrot = config.get("carrot_plant_price")
+carrot_sell = config.get("carrot_sell_price")
+max_carrot_planted = config.get("max_carrots_planted")
+growth_duration = 3600 * config.get("carrot_growth_duration")
+
+# Daily reward
+daily_reward = config.get('daily_reward')
+
+# Meth sell price
+meth_sell_price = config.get("meth_sell_price")
+
+# max bank size
+max_bank_size = config.get("bank_size")
+
+# max gamble amount
+max_bet = config.get("max_gamble_amount")
+
+# Admin logging channel
+logging_channel_id = config.get("LOGGING_CHANNEL")
+
+# ----------------------------------------------------------MODERATION FUNCTIONS----------------------------------------------------------
+
+# Check if the user invoking the command is the admin
+def is_admin(ctx):
+    return ctx.author.id == config.get("ADMIN_ID")
+
+# Unlock channels after the specified duration
+async def unlock_channel_after_delay(channel, delay):
+    await asyncio.sleep(delay)
+    await channel.set_permissions(channel.guild.default_role, respond_messages=True)
+    if str(channel.id) in locked_channels:
+        del locked_channels[str(channel.id)]
+        save_locked_channels()
+        await channel.respond("Channel unlocked automatically after scheduled duration.")
 
 
-class Slots(commands.Cog):
-    def __init__(self, bot: commands.Bot):
-        self.bot = bot
+# when a channel gets logs it is saved (so if the bot restarts or crashes the lock isnt lost/remoted)
+def save_locked_channels():
+    with open('locked_channels.json', 'w') as file:
+        json.dump(locked_channels, file)
 
 
-    def check_bet(self, ctx, bet):
-        user_id = ctx.author.id
-        bal = get_user_balance(user_id)
-        if bet is None:
-            return True
-        elif bet < bal:
-            pass
-        elif bet > bal:
-            return False
+# convert the users parsed duration (seconds, minutes, hours, days) into the correct value
+def convert_to_seconds(duration_str):
+    try:
+        unit = duration_str[-1]
+        value = int(duration_str[:-1])
+        if unit == 's':
+            return value
+        elif unit == 'm':
+            return value * 60
+        elif unit == 'h':
+            return value * 3600
+        elif unit == 'd':
+            return value * 86400
+    except Exception:
+        return None
 
 
-    @commands.command(brief='Slot machine', usage='slots *[bet]', aliases=['slot'])
-    @commands.cooldown(1, 3, BucketType.user)
-    async def slots(self, ctx: commands.Context, bet: int=None):
-        if self.check_bet(ctx, bet=bet) is False:
-            embed = discord.Embed(
-                title="BROKE ASF",
-                description=f"{ctx.author.mention}, You do not have enough money to gamble that amount",
-                color=embed_error
-            )
-            
-            embed.set_footer(text=f"Made by mal023")
-            
-            await ctx.send(embed=embed)
-            return
-        elif self.check_bet(ctx, bet=bet) is True:
-            embed = discord.Embed(
-                title="Enter a bet",
-                description=f"{ctx.author.mention}, Please enter a bet amount. Usage: `{prefix}slots <bet>`",
-                color=embed_error
-            )
-            
-            embed.set_footer(text=f"Made by mal023")
-            
-            await ctx.send(embed=embed)
-            return
-            
+# --------------------------------------------------------------------------------------------------------------------------
 
-        path = os.path.join('src/pictures/')
-        facade = Image.open(f'{path}slot-face.png').convert('RGBA')
-        reel = Image.open(f'{path}slot-reel.png').convert('RGBA')
 
-        rw, rh = reel.size
-        item = 180
-        items = rh//item
+# ----------------------------------------------------------Output Guilds the bot is in (main.py)----------------------------------------------------------
 
-        s1 = random.randint(1, items-1)
-        s2 = random.randint(1, items-1)
-        s3 = random.randint(1, items-1)
+def guilds(bot):
+    if show_guilds == "true":
+        try:
+            guild_count = 0
 
-        win_rate = 25/100
+            for guild in bot.guilds:
+                print(f"{Fore.RED}- {guild.id} (name: {guild.name})\n{Fore.RESET}")
 
-        if random.random() < win_rate:
-            symbols_weights = [3.5, 7, 15, 25, 55] # 
-            x = round(random.random()*100, 1)
-            pos = bisect.bisect(symbols_weights, x)
-            s1 = pos + (random.randint(1, (items/6)-1) * 6)
-            s2 = pos + (random.randint(1, (items/6)-1) * 6)
-            s3 = pos + (random.randint(1, (items/6)-1) * 6)
-            # ensure no reel hits the last symbol
-            s1 = s1 - 6 if s1 == items else s1
-            s2 = s2 - 6 if s2 == items else s2
-            s3 = s3 - 6 if s3 == items else s3
+                guild_count = guild_count + 1
 
-        images = []
-        speed = 6
-        for i in range(1, (item//speed)+1):
-            bg = Image.new('RGBA', facade.size, color=(255,255,255))
-            bg.paste(reel, (25 + rw*0, 100-(speed * i * s1)))
-            bg.paste(reel, (25 + rw*1, 100-(speed * i * s2))) # dont ask me why this works, but it took me hours
-            bg.paste(reel, (25 + rw*2, 100-(speed * i * s3)))
-            bg.alpha_composite(facade)
-            images.append(bg)
+            print(f"{t}{Fore.LIGHTBLUE_EX} | {bot.user.display_name} is in {str(guild_count)} guilds.\n{Fore.RESET}")
 
-        # Generate a unique filename using uuid
-        unique_filename = str(uuid.uuid4()) + '.gif'
-        fp = os.path.join('src/pictures/', unique_filename)
+        except Exception as e:
+            print(e)
 
-        images[0].save(
-            fp,
-            save_all=True,
-            append_images=images[1:],
-            duration=50
-        )
-
-        file = discord.File(fp, filename=unique_filename)
-        message = await ctx.send(file=file)
-
-        result = ('lost', bet)
-        update_user_balance(ctx.author.id, bet*-1)
-
-        if (1+s1)%6 == (1+s2)%6 == (1+s3)%6:
-            symbol = (1+s1)%6
-            reward = [4, 80, 40, 25, 10, 5][symbol] * bet
-            result = ('won', reward)
-            update_user_balance(ctx.author.id, reward)
-
-        embed = make_embed(
-            title=(
-                f'{ctx.author.display_name}, You {result[0]} {result[1]} credits' +
-                ('.' if result[0] == 'lost' else '!')
-            ),
-            description=(
-                f'{ctx.author.display_name}, You now have ' +
-                f'**£{get_user_balance(ctx.author.id)}**'
-            ),
-            color=(
-                embed_error if result[0] == "lost"
-                else discord.Color.green()
-            )
-        )
-
-        embed.set_image(url=f"attachment://{unique_filename}")
-        
-        await message.edit(content=None, embed=embed)
-
-        os.remove(fp)
-        
-    @slots.error
-    async def slots_error(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            embed = discord.Embed(
-                title="Slots Cooldown!",
-                description=f"{ctx.author.mention}, woah slow down there buddy! The slot can run again in {error.retry_after:.2f} seconds.",
-                color=discord.Color.red()
-            )
-            embed.set_footer(text="Made by mal023")
-            await ctx.send(embed=embed)
+# --------------------------------------------------------------------------------------------------------------------------
 
 
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Slots Cog Loaded! {Fore.RESET}')
+# ----------------------------------------------------------CHECK LOCKED CHANNELS ON BOT LOAD----------------------------------------------------------
 
 
-def slots_setup(bot: commands.Bot):
-    bot.add_cog(Slots(bot))
+async def lock_function(bot, save_locked_channels, unlock_channel_after_delay):
+    # List to store items to delete
+    channels_to_delete = []
+
+    # Reapply locks
+    for channel_id, data in locked_channels.items():
+        channel = bot.get_channel(int(channel_id))
+        if channel:
+            unlock_time = datetime.datetime.fromisoformat(data['unlock_time'])
+            if datetime.datetime.now() < unlock_time:
+                # Reapply lock
+                await channel.set_permissions(channel.guild.default_role, respond_messages=False)
+
+                # Schedule unlock
+                asyncio.create_task(unlock_channel_after_delay(channel, (unlock_time - datetime.datetime.now()).total_seconds()))
+            else:
+                # Unlock if the time has passed
+                await channel.set_permissions(channel.guild.default_role, respond_messages=True)
+                channels_to_delete.append(channel_id)
+
+    # Delete items from locked_channels
+    for channel_id in channels_to_delete:
+        del locked_channels[channel_id]
+
+    save_locked_channels()  # Save the updated state
+
+
+# ----------------------------------------------------------MAKE EMBED FUCNTION----------------------------------------------------------
+
+
+def make_embed(title=None, description=None, color=None, author=None,
+               image=None, link=None, footer=None) -> discord.Embed:
+    """Wrapper for making discord embeds"""
+    embed = discord.Embed(
+        title=title,
+        description=description,
+        url=link,
+        color=color if color else discord.Color.random()
+    )
+    if author: 
+        embed.set_author(name=author)
+    if image: 
+        embed.set_image(url=image)
+    if footer: 
+        embed.set_footer(text=footer)
+    else: 
+        embed.set_footer(text=datetime.now().strftime("%m/%d/%Y %H:%M:%S"))
+    return embed
