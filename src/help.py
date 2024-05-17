@@ -6,11 +6,10 @@ from eco_support import *
 
 economy_command_descriptions = {
     "balance": "Check your current bank and pocket balance.",
-    "networth": "Check your networth (assets included)",
+    "networth <@user>": "Check your networth (assets included)",
     "baltop": "Leaderboard of the richest people (networth)",
     "daily": "Claim your daily reward.",
     "shop": "View the available items in the shop.",
-    "drop": "Set the Wallet Drop channel.",
     "trade <@user> <item_id>": "Gives an item to a player",
     "cosmetics": "Lists all findable items and their sell prices.",
     "buy <item_id>": "Buy an item from the shop.",
@@ -57,14 +56,14 @@ class Help(commands.Cog):
             "coinflip <heads/tails>": "Flip a coin.",
             "dice": "Roll a six-sided die.",
             "8ball <question>": "Virtual Eight ball.",
-            "qr": "Generate a QR code from a link.",
+            "qr <https://example.com>": "Generate a QR code from a link.",
             "quote": "Generate a random quote.",
             "membercount": "Get the member count of the server.",
             "calculator <+-*/>": "Perform basic calculations.",
             "joke": "Get a random joke.",
-            "user_info": "Get user on a user.",
+            "user_info <@user>": "Get user on a user.",
             "server_info": "Get the server info.",
-            "avatar": "Get someones avatar or your own"
+            "avatar <@user>": "Get someones avatar or your own"
         }
 
         embed = discord.Embed(title="Bot Commands", description="List of available commands:", color=discord.Color.green())
