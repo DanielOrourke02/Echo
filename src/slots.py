@@ -21,6 +21,7 @@ class Slots(commands.Cog):
 
 
     @commands.command(brief='Slot machine', usage='slots *[bet]', aliases=['slot'])
+    @commands.cooldown(1, 3, BucketType.user)
     async def slots(self, ctx: commands.Context, bet: int=None):
         if self.check_bet(ctx, bet=bet) is False:
             embed = discord.Embed(
@@ -125,6 +126,18 @@ class Slots(commands.Cog):
         await message.edit(content=None, embed=embed)
 
         os.remove(fp)
+        
+    @slots.error
+    async def slots_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            embed = discord.Embed(
+                title="Slots Cooldown!",
+                description=f"{ctx.author.mention}, woah slow down there buddy! The slot can run again in {error.retry_after:.2f} seconds.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Made by mal023")
+            await ctx.send(embed=embed)
+
 
 
     @commands.Cog.listener()
