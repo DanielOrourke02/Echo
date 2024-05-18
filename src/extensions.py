@@ -33,7 +33,7 @@ class Farming(commands.Cog):
                 
                 embed.description = f"{ctx.author.mention}, Please enter the amount you want to plant. Usage: `{prefix}plant <amount>`"
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -50,7 +50,7 @@ class Farming(commands.Cog):
                 
                 embed.color = embed_error
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -63,7 +63,7 @@ class Farming(commands.Cog):
                 
                 embed.color = embed_error
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -76,7 +76,7 @@ class Farming(commands.Cog):
                 
                 embed.color = embed_error
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -89,7 +89,7 @@ class Farming(commands.Cog):
             
             embed.description = f"{ctx.author.mention}, You have planted {amount} carrots."
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
 
@@ -119,15 +119,15 @@ class Farming(commands.Cog):
                     del user_plantations[user_id]  # Removing the plantation record
 
                     embed = discord.Embed(title="Success", description=f"{ctx.author.mention}, You have successfully harvested {harvested_amount} carrots and earned ${total_profit}.", color=discord.Colour.green())
-                    embed.set_footer(text=f"Made by mal023")
+                    embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                     await ctx.send(embed=embed)
                 else:
                     embed = discord.Embed(title="Info", description=f"{ctx.author.mention}, Your carrots are not ready yet. They are {int(growth_percentage)}% grown.", color=embed_error)
-                    embed.set_footer(text=f"Made by mal023")
+                    embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                     await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You don't have any crops planted.", color=embed_error)
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 await ctx.send(embed=embed)
 
             save_user_plants(user_plantations) # save data
