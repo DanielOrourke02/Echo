@@ -24,7 +24,7 @@ class Economy(commands.Cog):
             for item, count in item_counts.items():
                 embed.add_field(name=item, value=f"Count: {count}", inline=True)
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             # Send the inventory as an embed
             await ctx.send(embed=embed)
@@ -37,7 +37,7 @@ class Economy(commands.Cog):
 
             # Create an embed to display the inventory
             embed = discord.Embed(title=f"{user.display_name}'s Inventory", color=embed_error)
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             # Add fields for each unique item and its count
             for item, count in item_counts.items():
@@ -54,11 +54,11 @@ class Economy(commands.Cog):
         update_user_balance(user.id, amount)
         embed = discord.Embed(
             title="Coins Given!",
-            description=f"Admin {ctx.author.display_name} has given **{amount} zesty coins** to {user.display_name}.",
+            description=f"Admin {ctx.author.display_name} has given **{amount} credits** to {user.display_name}.",
             color=discord.Color.green()
         )
 
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
         # Send the embed
         await ctx.send(embed=embed)
@@ -74,7 +74,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             await ctx.send(embed=embed)
 
@@ -96,7 +96,7 @@ class Economy(commands.Cog):
             color=discord.Color.green()
         )
 
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
         # Send the embed
         await ctx.send(embed=embed)
@@ -112,7 +112,7 @@ class Economy(commands.Cog):
             color=discord.Color.green()
         )
 
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
         
@@ -129,7 +129,7 @@ class Economy(commands.Cog):
             color=discord.Color.green()
         )
 
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -146,7 +146,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -158,7 +158,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return         
@@ -173,7 +173,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             await ctx.send(embed=embed)
             return
@@ -185,7 +185,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -196,11 +196,11 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Payment Successful",
-            description=f"{ctx.author.mention}, 💵 You just paid {user.display_name} **{amount} zesty coins**!",
+            description=f"{ctx.author.mention}, 💵 You just paid {user.display_name} **{amount} credits**!",
             color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
         await ctx.send(embed=embed)
 
@@ -215,7 +215,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -226,7 +226,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -248,7 +248,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -259,11 +259,11 @@ class Economy(commands.Cog):
 
         embed = discord.Embed(
             title="Purchase Successful",
-            description=f"{ctx.author.mention}, 💵 You have successfully bought **{amount} {shop_items[item_name]['name']} for {total} zesty coins**.",
+            description=f"{ctx.author.mention}, 💵 You have successfully bought **{amount} {shop_items[item_name]['name']} for {total} credits**.",
             color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -281,7 +281,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -294,7 +294,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -309,12 +309,12 @@ class Economy(commands.Cog):
         add_item_to_inventory(user_id, chosen_item)
 
         embed = discord.Embed(
-            title="Item Found",
-            description=f"{ctx.author.mention}, 🎉 You found: **{won_item['name']}**! Check your inventory with `{prefix}inventory`.",
-            color=discord.Color.orange()
+            title=f"{ctx.author.display_name}, Item Found",
+            description=f"🎉 You found: **{won_item['name']}**! 🎉 Check your inventory with `{prefix}inventory`.",
+            color=discord.Color.green()
         )
        
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
        
         await ctx.send(embed=embed)
 
@@ -323,12 +323,12 @@ class Economy(commands.Cog):
         update_user_balance(ctx.author.id, amount) # update balance
 
         embed = discord.Embed(
-            title="Coins Found",
-            description=f"{ctx.author.mention}, 💵 You found: **{amount} zesty coins**! Your new balance is: **{get_user_balance(ctx.author.id)} zesty coins** (still kinda poor tho).",
-            color=discord.Color.orange()
+            title=f"{ctx.author.display_name}, Coins Found",
+            description=f"💵 You found: **{amount} credits**! Your new balance is: **{get_user_balance(ctx.author.id)} credits**.",
+            color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
         
@@ -348,7 +348,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -361,7 +361,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -376,12 +376,12 @@ class Economy(commands.Cog):
         add_item_to_inventory(user_id, chosen_item)
 
         embed = discord.Embed(
-            title="Item Found",
-            description=f"{ctx.author.mention}, 🎉 You found: **{won_item['name']}**! Check your inventory with `{prefix}inventory`",
-            color=discord.Color.orange()
+            title=f"{ctx.author.display_name}, Item Found",
+            description=f"🎉 You found: **{won_item['name']}**! 🎉 Check your inventory with `{prefix}inventory`",
+            color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -391,12 +391,12 @@ class Economy(commands.Cog):
         update_user_balance(ctx.author.id, amount) # update balance
 
         embed = discord.Embed(
-            title="Zesty Coins Found",
-            description=f"{ctx.author.mention}, 💵 You found: **{amount} zesty coins**! Your new balance is: **{get_user_balance(ctx.author.id)} zesty coins**.",
-            color=discord.Color.orange()
+            title=f"{ctx.author.display_name}, Credits Found",
+            description=f"💵 You found: **{amount} credits**! Your new balance is: **{get_user_balance(ctx.author.id)} credits**.",
+            color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -414,7 +414,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -429,12 +429,12 @@ class Economy(commands.Cog):
         add_item_to_inventory(user_id, chosen_item)
 
         embed = discord.Embed(
-            title="Item Found",
-            description=f"{ctx.author.mention}, 🎉 You found: **{won_item['name']}**! Check your inventory with `{prefix}inventory`",
-            color=discord.Color.orange()
+            title=f"{ctx.author.display_name}, Item Found",
+            description=f"🎉 You found: **{won_item['name']}**. 🎉 Check your inventory with `{prefix}inventory`",
+            color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -443,12 +443,12 @@ class Economy(commands.Cog):
         update_user_balance(ctx.author.id, amount)
 
         embed = discord.Embed(
-            title="Zesty Coins Found",
-            description=f"{ctx.author.mention}, 💵 You found: **{amount} coins**! Your new balance is: **{get_user_balance(ctx.author.id)} zesty coins**.",
-            color=discord.Color.orange()
+            title=f"{ctx.author.display_name}, Credits Found",
+            description=f"💵 You found: **{amount} coins**! Your new balance is: **{get_user_balance(ctx.author.id)} credits**.",
+            color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -466,7 +466,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -476,12 +476,12 @@ class Economy(commands.Cog):
         update_user_balance(user_id, amount)
 
         embed = discord.Embed(
-            title=f"{ctx.author.display_name} is a begger lol",
-            description=f'{ctx.author.mention}, **you begged for it** and someone gave you 💵 **{amount} zesty coins**.',
-            color=discord.Color.orange()
+            title=f"{ctx.author.display_name} is begging",
+            description=f'💵 A kind man gave you **{amount} credits**.',
+            color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -500,7 +500,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -510,11 +510,11 @@ class Economy(commands.Cog):
             
             embed = discord.Embed(
                 title="Daily Reward Claimed",
-                description=f'{ctx.author.mention}, You have claimed your daily reward of 💵 **{daily_reward} zesty coins**!',
-                color=discord.Color.orange()
+                description=f'{ctx.author.mention}, You have claimed your daily reward of 💵 **{daily_reward} credits**!',
+                color=discord.Color.green()
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             
@@ -537,7 +537,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -546,10 +546,10 @@ class Economy(commands.Cog):
                 embed = discord.Embed(
                     title="Item Not Found",
                     description=f"{ctx.author.mention}, You don't have this in your inventory.",
-                    color=discord.Color.orange()
+                    color=discord.Color.green()
                 )
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -573,7 +573,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
                     
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                     
                 await ctx.send(embed=embed)
                 return
@@ -599,7 +599,7 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, That Item ID is invalid/does not exist.",
                     color=embed_error
                 )
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 await ctx.send(embed=embed)
                 return
                     
@@ -613,11 +613,11 @@ class Economy(commands.Cog):
 
             embed = discord.Embed(
                 title="Item Sold",
-                description=f"{ctx.author.mention}, You sold **{amount} {item_name} for 💵 {item_sell_price} zesty coins**. Your new balance is: 💵 **{get_user_balance(user_id)} zesty coins**!",
+                description=f"{ctx.author.mention}, You sold **{amount} {item_name} for 💵 {item_sell_price} credits**. Your new balance is: 💵 **{get_user_balance(user_id)} credits**!",
                 color=discord.Color.green()
             )
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             await ctx.send(embed=embed)
         except Exception as e:
@@ -635,7 +635,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             await ctx.send(embed=embed)
             return
@@ -649,7 +649,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
                 await ctx.send(embed=embed)
                 return
@@ -661,7 +661,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             await ctx.send(embed=embed)
             return
@@ -675,11 +675,11 @@ class Economy(commands.Cog):
         # Embed the message
         embed = discord.Embed(
             title="Deposit Successful",
-            description=f'{ctx.author.mention}, 💵 **{amount_to_deposit} zesty coins** has been deposited to your sussy account.',
+            description=f'{ctx.author.mention}, 💵 **{amount_to_deposit} credits** has been deposited to your sussy account.',
             color=embed_colour
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -693,7 +693,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -710,7 +710,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
                 await ctx.send(embed=embed)
                 return        
@@ -722,7 +722,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -733,11 +733,11 @@ class Economy(commands.Cog):
         # Embed the message
         embed = discord.Embed(
             title="Withdraw Successful",
-            description=f'{ctx.author.mention}, 💵 **{amount} zesty coins** have been withdrawn from your sussy account.',
+            description=f'{ctx.author.mention}, 💵 **{amount} credits** have been withdrawn from your sussy account.',
             color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
         
@@ -785,7 +785,7 @@ class Economy(commands.Cog):
             for rank, (member_id, balance) in enumerate(user_balances[:10], start=1): # only show the highest 3
                 member = ctx.guild.get_member(member_id)
                 if member:
-                    embed.add_field(name=f"**#{rank}** - {member.display_name}", value=f"💰 **{balance} zesty coins**", inline=False)
+                    embed.add_field(name=f"**#{rank}** - {member.display_name}", value=f"💰 **{balance} credits**", inline=False)
 
             # Add a line break
             embed.add_field(name="\u200b", value="\u200b", inline=False)
@@ -796,7 +796,7 @@ class Economy(commands.Cog):
             else:
                 embed.add_field(name="Your Rank", value="**You are not ranked in the top net worths.**", inline=False)
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
 
@@ -816,11 +816,11 @@ class Economy(commands.Cog):
 
             embed = discord.Embed(
                 title=f"**{user.display_name}'s** Balance",
-                description=f'On Hand: **{pocket_money} zesty coins**\nBank Balance: **{bank_balance}/{max_bank_size} zesty coins**',
+                description=f'On Hand: **{pocket_money} credits**\nBank Balance: **{bank_balance}/{max_bank_size} credits**',
                 color=discord.Color.green()
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
         except Exception as e:
@@ -845,7 +845,7 @@ class Economy(commands.Cog):
 
             embed = discord.Embed(
                 title=f"💰 {user.display_name}'s Balance 💰",
-                description=f'💼 Wallet: **{pocket_money} zesty coins**💼\n🏦 Bank Account: **{bank_balance}/{max_bank_size} zesty coins**🏦\n\n🛍️ Assets: **{total_inventory_value}** zesty coins🛍️',
+                description=f'💼 Wallet: **{pocket_money} credits**💼\n🏦 Bank Account: **{bank_balance}/{max_bank_size} credits**🏦\n\n🛍️ Assets: **{total_inventory_value}** credits🛍️',
                 color=discord.Color.green()
             )
             
@@ -853,9 +853,9 @@ class Economy(commands.Cog):
             embed.set_thumbnail(url=user.avatar.url if user.avatar else user.default_avatar_url)
 
             # Add total balance at the bottom of the embed in big text
-            embed.add_field(name="💰 NETWORTH 💰", value=f"**{total_balance}** zesty coins", inline=False)
+            embed.add_field(name="💰 NETWORTH 💰", value=f"**{total_balance}** credits", inline=False)
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
         except Exception as e:
@@ -872,10 +872,10 @@ class Economy(commands.Cog):
             embed = discord.Embed(
                 title="Gamble Command",
                 description=f"{ctx.author.mention}, Please specify an amount to gamble. Usage: `{prefix}gamble <amount>`",
-                color=discord.Color.orange()
+                color=discord.Color.green()
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -890,10 +890,10 @@ class Economy(commands.Cog):
                 embed = discord.Embed(
                     title="Invalid Input",
                     description=f"{ctx.author.mention}, Please enter a valid amount or 'max'.",
-                    color=discord.Color.orange()
+                    color=discord.Color.green()
                 )
                 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -902,10 +902,10 @@ class Economy(commands.Cog):
             embed = discord.Embed(
                 title="Invalid Bet Amount",
                 description=f"{ctx.author.mention}, Invalid bet amount. You can bet up to {max_bet} coins.",
-                color=discord.Color.orange()
+                color=discord.Color.green()
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -914,11 +914,11 @@ class Economy(commands.Cog):
         if random.choice([True, False, False]):  # 1/3 chance
             # User wins
             update_user_balance(ctx.author.id, amount)
-            result_description = f"{ctx.author.mention}, You won 💵 **{amount} zesty coins**!"
+            result_description = f"{ctx.author.mention}, You won 💵 **{amount} credits**!"
             result_color = discord.Color.green()
         else:
             update_user_balance(ctx.author.id, -amount)
-            result_description = f"{ctx.author.mention}, You lost 💵 **{amount} zesty coins! Big L**."
+            result_description = f"{ctx.author.mention}, You lost 💵 **{amount} credits! Big L**."
             result_color = embed_error
 
         # Send result embed
@@ -947,7 +947,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -960,7 +960,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -968,10 +968,10 @@ class Economy(commands.Cog):
         embed = discord.Embed(
             title="Shots Fired",
             description=f"{ctx.author.mention}, Has just **shot and killed {user.mention}** in cold blood.",
-            color=discord.Color.orange()
+            color=discord.Color.green()
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -989,7 +989,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -1001,7 +1001,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -1009,10 +1009,10 @@ class Economy(commands.Cog):
         embed = discord.Embed(
             title="Bombing",
             description=f"{ctx.author.mention}, has just **bombed and killed {user.mention}** with c4!",
-            color=discord.Color.orange(),
+            color=discord.Color.green(),
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
 
@@ -1028,7 +1028,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -1040,7 +1040,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -1054,7 +1054,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -1065,10 +1065,10 @@ class Economy(commands.Cog):
         embed = discord.Embed(
             title="Trade successfull",
             description=f"{ctx.author.mention}, You have **given {item_name} to {user}**!",
-            color=discord.Color.orange(),
+            color=discord.Color.green(),
         )
         
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
         
         await ctx.send(embed=embed)
     
@@ -1086,7 +1086,7 @@ class Economy(commands.Cog):
                 color=embed_error
             )
             
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
             await ctx.send(embed=embed)
             return
@@ -1099,7 +1099,7 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, Please specify the user to rob: `{prefix}rob <@user>`",
                     color=embed_error
                 )
-                embed.set_footer(text="Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -1110,7 +1110,7 @@ class Economy(commands.Cog):
                     description=f"{ctx.author.mention}, You can't rob yourself!",
                     color=embed_error
                 )
-                embed.set_footer(text="Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
@@ -1130,7 +1130,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
                 
-                embed.set_footer(text="Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
                 await ctx.send(embed=embed)
                 return
@@ -1142,7 +1142,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
                 
-                embed.set_footer(text="Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
                 await ctx.send(embed=embed)
                 return
@@ -1172,7 +1172,7 @@ class Economy(commands.Cog):
                     color=embed_error
                 )
 
-            embed.set_footer(text="Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             await ctx.send(embed=embed)
 
             update_last_action_time(user_id, "rob")
