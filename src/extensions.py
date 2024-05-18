@@ -192,7 +192,7 @@ class Crafting(commands.Cog):
                     recipe_text = ', '.join([f"{count}x {combined_items[item]['name']}" for item, count in recipe_details.items() if item != 'result'])
                     embed.add_field(name=f"{recipe_id}", value=f"**Sell price: {craftables.get(recipe_id, {}).get('sell', 'unknown price')}**\n{recipe_text}", inline=False)
 
-            embed.set_footer(text=f"Made by mal023")
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             await ctx.send(embed=embed)
         except Exception as e:
@@ -219,7 +219,7 @@ class Crafting(commands.Cog):
             if item_name is None:
                 embed = discord.Embed(title="Incorrect Usage", description=f"Correct usage: `{ctx.prefix}craft <item>`", color=embed_error)
 
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
                 await ctx.send(embed=embed)
                 return
@@ -242,7 +242,7 @@ class Crafting(commands.Cog):
 
                     embed = discord.Embed(title="Missing Items", description=f"You are missing {missing_items_text} for crafting {item_name}.", color=embed_error)
 
-                    embed.set_footer(text=f"Made by mal023")
+                    embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
                     await ctx.send(embed=embed)
                 else:
@@ -256,12 +256,12 @@ class Crafting(commands.Cog):
 
                     embed = discord.Embed(title="Crafting Successful", description=f"You have crafted {recipe['result']}.", color=discord.Color.green())
 
-                    embed.set_footer(text=f"Made by mal023")
+                    embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
                     await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Error", description="This item cannot be crafted or does not exist.", color=embed_error)
-                embed.set_footer(text=f"Made by mal023")
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 await ctx.send(embed=embed)
         except Exception as e:
             print(e)
