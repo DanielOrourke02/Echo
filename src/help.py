@@ -221,7 +221,8 @@ class Help(commands.Cog):
     async def tutorial(self, ctx):
         try:
             view = View()
-            economy = Button(label="Economy", style=discord.ButtonStyle.green)     
+            economy = Button(label="Economy", style=discord.ButtonStyle.green)
+            moderation = Button(label="Moderation", style=discord.ButtonStyle.blurple)
             
             async def economy_tutorial(ctx, guild, member):
                 embed = discord.Embed(
@@ -240,7 +241,8 @@ class Help(commands.Cog):
                 await economy_tutorial(ctx, guild, member)
 
             economy.callback = economy_tutorial_callback
-            view.add_item(economy)        
+            view.add_item(economy)
+            view.add_item(moderation)
             
             embed = discord.Embed(
                 title="Tutorial",
