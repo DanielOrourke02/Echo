@@ -55,7 +55,7 @@ class Fun(commands.Cog):
     # Invite Command
     @commands.command()
     async def invite(self, ctx):
-        embed = discord.Embed(title="Add me to your server!", description=f"[Click Here!]({bot_invite})", color=embed_colour)
+        embed = discord.Embed(title="Add me to your server!", description=f"[Click Here!]({bot_invite})\nJoin the [Main Bot Hub](https://discord.gg/JX3zFYPY6b)!", color=embed_colour)
 
         embed.set_footer(text=f"Made by mal023")
 
