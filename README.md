@@ -136,7 +136,6 @@ pip install git+https://github.com/Rapptz/discord.py
 | `networth`               | Checks your total networth (assets included)          |
 | `baltop`                 | Displays the richest people leaderboard (networth)    |
 | `tutorial`               | A tutorial command (economy game only rn)             |
-| `drop`                   | (ADMIN ONLY) Set the wallet drop channel              |
 | `daily`                  | Claims your daily reward.                             |
 | `shop`                   | Views available items in the shop.                    |
 | `trade <@user> <item_id>`| Gives an item to a player.                            |
@@ -207,6 +206,7 @@ pip install git+https://github.com/Rapptz/discord.py
 | `Poo`               | 3 charcoal, 1 sulphur                         | Just poo                                         |
 | `Joint`             | 1 roll, 1 weed                                | Sell joints                                      |
 | `meth`              | 1 chemical, 1 red, create using `!cook`       | sell meth by using `!streets`                    |
+| `glitch`             |2x god (0.1% chance for each)                 | A glitch in the matrix                           |
 
 ## Findable Items (ingame)
 
@@ -217,19 +217,19 @@ I call them 'cosmetics', but they are items you get from running: dig, hunt and 
 | `Rare Sword`       | Rare Sword                      | 2500       | 25          |
 | `Legendary Sword`  | Legendary Sword                 | 5000       | 15          |
 | `Mythical sword`   | Mythical sword                  | 12500      | 5           |
+| `god`              | An item that only the gods can hold | 15000000 | 0.1       |
 | `Shovel`           | Shovel used for digging         | 1000       | 23          |
 | `Bow`              | Bow used for hunting            | 1000       | 20          |
 | `Infinity Gauntlet`| Infinity Gauntlet               | 30000      | 5           |
 | `David's 4th ball` | David's 4th ball                | 25000      | 7           |
 | `Stick`            | Stick                           | 15000      | 15          |
-| `Glock-18`         | Glock-18                        | 8000       | 18          |
-| `Electronics`      | Electronics                     | 1000       | 20          |
-| `Weed`             | Weed                            | 5000       | 25          |
+| `Glock-18`         | Glock-18                        | 8000       | 19          |
+| `Weed`             | Weed                            | 5000       | 30          |
 | `Sulphur`          | Sulphur                         | 500        | 40          |
 | `Charcoal`         | Charcoal                        | 300        | 50          |
 | `Alarm Clock`      | Alarm Clock                     | 700        | 30          |
-| `Roll`             | Roll paper for weed             | 1500       | 30          |
-| `Potato`           | Potato                          | 100        | 70          |
+| `Roll`             | Roll paper for weed             | 1500       | 33          |
+| `Potato`           | Potato                          | 100        | 65          |
 
 
 <div align="center">
