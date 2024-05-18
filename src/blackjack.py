@@ -295,7 +295,6 @@ class Blackjack(commands.Cog):
                 result = ("Dealer busts", 'won')
             elif dealer_score == player_score:
                 result = ("Tie!", 'kept')
-                update_user_balance(ctx.author.id, bet*1)
             elif dealer_score > player_score:
                 update_user_balance(ctx.author.id, bet*-1)
                 result = ("You lose!", 'lost')
