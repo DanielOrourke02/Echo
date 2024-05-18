@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://github.com/DanielJones02/Echo/blob/main/images/bot_icon.png" alt="Echo Bot Image" width="400">
+</div>
+
 <h1 align="center">
   <br>
   Echo Bot v3
