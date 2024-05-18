@@ -94,7 +94,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member: discord.Member, reason: str = "No reason provided"):
+    async def kick(self, ctx, member: discord.Member, *, reason: str = "No reason provided"):
         try:
             await member.kick(reason=reason)
             await member.send(f"You have been kicked in {ctx.guild.name} by an admin. Reason: {reason}") # dm user 
@@ -109,7 +109,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, reason: str = "No reason provided"):
+    async def ban(self, ctx, member: discord.Member, *, reason: str="No reason provided"):
         try:
             await member.ban(reason=reason)
             await member.send(f"You have been banned in {ctx.guild.name} by an admin. Reason: {reason}") # dm user 
@@ -124,7 +124,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_roles=True)
-    async def mute(self, ctx, member: discord.Member, reason: str = "No reason provided"):
+    async def mute(self, ctx, member: discord.Member, *, reason: str = "No reason provided"):
         mute_role = discord.utils.get(ctx.guild.roles, name="Muted")
 
         if not mute_role:
@@ -153,7 +153,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_roles=True)
-    async def unmute(self, ctx, member: discord.Member, reason: str = "No reason provided"):
+    async def unmute(self, ctx, member: discord.Member, *, reason: str = "No reason provided"):
         # Get the "Muted" role
         mute_role = discord.utils.get(ctx.guild.roles, name="muted")
 
@@ -195,8 +195,8 @@ class Moderation(commands.Cog):
             await ctx.send(embed=embed)
             return
 
-        if amount > 1000:
-            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You can only clear up to 1000 messages at a time.", color=embed_colour) 
+        if amount > 100:
+            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You can only clear up to 100 messages at a time.", color=embed_colour) 
             
             embed.set_footer(text=f"Made by mal023")
             
@@ -213,7 +213,7 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases=['lockchannel', 'channel_lock', 'channellock', 'lockthis'])
     @commands.has_permissions(manage_channels=True)
-    async def lock_channel(self, ctx, channel: discord.TextChannel = None, duration: str = None, reason: str = "No reason provided"):
+    async def lock_channel(self, ctx, channel: discord.TextChannel = None, duration: str = None, *, reason: str = "No reason provided"):
         # If channel is not provided, use the current channel
         channel = channel or ctx.channel
 
@@ -303,7 +303,7 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases=['lockserver', 'serverlock', 'server_lock'])
     @commands.has_permissions(administrator=True)
-    async def lock_server(self, ctx, duration: str = None, reason: str = "No reason provided"):
+    async def lock_server(self, ctx, duration: str = None, *, reason: str = "No reason provided"):
         if duration is None:
             embed = discord.Embed(
                 title="Incorrect usage",
