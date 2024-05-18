@@ -29,17 +29,18 @@ cosmetics_items = {
     "bow": {"name": "Bow used for hunting", "sell": 1000, "chance": 20},
 
     # Other items (High to low chance)
+    "god": {"name": "An item that only the gods can hold.", "sell": 15000000, "chance": 0.1},
     "infinity": {"name": "Infinity Gauntlet", "sell": 30000, "chance": 5},
     "david4": {"name": "David's 4th ball", "sell": 25000, "chance": 7},
     "stick": {"name": "Stick", "sell": 15000, "chance": 15},
-    "gun": {"name": "Glock-18", "sell": 8000, "chance": 18},
-    "tech": {"name": "Electronics", "sell": 1000, "chance": 20},
+    "gun": {"name": "Glock-18", "sell": 8000, "chance": 19},
+    "tech": {"name": "Electronics", "sell": 1000, "chance": 25},
     "weed": {"name": "Weed", "sell": 5000, "chance": 30},
     "sulphur": {"name": "Sulphur", "sell": 500, "chance": 40},
     "charcoal": {"name": "Charcoal", "sell": 300, "chance": 50},
     "clock": {"name": "Alarm Clock", "sell": 700, "chance": 30},
-    "roll": {"name": "Roll", "sell": 1500, "chance": 32},
-    "potato": {"name": "Potato", "sell": 100, "chance": 70},
+    "roll": {"name": "Roll", "sell": 1500, "chance": 33},
+    "potato": {"name": "Potato", "sell": 100, "chance": 65},
 }
 
 
@@ -52,7 +53,8 @@ craftables = {
     "m4a1": {"name": "Assault Rifle", "sell": 30000},
     "excalibur": {"name": "Excalibur", "sell": 30000},
     "8_incher": {"name": "Long hard Stick", "sell": 40000},
-    "complete_gauntlet": {"name": "Infinity  Gauntlet", "sell": 60000}
+    "complete_gauntlet": {"name": "Infinity  Gauntlet", "sell": 60000},
+    "glitch": {"name": "A glitch in the matrix", "sell": 50000000}
 }
 
 
@@ -110,6 +112,10 @@ crafting_recipes = {
         "roll": 1,
         "weed": 1,
         "result": "joint" # Get high asf 
+    },
+    "glitch": {
+        "god": 2,
+        "result": "glitch" # rarest item in the game, if you have this your legit a god
     }
 }
 
@@ -143,7 +149,6 @@ except FileNotFoundError:
     user_balances = {}
     user_bank_balances = {}
     user_carrot_plantations = {}
-
 
 def load_user_plants():
     try:
