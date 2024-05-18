@@ -67,7 +67,7 @@ class Fun(commands.Cog):
         guild = ctx.guild
         embed = discord.Embed(title="Server Information", color=embed_colour)
 
-        embed.set_thumbnail(url=guild.icon.url if guild.icon else None)
+        embed.set_author(name=guild.name, icon_url=guild.icon.url if guild.icon else None)
 
         embed.add_field(name="Server Name", value=guild.name, inline=True)
         embed.add_field(name="Server ID", value=guild.id, inline=True)
@@ -75,7 +75,7 @@ class Fun(commands.Cog):
         embed.add_field(name="Owner", value=guild.owner.display_name, inline=True)
         embed.add_field(name="Creation Time", value=guild.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
 
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text="Made by mal023")
 
         await ctx.send(embed=embed)
 
