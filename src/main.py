@@ -13,7 +13,6 @@ from slots import Slots
 from help import Help
 from fun import Fun
 
-from extensions import Droped_Wallets_setup
 from extensions import Crafting
 from extensions import Farming
 from extensions import Cooking
@@ -36,7 +35,6 @@ async def setup_bot():
     await bot.add_cog(Blackjack(bot))
     await bot.add_cog(Slots(bot))
     await bot.add_cog(Cooking(bot))
-    await Droped_Wallets_setup(bot)
 
 
 @bot.event
