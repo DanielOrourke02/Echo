@@ -22,6 +22,10 @@
 
 <br>
 
+# This project is no longer maintained (I will respond to issues and patch bugs when needed)
+
+note: I might do some updates in the future.
+
 ## 🔗 Resource Links
 
 - 🤖 Demo Bot: [Echo](https://top.gg/bot/1075434463217066014) Now on Top.gg!
