@@ -26,7 +26,7 @@
 
 # JK IM UPDATING EVERYTHING SOON (give me a week)
 
-## REVIVAL (planned features
+## REVIVAL (planned features)
 
 - Moving to SQL Database (already in the works)
 
@@ -37,8 +37,6 @@
 - New admin commands
 
 - No more shitty bugs
-
-note: I might do some updates in the future.
 
 ## 🔗 Resource Links
 
