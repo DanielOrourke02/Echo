@@ -22,7 +22,9 @@
 
 <br>
 
-# This project is no longer maintained (I will respond to issues and patch bugs when needed)
+~~# This project is no longer maintained (I will respond to issues and patch bugs when needed)~~
+
+# JK IM UPDATING EVERYTHING SOON (give me a week)
 
 note: I might do some updates in the future.
 
