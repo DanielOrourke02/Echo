@@ -26,6 +26,18 @@
 
 # JK IM UPDATING EVERYTHING SOON (give me a week)
 
+## REVIVAL (planned features
+
+- Moving to SQL Database (already in the works)
+
+- Simpler installation process (docker)
+
+- Better lists (shop, economy, help etc)
+
+- New admin commands
+
+- No more shitty bugs
+
 note: I might do some updates in the future.
 
 ## 🔗 Resource Links
