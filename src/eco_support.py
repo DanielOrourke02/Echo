@@ -13,10 +13,6 @@ last_planting_time = {}
 
 robbery_cooldown = {}  # Dictionary to track cooldowns
 
-lottery_pool = set()
-
-required_participants = 5 # chance = code break
-
 # List of all cosmetics
 cosmetics_items = {
     # Swords
@@ -357,6 +353,7 @@ def set_last_claim_time(user_id):
     update_last_action_time(user_id, "claim")
 
 
+# Logs bought items
 def log_purchase(user_id, mode ,username , item_name, item_cost):
     if mode == 1:
         with open("logs.txt", "a") as log_file:
@@ -365,7 +362,7 @@ def log_purchase(user_id, mode ,username , item_name, item_cost):
         with open("logs.txt", "a") as log_file:
             log_file.write(f"User {user_id} | {username} sold {item_name} for {item_cost} coins.\n")
 
-
+# Logs sold items
 def log_sell(user_id, username , item_name, item_cost):
     with open("sell_log.txt", "a") as log_file:
         log_file.write(f"User {user_id} | {username} sell {item_name} for {item_cost} coins.\n")
