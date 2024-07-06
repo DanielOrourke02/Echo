@@ -1,11 +1,12 @@
 
-
+# Runs installation.py (which installs all requirements)
 from installation import SETUP_INSTALL
-SETUP_INSTALL() # INSTALLS REQUIREMENTS
+SETUP_INSTALL() 
 
-from utilities import *
-from eco_support import *
+from utilities import * # contains library imports
+from eco_support import * # economy game functions
 
+# Cogs
 from blackjack import Blackjack
 from economy import Economy
 from moderation import Moderation
@@ -13,6 +14,7 @@ from slots import Slots
 from help import Help
 from fun import Fun
 
+# Extension Cogs (most are for the economy game)
 from extensions import Crafting
 from extensions import Farming
 from extensions import Cooking
@@ -43,24 +45,26 @@ async def setup_bot():
 
 @bot.event
 async def on_ready():
+    # IF channels are locked it loads the locked channels or unlocks any locked channels
+    # (tempermental might not work)
     await lock_function(bot, save_locked_channels, unlock_channel_after_delay)
 
     print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}")  # Show login message
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help"))  # set presence to 'Listening to .help'
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help"))  # set presence to 'Listening to .help' or whatever the bot prefix is
 
     guilds(bot)  # call guilds function, this will output what guilds the bot is in (if enabled in config)
     
-    
+
 @bot.event
 async def on_message(message):
-    if link_ban == 'true':
-        if any(link in message.content for link in BANNED_LINKS):
-            await message.delete()
+    if link_ban == 'true': # only runs if enabled in config
+        if any(link in message.content for link in BANNED_LINKS): # if any of the banned links are in the message it runs the following code
+            await message.delete() # deletes message
 
             embed = discord.Embed(
                 title="Discord Links Are Forbidden!",
                 description=f"{message.author.mention} Discord links are not allowed in this server.",
-                color=discord.Color.red()
+                color=embed_error
             )
 
             embed.set_footer(text="Made by mal023")
