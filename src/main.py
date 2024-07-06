@@ -17,6 +17,8 @@ from extensions import Crafting
 from extensions import Farming
 from extensions import Cooking
 
+#from extensions import Example
+
 
 intents = discord.Intents.all()
 
@@ -35,6 +37,8 @@ async def setup_bot():
     await bot.add_cog(Blackjack(bot))
     await bot.add_cog(Slots(bot))
     await bot.add_cog(Cooking(bot))
+    
+    #await bot.add_cog(Example(bot))
 
 
 @bot.event

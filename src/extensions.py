@@ -718,9 +718,9 @@ def Printing_setup(bot):
 
 
 
-# EXAMPLE COG (add your own extensions)
-# Go back to main.py and import your cog
-# then add it to the 'setup_bot' function
+# EXAMPLE COG (add your own extensions to the bot)
+# Go back to main.py and import your cog (line 20)
+# then add it to the 'setup_bot' function (line 41)
 
 """
 class Example(commands.Cog):
@@ -732,10 +732,10 @@ class Example(commands.Cog):
         embed = discord.Embed(
             title="Example",
             description=f"{ctx.author.mention}, This is an example command! ",
-            color=embed_colour,
+            color=embed_colour, # embed_colour is a cyan colour (located in utilities.py)
         )
 
-        embed.set_footer(text=f"Made by mal023")
+        embed.set_footer(text=f"Extension made by xxx") # replace with your username
 
         await ctx.send(embed=embed)
 
