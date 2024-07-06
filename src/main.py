@@ -65,25 +65,6 @@ async def on_message(message):
             return
 
     await bot.process_commands(message)
-        
-        
-if message_delete == 'true':
-    @bot.event
-    async def on_message_delete(message):
-        try:
-            channel = bot.get_channel(logging_channel_id)
-            embed = discord.Embed(
-                title="Message Deleted",
-                description=f"**Message sent by:** {message.author.mention}\n"
-                            f"**Content:** {message.content}",
-                color=discord.Color.red()
-            )
-            await channel.send(embed=embed)
-        except Exception as e:
-            print(e)
-        
-        # Delete the original message
-        await message.delete()
 
 # Use an asynchronous function to run the setup and the bot
 async def run_bot():

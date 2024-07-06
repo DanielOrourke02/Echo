@@ -1,10 +1,9 @@
 {
-    "TOKEN": "BOT_TOKEN_HERE",
+    "TOKEN": "YOUR_BOT_TOKEN_HERE",
     "bot_invite_link": "YOUR_BOT_INVITE_LINK_HERE",
     "prefix": ".",
     "ADMIN_ID": 123456,
     
-    "LOGGING_CHANNEL": 12345678,
     "MESSAGE_DELETE_ALERT": "false",
     "LINK_BAN": "true",
     "BANNED_LINKS": ["discord.gg"],
