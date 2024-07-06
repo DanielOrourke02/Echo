@@ -145,7 +145,7 @@ class Blackjack(commands.Cog):
 
 
     @commands.command(aliases=['bj', 'blackjacks'], brief="Play a simple game of blackjack.\nBet must be greater than $0", usage=f"blackjack <bet>")
-    async def blackjack(self, ctx: commands.Context, bet: int=None):
+    async def blackjack(self, ctx: commands.Context, bet=None):
         """
         Play a simple game of blackjack.
 
@@ -171,7 +171,7 @@ class Blackjack(commands.Cog):
             embed = discord.Embed(
                 title="Incorrect Usage",
                 description=f"Please specify an amount to gamble. Usage: `{prefix}blackjack <amount>`",
-                color=discord.Color.orange()
+                color=embed_error
             )
             
             embed.set_footer(text=f"Made by mal023")
@@ -180,13 +180,32 @@ class Blackjack(commands.Cog):
             
             return
 
+        # making it easier for us gamblers to gamble everything lmao
+        # (there isnt a blackjack bet limit LOL
+        if bet == 'max' or bet == 'all':
+            bet = get_user_balance(ctx.author.id)
+        else:
+            try:
+                amount = int(amount)
+            except ValueError:
+                embed = discord.Embed(
+                    title="Invalid Withdraw amount",
+                    description=f"{ctx.author.mention}, Please enter a valid amount.",
+                    color=embed_error
+                )
+
+                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+
+                await ctx.send(embed=embed)
+                return 
+
         # Check if the user has enough balance for the bet
         if self.check_bet(ctx, bet) == False:
             bal = get_user_balance(ctx.author.id)
 
             embed = discord.Embed(
-                title="BROKE ASF",
-                description=f'You dont have enough money to place that bet. You currently have {bal} and you need {bet - bal} more.',
+                title="Brokie.",
+                description=f'Go get some money. **You have {bal} and you need {bet - bal} more.**',
                 color=embed_error
             )
 
