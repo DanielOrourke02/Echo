@@ -62,9 +62,6 @@ shop_items = {
     "gold": {"name": "Gold Store your money in gold", "cost": 10000},
     "shovel": {"name": "Buy a shovel for digging", "cost": 1000},
     "bow": {"name": "Buy a bow for hunting", "cost": 1000},
-    "stove": {"name": "A stove used for cooing", "cost": 25000},
-    "red": {"name": "Red phosphorus", "cost": 4000},
-    "chemical": {"name": "Special Chemical", "cost": 4000},
 }
 
 combined_items = {**cosmetics_items, **craftables}
