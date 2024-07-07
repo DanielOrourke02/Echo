@@ -57,7 +57,6 @@ prefix = config.get('prefix')
 
 # Moderation
 
-message_delete = config.get('MESSAGE_DELETE_ALERT')
 link_ban = config.get('LINK_BAN')
 BANNED_LINKS = config.get('BANNED_LINKS', [])
 

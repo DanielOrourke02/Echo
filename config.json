@@ -4,7 +4,6 @@
     "prefix": ".",
     "ADMIN_ID": 123456,
     
-    "MESSAGE_DELETE_ALERT": "false",
     "LINK_BAN": "true",
     "BANNED_LINKS": ["discord.gg"],
     
