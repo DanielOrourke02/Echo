@@ -1,4 +1,7 @@
-
+"""
+Just random commands
+e.g ping, say, dice etc
+"""
 
 from installation import *
 from utilities import *
@@ -259,7 +262,7 @@ class Fun(commands.Cog):
     @commands.command()
     async def joke(self, ctx):
         try:
-            response = requests.get("https://official-joke-api.appspot.com/random_joke") # random joke from api
+            response = requests.get("https://official-joke-api.appspot.com/random_joke") # IF this API disappears of the face of this earth then future me is cooked - Mal - dev1
             joke_data = response.json()
             setup = joke_data["setup"] # get the joke setup
             punchline = joke_data["punchline"] # get the punchline

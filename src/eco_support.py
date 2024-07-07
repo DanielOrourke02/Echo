@@ -1,4 +1,7 @@
-
+"""
+This file contains anything economy game related
+e.g functions to load databases, access databases
+"""
 
 from utilities import *
 

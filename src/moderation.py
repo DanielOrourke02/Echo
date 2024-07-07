@@ -1,4 +1,7 @@
-
+"""
+Moderation commands 
+e.g ban, kick, mute etc
+"""
 
 from installation import *
 from utilities import *

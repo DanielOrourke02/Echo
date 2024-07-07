@@ -1,3 +1,12 @@
+"""
+Runs when main.py is ran
+All this does is installs required libraries
+You can disable this from running every time main.py runs
+by changing 'skip_installation' to 'true' in the config
+Note: when installation a new release, be sure to check
+that there aren't any new dependencies.
+"""
+
 import json
 import os
 

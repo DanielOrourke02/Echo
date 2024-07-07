@@ -1,4 +1,7 @@
-
+"""
+Slots game - Not made by me
+I can't find original source!
+"""
 
 from utilities import *
 from eco_support import *

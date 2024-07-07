@@ -1,4 +1,6 @@
-
+"""
+Help commands
+"""
 
 from utilities import *
 from eco_support import *

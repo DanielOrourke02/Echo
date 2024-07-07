@@ -1,4 +1,7 @@
-
+"""
+Blackjack game - Not made by me
+I can't find original source!
+"""
 
 from eco_support import *
 

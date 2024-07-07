@@ -10,7 +10,7 @@ from colorama import Fore
 from pathlib import Path
 from io import BytesIO
 from time import ctime
-from card import Card
+from card import Card # blackjack game uses this
 
 import requests
 import discord

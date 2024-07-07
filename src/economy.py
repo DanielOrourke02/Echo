@@ -1,4 +1,8 @@
-
+"""
+Main economy game
+See more extensions (farming, crafting etc)
+in extensions.py
+"""
 
 from utilities import *
 from eco_support import *

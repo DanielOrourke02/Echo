@@ -1,3 +1,7 @@
+"""
+Used in blackjack.py
+"""
+
 import os
 
 
