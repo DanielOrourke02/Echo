@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/DanielJones02/Echo/blob/main/images/bot_icon.png" alt="Echo Bot Image" width="400">
+  <img src="https://github.com/DanielOrourke02/Echo/blob/main/images/bot_icon.png" alt="Echo Bot Image" width="400">
 </div>
 
 <h1 align="center">
@@ -62,7 +62,7 @@
 - Open the terminal and run the following commands
 
 ```
-git clone https://github.com/DanielJones02/Echo
+git clone https://github.com/DanielOrourke02/Echo
 ```
 
 - Open the directory in windows file explorer
@@ -80,7 +80,7 @@ git clone https://github.com/DanielJones02/Echo
 - Open the terminal and run the following commands:
 
 ```
-git clone https://github.com/DanielJones02/Echo
+git clone https://github.com/DanielOrourke02/Echo
 cd Echo
 ```
 - Now open config.json (in the terminal), or open it in notepad++ if you prefer.
@@ -253,10 +253,10 @@ I call them 'cosmetics', but they are items you get from running: dig, hunt and 
 
 
 <div align="center">
-  <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/Visual_Studio_Icon_2019.svg.png" width="48" height="48" alt="Visual Studio" />
-  <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/python.png" alt="Python" />
-  <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/html.png" alt="HTML" />
-  <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/css.png" alt="CSS" />
-  <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/C%2B%2B.png" alt="C++" />
-  <img src="https://github.com/DanielJones02/Active-Projects/blob/main/images/linux.png" alt="Linux" />
+  <img src="https://github.com/DanielOrourke02/Active-Projects/blob/main/images/Visual_Studio_Icon_2019.svg.png" width="48" height="48" alt="Visual Studio" />
+  <img src="https://github.com/DanielOrourke02/Active-Projects/blob/main/images/python.png" alt="Python" />
+  <img src="https://github.com/DanielOrourke02/Active-Projects/blob/main/images/html.png" alt="HTML" />
+  <img src="https://github.com/DanielOrourke02/Active-Projects/blob/main/images/css.png" alt="CSS" />
+  <img src="https://github.com/DanielOrourke02/Active-Projects/blob/main/images/C%2B%2B.png" alt="C++" />
+  <img src="https://github.com/DanielOrourke02/Active-Projects/blob/main/images/linux.png" alt="Linux" />
 </div>
