@@ -26,17 +26,23 @@
 
 # JK IM UPDATING EVERYTHING SOON (give me a week)
 
+### Might take a bit longer than expected, but i'm nearly done
+
 ## REVIVAL (planned features)
 
-- Moving to SQL Database (already in the works)
+~~crossed out~~ features means it is not being added (im focusing on the more important features)
 
-- Simpler installation process (docker)
+- Moving to SQL Database (DONE)
 
-- Better lists (shop, economy, help etc)
+- Better installation (less likely to error) (DONE)
 
-- New admin commands
+- No more bugs - Only the `.harvest` command is returning errors
 
-- No more shitty bugs
+- Simpler installation process (docker) (Will not be added yet)
+
+~~- Better lists (shop, economy, help etc)~~
+
+~~- New admin commands~~
 
 ## 🔗 Resource Links
 
