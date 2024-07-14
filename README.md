@@ -26,17 +26,23 @@
 
 # JK IM UPDATING EVERYTHING SOON (give me a week)
 
+### Might take a bit longer than expected, but i'm nearly done
+
 ## REVIVAL (planned features)
 
-- Moving to SQL Database (already in the works)
+~~crossed out~~ features means it is not being added (im focusing on the more important features)
 
-- Simpler installation process (docker)
+- Moving to SQL Database (DONE)
 
-- Better lists (shop, economy, help etc)
+- Better installation (less likely to error) (DONE)
 
-- New admin commands
+- No more bugs - Only the `.harvest` command is returning errors
 
-- No more shitty bugs
+- Simpler installation process (docker) (Will not be added yet)
+
+~~- Better lists (shop, economy, help etc)~~
+
+~~- New admin commands~~
 
 ## 🔗 Resource Links
 
@@ -55,25 +61,33 @@
 ## 🚀 Getting Started
 
 > [!WARNING]
-> I have not tested this on mac. But in theory it should work.
+> Untested on MAC-OS
 
 ## Windows Installation
 
-- Open the terminal and run the following commands
+- Open command prompt (cmd.exe) and run the following commands
 
 ```
-git clone https://github.com/DanielOrourke02/Echo
+git clone https://github.com/DanielJones02/Echo
+cd Echo
+python -m venv venv
+venv\Scripts\activate
+pip install -r \src\databases\requirements.txt
 ```
 
-- Open the directory in windows file explorer
+- Open the cloned directory in windows file explorer
 
 - Open config.json and add the following values
 
-  - Your bot token
-  - Your bot invite link
-  - Your user ID
+  - Your Bot Token (essential)
+  - Your Bot Invite Link (optional)
+  - Your User ID (optional)
 
-- Then double click `win_run.bat`, any requirements will be auto installed, and your bot will start.
+- Now back to your terminal and run win_run.bat inside the terminal with the venv activated. (this is essential)
+
+```
+.\win_run.bat
+```
 
 ## Linux Installation
 
@@ -82,6 +96,9 @@ git clone https://github.com/DanielOrourke02/Echo
 ```
 git clone https://github.com/DanielOrourke02/Echo
 cd Echo
+python3 -m venv venv
+source venv/bin/activate
+pip install -r /src/databases/requirements.txt
 ```
 - Now open config.json (in the terminal), or open it in notepad++ if you prefer.
 
@@ -91,9 +108,9 @@ nano config.json
 
 - Add the following data to config.json:
 
-  - Your bot token
-  - Your bot invite link
-  - Your user ID
+  - Your Bot Token (essential)
+  - Your Bot Invite Link (optional)
+  - Your User ID (optional)
 
 - After that run the following commands to run the bot:
 
@@ -102,8 +119,6 @@ chmod +x linux_run.sh
 ./linux_run.sh
 ```
 
-- Requirements will be auto installed and the bot will start
-
 <h2 align="center">
   <br>
   Connect with me
@@ -111,21 +126,6 @@ chmod +x linux_run.sh
 </h2>
 
 <p align="center">Hire Me: https://discord.gg/kNWkT8xWg6 Or DM ME: mal023</p>
-
-# KNOWN BUGS
-
-`Buttons` - Buttons will no longer work after a bot restart (ticket button and verify button)
-
-`streets` - Command is still in beta, the command is still very buggy and bugs out alot. I am working on a fix.
-
-`RuntimeWarning: Enable tracemalloc to get the object allocation traceback` - This means you have the wrong version of pycord installed. 
-
-Run the following commands to fix it.
-
-```
-py -3 -m pip uninstall py-cord
-pip install git+https://github.com/Rapptz/discord.py
-```
 
 ## General Commands
 
@@ -180,8 +180,6 @@ pip install git+https://github.com/Rapptz/discord.py
 | `gamble <amount>`        | Gamble your money with a 1/3 chance of winning.       |
 | `blackjack <amount>`     | Play a cool interactive blackjacks game.              |
 | `slots <amount>`         | Play slots with a small chance of winning big.        |
-| `cook`                   | Use 1 Chemical and 1 red to create 5 meth.            |
-| `streets`                | Sell 5 meth for 4k each once per hour (police exist)  |
 
 ## Moderation Commands
 
@@ -205,28 +203,25 @@ pip install git+https://github.com/Rapptz/discord.py
 
 | Item   | Description                                | Cost  |
 |--------|--------------------------------------------|-------|
-| `Silver` | Store your money in silver                 | 1000  |
-| `Gold`   | Store your money in gold                   | 10000 |
-| `shovel` | Buy a shovel for digging                   | 1000  |
-| `bow`    | Buy a bow for hunting                      | 1000  |
-| `stove`  | Buy a stove for cooking                    | 25000 |
-| `chemical` | Chemical used for cooking goods          | 4000  |
-| `red`    | a red substance used for cooking goods     | 4000  |
+| `Silver` | Bank full? Cant afford any gold? Buy some silver                              | 1000  |
+| `Gold`   | Too rich? Banks full? Invest some money into gold. No interest, but its safe. | 10000 |
+| `shovel` | Dig up treasure, find items and make money!                                   | 1000  |
+| `bow`    | You can now hunt animals! Sell what you find and make money while doing it.   | 1000  |
 
 
 ## Craftable Items (ingame)
 
 | Item               | Ingredients                                  | Description                                      |
 |--------------------|----------------------------------------------|--------------------------------------------------|
-| `Excalibur`         | 2 guns, 1 mythical_sword                      | A powerful sword that only the one can handle    |
-| `M4A1`              | 2 guns, 1 stick                               | Shoot down your enemies                          |
-| `8_Incher`          | 1 stick, 1 david4                             | A unique and 8 inch weapon                       |
-| `Complete_Gauntlet` | 1 infinity, 1 leg.sword, 1 david4             | The most powerful item in the game               |
-| `C4`                | 2 sulphur, 1 charcoal, 1 clock, 5 potatoes, 2 tech | C4 Bomb for bombing people                  |
-| `Poo`               | 3 charcoal, 1 sulphur                         | Just poo                                         |
-| `Joint`             | 1 roll, 1 weed                                | Sell joints                                      |
-| `meth`              | 1 chemical, 1 red, create using `!cook`       | sell meth by using `!streets`                    |
-| `glitch`             |2x god (0.1% chance for each)                 | A glitch in the matrix                           |
+| `Excalibur`         | 2 guns, 1 mythical_sword                      | A powerful sword that only the one can handle  |
+| `M4A1`              | 2 guns, 1 stick                               | Shoot down your enemies                        |
+| `8_Incher`          | 1 stick, 1 david4                             | A unique and 8 inch weapon                     |
+| `Complete_Gauntlet` | 1 infinity, 1 leg.sword, 1 david4             | The most powerful item in the game             |
+| `C4`                | 2 sulphur, 1 charcoal, 1 clock, 5 potatoes, 2 tech | C4 Bomb for bombing people                |
+| `Poo`               | 3 charcoal, 1 sulphur                         | Just poo                                       |
+| `Joint`             | 1 roll, 1 weed                                | Sell joints                                    |
+| `meth`              | 1 chemical, 1 red, create using `!cook`       | sell meth by using `!streets`                  |
+| `glitch`             |2x god (0.1% chance for each)                 | A glitch in the matrix                         |
 
 ## Findable Items (ingame)
 
