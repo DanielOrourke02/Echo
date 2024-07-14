@@ -195,6 +195,16 @@ class Blackjack(commands.Cog):
                     embed.set_footer(text=f"Need some help? Do {ctx.prefix}tutorial")
                     await ctx.send(embed=embed)
                     return 
+            
+            if bet <= 0:
+                embed = discord.Embed(
+                    title="Nice try",
+                    description=f"Nice try but your bet has to be larger than 0",
+                    color=discord.Color.red()
+                )
+                embed.set_footer(text="Made by mal023")
+                await ctx.send(embed=embed)
+                return
 
             # Check if the user has enough balance for the bet
             if not self.check_bet(ctx, bet):

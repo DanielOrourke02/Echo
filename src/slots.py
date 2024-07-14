@@ -37,6 +37,17 @@ class Slots(commands.Cog):
                 return
 
             bet = int(bet)
+            
+            if bet <= 0:
+                embed = discord.Embed(
+                    title="Nice try",
+                    description=f"Nice try but your bet has to be larger than 0",
+                    color=discord.Color.red()
+                )
+                embed.set_footer(text="Made by mal023")
+                await ctx.send(embed=embed)
+                return
+            
             path = os.path.join('src/pictures/')
             facade = Image.open(f'{path}slot-face.png').convert('RGBA')
             reel = Image.open(f'{path}slot-reel.png').convert('RGBA')
