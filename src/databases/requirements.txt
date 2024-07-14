@@ -1,0 +1,15 @@
+discord==2.3.2
+httpx==0.27.0
+Flask==3.0.1
+qrcode[pil]
+requests==2.31
+colorama==0.4.6
+aiohttp==3.7.4.post0
+async-timeout==3.0.1
+chardet==4.0.0
+idna==3.1
+multidict==5.1.0
+Pillow==10.0.1
+typing-extensions==4.8.0 
+yarl==1.9.3
+aiofiles==23.2.1 
