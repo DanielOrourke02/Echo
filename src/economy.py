@@ -69,6 +69,7 @@ class Economy(commands.Cog):
             embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
             await ctx.send(embed=embed)
+            return
 
 
     # Command to reset the cooldowns file
@@ -96,6 +97,22 @@ class Economy(commands.Cog):
         # Send the embed
         await ctx.send(embed=embed)
 
+    # Error handling for the give command
+    @cool_bypass.error
+    async def cool_bypass_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            # Create an embed for the error message with red color
+            embed = discord.Embed(
+                title="Permission Denied",
+                description=f"{ctx.author.mention}, You don't have permission to use this command.",
+                color=embed_error
+            )
+
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+
+            await ctx.send(embed=embed)
+            return
+
 
     # Command to remove items from a users inventory
     @commands.command()
@@ -114,6 +131,22 @@ class Economy(commands.Cog):
         for i in range(0, amount):
             remove_item_from_inventory(user.id, item)    
 
+    # Error handling for the give command
+    @remove_item.error
+    async def remove_item_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            # Create an embed for the error message with red color
+            embed = discord.Embed(
+                title="Permission Denied",
+                description=f"{ctx.author.mention}, You don't have permission to use this command.",
+                color=embed_error
+            )
+
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+
+            await ctx.send(embed=embed)
+            return
+
 
     @commands.command()
     @commands.check(is_admin)
@@ -130,6 +163,22 @@ class Economy(commands.Cog):
 
         for i in range(0, amount):
             add_item_to_inventory(user.id, item)
+
+    # Error handling for the give command
+    @add_item.error
+    async def add_item_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            # Create an embed for the error message with red color
+            embed = discord.Embed(
+                title="Permission Denied",
+                description=f"{ctx.author.mention}, You don't have permission to use this command.",
+                color=embed_error
+            )
+
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+
+            await ctx.send(embed=embed)
+            return
 
     # pay another user money
     @commands.command()
