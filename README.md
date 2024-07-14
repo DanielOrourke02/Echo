@@ -78,7 +78,7 @@ git clone https://github.com/DanielOrourke02/Echo
 cd Echo
 python3 -m venv venv
 source venv/bin/activate
-pip install -r /src/databases/requirements.txt
+pip install -r src/databases/requirements.txt
 ```
 - Now open config.json (in the terminal), or open it in notepad++ if you prefer.
 
