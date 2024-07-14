@@ -15,5 +15,5 @@
     "max_carrots_planted": 1000,
     "carrot_growth_duration": 12,
     "bank_size": 500000,
-    "max_gamble_amount": 500000,
+    "max_gamble_amount": 500000
 }

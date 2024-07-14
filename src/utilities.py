@@ -86,17 +86,11 @@ growth_duration = 3600 * config.get("carrot_growth_duration")
 # Daily reward
 daily_reward = config.get('daily_reward')
 
-# Meth sell price
-meth_sell_price = config.get("meth_sell_price")
-
 # max bank size
 max_bank_size = config.get("bank_size")
 
 # max gamble amount
 max_bet = config.get("max_gamble_amount")
-
-# Admin logging channel
-logging_channel_id = config.get("LOGGING_CHANNEL")
 
 # ----------------------------------------------------------MODERATION FUNCTIONS----------------------------------------------------------
 
