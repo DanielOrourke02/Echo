@@ -22,27 +22,7 @@
 
 <br>
 
-~~# This project is no longer maintained (I will respond to issues and patch bugs when needed)~~
-
-# JK IM UPDATING EVERYTHING SOON (give me a week)
-
-### Might take a bit longer than expected, but i'm nearly done
-
-## REVIVAL (planned features)
-
-~~crossed out~~ features means it is not being added (im focusing on the more important features)
-
-- Moving to SQL Database (DONE)
-
-- Better installation (less likely to error) (DONE)
-
-- No more bugs - Only the `.harvest` command is returning errors
-
-- Simpler installation process (docker) (Will not be added yet)
-
-~~- Better lists (shop, economy, help etc)~~
-
-~~- New admin commands~~
+# MAJOR UPDATE, MOVED TO SQL DATABASES
 
 ## 🔗 Resource Links
 
