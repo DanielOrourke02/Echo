@@ -3,7 +3,6 @@ Moderation commands
 e.g ban, kick, mute etc
 """
 
-from installation import *
 from utilities import *
 
 
@@ -191,7 +190,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int = None):
         if amount is None:
-            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You need to specify the number of messages to clear.", color=embed_colour)
+            embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You need to specify the number of messages to clear.", color=embed_error)
             
             embed.set_footer(text=f"Made by mal023")
             

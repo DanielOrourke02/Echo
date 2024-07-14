@@ -25,8 +25,8 @@ class Farming(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
 
-    # Command to plant carrots
-    @commands.command()
+    # Command to plant crops
+    @commands.command(aliases=['crop', 'carrots'])
     async def plant(self, ctx, amount: int=None):
         user_id = ctx.author.id
         user_balance = get_user_balance(user_id)
@@ -37,14 +37,14 @@ class Farming(commands.Cog):
                 
                 embed.title = "Incorrect usage"
                 
-                embed.description = f"{ctx.author.mention}, Please enter the amount you want to plant. Usage: `{prefix}plant <amount>`"
+                embed.description = f"{ctx.author.mention}, Please enter the amount of crops you want to plant. Usage: `{prefix}plant <amount>`"
                 
                 embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
                 
                 await ctx.send(embed=embed)
                 return
 
-            total_cost = amount * cost_per_carrot # total cost of planting their amount of carrots
+            total_cost = amount * cost_per_carrot # total cost of planting their amount of crops
 
             embed = discord.Embed(color=discord.Color.green())
 
@@ -52,7 +52,7 @@ class Farming(commands.Cog):
             if user_has_plants(user_id):
                 embed.title = "Wait a Little Longer"
                 
-                embed.description = f"{ctx.author.mention}, Your plants take {config.get('carrot_growth_duration')} hours to grow. Try harvesting them using: `{prefix}harvest`."
+                embed.description = f"{ctx.author.mention}, Your crops take {config.get('carrot_growth_duration')} hours to grow. Try harvesting them using: `{prefix}harvest`."
                 
                 embed.color = embed_error
                 
@@ -61,11 +61,11 @@ class Farming(commands.Cog):
                 await ctx.send(embed=embed)
                 return
 
-            # Check if the user is trying to plant too many carrots
+            # Check if the user is trying to plant too many crops
             if amount > max_carrot_planted:
-                embed.title = "Too Many Carrots"
+                embed.title = "Too Many crops"
                 
-                embed.description = f"{ctx.author.mention}, You cannot plant more than {max_carrot_planted} carrots."
+                embed.description = f"{ctx.author.mention}, You cannot plant more than {max_carrot_planted} crops."
                 
                 embed.color = embed_error
                 
@@ -78,7 +78,7 @@ class Farming(commands.Cog):
             if user_balance < total_cost:
                 embed.title = "Not Enough Balance"
                 
-                embed.description = f"{ctx.author.mention}, You need {total_cost} zesty coins to plant {amount} carrots"
+                embed.description = f"{ctx.author.mention}, You need {total_cost} credits to plant {amount} crops"
                 
                 embed.color = embed_error
                 
@@ -87,13 +87,13 @@ class Farming(commands.Cog):
                 await ctx.send(embed=embed)
                 return
 
-            # Plant carrots
+            # Plant crops
             plant_carrots(user_id, amount)
 
             # Send success message
-            embed.title = "Carrots Planted"
+            embed.title = "Crops Planted"
             
-            embed.description = f"{ctx.author.mention}, You have planted {amount} carrots."
+            embed.description = f"{ctx.author.mention}, You have planted {amount} crops."
             
             embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
             
@@ -105,42 +105,55 @@ class Farming(commands.Cog):
             print(e)
 
 
-
     @commands.command(aliases=['har'])
     async def harvest(self, ctx):
         user_id = str(ctx.author.id)
-        user_plantations = load_user_plants() # load planted crops
-        plantation = user_plantations.get(user_id) # get what that user has planted (and when)
+        user_plantations = load_user_plants()  # Load planted crops
+
         try:
-            if plantation: 
+            if user_id in user_plantations:
+                time_planted, amount_planted = user_plantations[user_id]
                 current_time = time.time()
-                time_left_seconds = max(0, plantation['time_planted'] + growth_duration - current_time) # time left of growth (if their is any left)
-                growth_percentage = min(100, ((growth_duration - time_left_seconds) / growth_duration) * 100) # calculate growth percentage
+                time_left_seconds = max(0, time_planted + growth_duration - current_time)  # Time left of growth (if any)
+                growth_percentage = min(100, ((growth_duration - time_left_seconds) / growth_duration) * 100)  # Calculate growth percentage
 
                 if time_left_seconds <= 0:
-                    harvested_amount = plantation['amount_planted'] # get how much they can harvest/how much they planted
+                    harvested_amount = amount_planted  # Get how much they can harvest
 
-                    total_profit = harvested_amount * carrot_sell # calculate total profit
-                    update_user_balance(user_id, total_profit) # sell corps and add money 
+                    total_profit = harvested_amount * carrot_sell  # Calculate total profit
+                    update_user_balance(user_id, total_profit)  # Sell crops and add money
                     del user_plantations[user_id]  # Removing the plantation record
 
-                    embed = discord.Embed(title="Success", description=f"{ctx.author.mention}, You have successfully harvested {harvested_amount} carrots and earned ${total_profit}.", color=discord.Colour.green())
-                    embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+                    embed = discord.Embed(
+                        title="Success",
+                        description=f"{ctx.author.mention}, You have successfully harvested {harvested_amount} crops and earned ${total_profit}.",
+                        color=discord.Colour.green()
+                    )
+                    embed.set_footer(text=f"Need some help? Do {ctx.prefix}tutorial")
                     await ctx.send(embed=embed)
                 else:
-                    embed = discord.Embed(title="Info", description=f"{ctx.author.mention}, Your carrots are not ready yet. They are {int(growth_percentage)}% grown.", color=embed_error)
-                    embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+                    embed = discord.Embed(
+                        title="Crop Info",
+                        description=f"{ctx.author.mention}, Your crops are not ready yet. They are {int(growth_percentage)}% grown.",
+                        color=discord.Colour.orange()
+                    )
+                    embed.set_footer(text=f"Need some help? Do {ctx.prefix}tutorial")
                     await ctx.send(embed=embed)
             else:
-                embed = discord.Embed(title="Error", description=f"{ctx.author.mention}, You don't have any crops planted.", color=embed_error)
-                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+                embed = discord.Embed(
+                    title="Error",
+                    description=f"{ctx.author.mention}, You don't have any crops planted.",
+                    color=embed_error
+                )
+                embed.set_footer(text=f"Need some help? Do {ctx.prefix}tutorial")
                 await ctx.send(embed=embed)
 
-            save_user_plants(user_plantations) # save data
+            save_user_plants(user_plantations)  # Save data
+
         except Exception as e:
             print(e)
-            
 
+            
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Farming Cog Loaded! {Fore.RESET}')
@@ -284,6 +297,7 @@ def crafting_setup(bot):
 
 
 
+
 # HEISTS COG
 
 
@@ -307,21 +321,87 @@ def Heists_setup(bot):
 
 
 # JOBS COG
+# IN DEVELOPMENT, NOT ADDED YET
 
 
 
 
+
+class JobButton(Button):
+    def __init__(self, job_name, label):
+        super().__init__(label=label, style=discord.ButtonStyle.primary)
+        self.job_name = job_name
+
+    async def callback(self, interaction: discord.Interaction):
+        user_id = interaction.user.id
+        self.view.cog.user_jobs[user_id] = self.job_name
+        await interaction.response.send_message(f"{interaction.user.mention}, you have selected the job: {self.job_name}!", ephemeral=True)
+
+class JobView(View):
+    def __init__(self, cog):
+        super().__init__(timeout=None)
+        self.cog = cog
+        for job_name, job_info in cog.jobs.items():
+            self.add_item(JobButton(job_name, label=job_name.capitalize()))
 
 class Jobs(commands.Cog):
-    def __init__(self, bot) -> None:
+    def __init__(self, bot):
         self.bot = bot
+        self.jobs = {
+            "freelancer": {"salary": (50, 100), "description": "Work on various tasks for clients."},
+            "gamer": {"salary": (20, 80), "description": "Play games and earn money by streaming or winning tournaments."},
+            "chef": {"salary": (30, 70), "description": "Cook and sell delicious meals."},
+        }
+        self.user_jobs = {}  # This will store user jobs {user_id: job_name}
+
+    @commands.command(aliases=['job', 'jobs', 'list_jobs'])
+    async def select_job(self, ctx):
+        embed = discord.Embed(title="Select a Job", description="Click a button to choose your job:", color=discord.Color.blue())
+        
+        job_list = "\n".join([f"**{job.capitalize()}**: {info['description']}\nSalary: {info['salary']}" for job, info in self.jobs.items()])
+        
+        embed.add_field(name="Available Jobs", value=job_list)
+        
+        await ctx.send(embed=embed, view=JobView(self))
+
+    @commands.command()
+    async def collect_salary(self, ctx):
+        job_name = self.user_jobs.get(ctx.author.id)
+        
+        if not job_name:
+            embed = discord.Embed(
+                title="Job salary collected",
+                description=f"{ctx.author.mention}, you don't have a job! Use `!job` to select one.",
+                color=discord.Color.green()
+            )           
+            
+            embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+            
+            await ctx.send(embed=embed)
+            return
+        
+        job = self.jobs[job_name]
+        salary = random.randint(*job['salary'])
+        
+        update_user_balance(ctx.author.id, salary)
+        
+        embed = discord.Embed(
+            title="Job salary collected",
+            description=f"{ctx.author.mention}, you collected **{salary} credits** from your job as a {job_name}.",
+            color=discord.Color.green()
+        )
+        
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
+        
+        await ctx.send(embed=embed)
+
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'{Fore.LIGHTGREEN_EX}{t}{Fore.LIGHTGREEN_EX} | Jobs Cog Loaded! {Fore.RESET}')
 
 
-def Jobs_setup(bot):
+def setup(bot):
     bot.add_cog(Jobs(bot))
 
 
@@ -393,9 +473,9 @@ def Printing_setup(bot):
 
 
 
-# EXAMPLE COG (add your own extensions to the bot)
-# Go back to main.py and import your cog (line 20)
-# then add it to the 'setup_bot' function (line 41)
+# EXAMPLE COG (add your own extensions)
+# Go back to main.py and import your cog
+# then add it to the 'setup_bot' function
 
 """
 class Example(commands.Cog):
@@ -407,10 +487,10 @@ class Example(commands.Cog):
         embed = discord.Embed(
             title="Example",
             description=f"{ctx.author.mention}, This is an example command! ",
-            color=embed_colour, # embed_colour is a cyan colour (located in utilities.py)
+            color=embed_colour,
         )
 
-        embed.set_footer(text=f"Extension made by xxx") # replace with your username
+        embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
 
         await ctx.send(embed=embed)
 

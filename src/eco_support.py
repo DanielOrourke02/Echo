@@ -6,16 +6,6 @@ e.g functions to load databases, access databases
 from utilities import *
 
 
-DATA_FILE = 'user_data.json'
-
-COOLDOWN_FILE = 'cooldowns.json'
-
-user_bank_balances = {}  # Holds users' bank 
-
-last_planting_time = {}
-
-robbery_cooldown = {}  # Dictionary to track cooldowns
-
 # List of all cosmetics
 cosmetics_items = {
     # Swords
@@ -57,16 +47,25 @@ craftables = {
 }
 
 
+"""
+If you are adding items to the shop do the following:
+
+- Add your custom items
+- Turn off bot
+- delete items.db in the databases directory
+- Start bot
+- New items will be created along with the database
+Enjoy!
+"""
 shop_items = {
-    "silver": {"name": "Silver, Store your money in silver", "cost": 1000},
-    "gold": {"name": "Gold Store your money in gold", "cost": 10000},
-    "shovel": {"name": "Buy a shovel for digging", "cost": 1000},
-    "bow": {"name": "Buy a bow for hunting", "cost": 1000},
+    "silver": {"desc": "Bank full? Cant afford any gold? Buy some silver", "cost": 1000},
+    "gold": {"desc": "Too rich? Banks full? Invest some money into gold. No interest, but its safe.", "cost": 10000},
+    "shovel": {"desc": "Dig up treasure, find items and make money!", "cost": 1000},
+    "bow": {"desc": "You can now hunt animals! Sell what you find and make money while doing it.", "cost": 1000},
+    #"example": {"desc": "This is the item description!!", "cost": 1234},
 }
 
 combined_items = {**cosmetics_items, **craftables}
-
-ABS_PATH = os.path.abspath(os.path.dirname(__file__))
 
 # crafting recipes
 crafting_recipes = {
@@ -115,59 +114,129 @@ crafting_recipes = {
     }
 }
 
+DATA_DB = 'src/databases/user_data.db'
+COOLDOWN_DB = 'src/databases/cooldowns.db'
+ITEMS_DB = 'src/databases/items.db'
 
-# Create the file if it doesn't exist
-if not os.path.exists(DATA_FILE):
-    with open(DATA_FILE, 'w') as f:
-        json.dump({}, f)
+# Create the databases and tables if they don't exist
+def initialize_databases():
+    # Initialize user data database
+    conn = sqlite3.connect(DATA_DB)
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS user_balances (
+            user_id TEXT PRIMARY KEY,
+            balance INTEGER DEFAULT 0,
+            inventory TEXT DEFAULT '[]'
+        )
+    ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS user_bank_balances (
+            user_id TEXT PRIMARY KEY,
+            balance INTEGER DEFAULT 0,
+            last_interest_update REAL DEFAULT 0
+        )
+    ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS user_carrot_plantations (
+            user_id TEXT PRIMARY KEY,
+            harvest_time REAL,
+            amount INTEGER
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
-if not os.path.exists(COOLDOWN_FILE):
-    with open(COOLDOWN_FILE, 'w') as f:
-        json.dump({}, f)
+    # Initialize cooldowns database
+    conn = sqlite3.connect(COOLDOWN_DB)
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS cooldowns (
+            user_id TEXT,
+            action TEXT,
+            last_action_time REAL,
+            PRIMARY KEY (user_id, action)
+        )
+    ''')
+    conn.commit()
+    conn.close()
+    
+    conn = sqlite3.connect(ITEMS_DB)
+    c = conn.cursor()
+    # Create items table if not exists
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS items (
+            item_name TEXT PRIMARY KEY,
+            desc TEXT,
+            cost INTEGER
+        )
+    ''')
+
+    # Insert data into items table
+    for item_name, item_data in shop_items.items():
+        c.execute('''
+            INSERT OR IGNORE INTO items (item_name, desc, cost) VALUES (?, ?, ?)
+        ''', (item_name, item_data['desc'], item_data['cost']))
+
+    conn.commit()
+    conn.close()
+
+initialize_databases()
+
 
 def load_cooldowns():
-    try:
-        with open(COOLDOWN_FILE, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        # Create the file if it doesn't exist
-        with open(COOLDOWN_FILE, 'w') as f:
-            json.dump({}, f)
-        return {}
+    conn = sqlite3.connect(COOLDOWN_DB)
+    c = conn.cursor()
+    c.execute('SELECT * FROM cooldowns')
+    cooldowns = {f"{row[0]}_{row[1]}": row[2] for row in c.fetchall()}
+    conn.close()
+    return cooldowns
 
-try:
-    with open(DATA_FILE, 'r') as f:
-        data = json.load(f)
-        user_balances = data.get('user_balances', {})
-        user_bank_balances = data.get('user_bank_balances', {})
-        user_carrot_plantations = data.get('user_carrot_plantations', {})
-except FileNotFoundError:
-    user_balances = {}
-    user_bank_balances = {}
-    user_carrot_plantations = {}
 
 def load_user_plants():
     try:
-        with open('user_plants.json', 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
+        conn = sqlite3.connect(DATA_DB)
+        c = conn.cursor()
+        c.execute('SELECT * FROM user_carrot_plantations')
+        user_plantations = {}
+        for row in c.fetchall():
+            user_id, harvest_time, amount_planted = row
+            try:
+                harvest_time = float(harvest_time)
+                amount_planted = int(amount_planted)
+                user_plantations[user_id] = (harvest_time, amount_planted)
+            except ValueError as e:
+                continue  # Skip this row if conversion fails
+        conn.close()
+        return user_plantations
+    except Exception as e:
+        print(f"Error loading user plantations: {e}")
+        return {}  # Return an empty dictionary or handle the error as appropriate
 
 
 def save_cooldowns(cooldowns):
-    with open(COOLDOWN_FILE, 'w') as f:
-        json.dump(cooldowns, f)
+    conn = sqlite3.connect(COOLDOWN_DB)
+    c = conn.cursor()
+    for key, value in cooldowns.items():
+        user_id, action = key.split('_')
+        c.execute('REPLACE INTO cooldowns (user_id, action, last_action_time) VALUES (?, ?, ?)', (user_id, action, value))
+    conn.commit()
+    conn.close()
 
 
-def save_user_plants(data):
-    with open('user_plants.json', 'w') as f:
-        json.dump(data, f, indent=4)
-
-
-def save_user_data():
-    with open(DATA_FILE, 'w') as f:
-        json.dump({'user_balances': user_balances, 'user_bank_balances': user_bank_balances}, f)
-
+def save_user_plants(user_plantations):
+    try:
+        conn = sqlite3.connect(DATA_DB)
+        c = conn.cursor()
+        c.execute('DELETE FROM user_carrot_plantations')
+        for user_id, (harvest_time, amount_planted) in user_plantations.items():
+            c.execute('INSERT INTO user_carrot_plantations (user_id, harvest_time, amount) VALUES (?, ?, ?)',
+                      (user_id, harvest_time, amount_planted))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Error saving user plantations: {e}")
+  
 
 def user_has_plants(user_id):
     user_plantations = load_user_plants()
@@ -175,93 +244,209 @@ def user_has_plants(user_id):
 
 
 def update_plants():
-    global user_carrot_plantations
-    loaded_data = load_user_plants()
-    
-    for user_id, plantation_data in loaded_data.items():
-        current_time = datetime.now().timestamp()
-        time_left_seconds = max(0, plantation_data[0] - current_time)
-        if time_left_seconds <= 0:
-            # Harvest the crops if the growth time has passed
-            harvested_amount = plantation_data[1]
-            total_profit = harvested_amount * carrot_sell
-            update_user_balance(user_id, total_profit)
-            del user_carrot_plantations[user_id]  # Removing the plantation record
-        else:
-            # Update the time left in the percentage
-            growth_percentage = min(100, ((growth_duration - time_left_seconds) / growth_duration) * 100)
-            user_carrot_plantations[user_id] = (current_time + growth_duration, plantation_data[1])
+    try:
+        global user_carrot_plantations
+        user_carrot_plantations = load_user_plants()
+        
+        if user_carrot_plantations is None:
+            print("No user carrot plantations loaded.")  # Debug statement
+            return  # Handle the case where data loading failed or returned None
 
-    # Save the updated data
-    save_user_plants(user_carrot_plantations)
+        current_time = datetime.now().timestamp()
+        
+        for user_id, (harvest_time, amount) in user_carrot_plantations.items():
+            time_left_seconds = max(0, harvest_time - current_time)
+            if time_left_seconds <= 0:
+                # Harvest the crops if the growth time has passed
+                total_profit = amount * carrot_sell
+                update_user_balance(user_id, total_profit)
+                del user_carrot_plantations[user_id]  # Removing the plantation record
+            else:
+                # Update the time left in the percentage
+                growth_percentage = min(100, ((growth_duration - time_left_seconds) / growth_duration) * 100)
+                user_carrot_plantations[user_id] = (harvest_time, amount)  # Ensure consistency
+
+        # Save the updated data
+        save_user_plants(user_carrot_plantations)
+
+    except Exception as e:
+        print(f"Error updating plants: {e}")
+        
+
+def plant_carrots(user_id, amount):
+    total_cost = amount * cost_per_carrot
+
+    try:
+        # Update balance and record plantation details
+        update_user_balance(user_id, -total_cost)  # Deducting the cost for planting
+
+        user_plantations = load_user_plants()
+
+        # Store user's ID, planted amount, and time planted in a tuple
+        user_plantations[str(user_id)] = (
+            get_current_time(),
+            amount
+        )
+
+        save_user_plants(user_plantations)
+    except Exception as e:
+        print(e)
 
 
 def update_bank_interest(user_id, max_bank_size):
-    # Retrieve last interest update time for the user
-    last_interest_update = user_bank_balances.get(f"{user_id}_last_interest_update", 0)
-
-    # Calculate time difference since last update
+    conn = sqlite3.connect(DATA_DB)
+    c = conn.cursor()
+    
+    c.execute('SELECT last_interest_update FROM user_bank_balances WHERE user_id = ?', (user_id,))
+    last_interest_update = c.fetchone()
+    last_interest_update = last_interest_update[0] if last_interest_update else 0
+    
     time_difference = time.time() - last_interest_update
 
-    # If 24 hours have passed, apply interest 24 * 60 * 60 == 1 day/24 hours
     if time_difference >= 24 * 60 * 60:
-        #print("updated bank interest!")
-        # Calculate interest amount (10% of current bank balance)
-        bank_balance = get_bank_balance(user_id)
+        bank_balance = get_user_bank_balance(user_id)
         interest_amount = int(bank_balance * 0.10)
-
-        # Cap the interest at whatever the max bank size is
         interest_amount = min(interest_amount, max_bank_size - bank_balance)
-
-        update_bank_balance(user_id, interest_amount)
-
-        user_bank_balances[f"{user_id}_last_interest_update"] = time.time()
-        save_user_data()
         
+        update_bank_balance(user_id, interest_amount)
+        
+        c.execute('REPLACE INTO user_bank_balances (user_id, last_interest_update) VALUES (?, ?)', (user_id, time.time()))
+        conn.commit()
+    
+    conn.close()
 
-def get_user_bank_balance(user_id):
-    update_bank_interest(user_id, max_bank_size)  # Update interest before returning balance
-    return user_bank_balances.get(str(user_id), 0)
 
-
-# Get the list of items in their inventory
+# Function to retrieve user inventory from the database
 def get_user_inventory(user_id):
-    return user_balances.setdefault(f"{user_id}_inventory", [])
+    try:
+        conn = sqlite3.connect(DATA_DB)
+        c = conn.cursor()
+        c.execute('SELECT inventory FROM user_balances WHERE user_id = ?', (user_id,))
+        inventory = c.fetchone()
+        conn.close()
+        return json.loads(inventory[0]) if inventory and inventory[0] else []
+    except Exception as e:
+        print(f"Error in get_user_inventory: {e}")
+        return []
 
 
-# Add items to their inventory
 def add_item_to_inventory(user_id, item_name):
-    inventory = get_user_inventory(user_id)
-    inventory.append(item_name)
-    user_balances[f"{user_id}_inventory"] = inventory
-    save_user_data()  # Function to save data to file
+    try:
+        inventory = get_user_inventory(user_id)
+        inventory.append(item_name)
+        inventory_json = json.dumps(inventory)
+        
+        conn = sqlite3.connect(DATA_DB)
+        c = conn.cursor()
+
+        # Check if the user already has an entry in user_balances
+        c.execute('SELECT * FROM user_balances WHERE user_id = ?', (user_id,))
+        existing_entry = c.fetchone()
+
+        if existing_entry:
+            # Update existing entry
+            c.execute('UPDATE user_balances SET inventory = ? WHERE user_id = ?', (inventory_json, user_id))
+        else:
+            # Insert new entry
+            c.execute('INSERT INTO user_balances (user_id, inventory) VALUES (?, ?)', (user_id, inventory_json))
+
+        conn.commit()
+        conn.close()
+
+    except Exception as e:
+        print(f"Error in add_item_to_inventory: {e}")
 
 
-# Remove items from their inventory
 def remove_item_from_inventory(user_id, item_name):
-    inventory = get_user_inventory(user_id)
-    if item_name in inventory:
-        inventory.remove(item_name)
-        user_balances[f"{user_id}_inventory"] = inventory
-        save_user_data()  # Function to save data to file
+    try:
+        inventory = get_user_inventory(user_id)
+        
+        if item_name in inventory:
+            inventory.remove(item_name)
+            inventory_json = json.dumps(inventory)
+            
+            conn = sqlite3.connect(DATA_DB)
+            c = conn.cursor()
+
+            # Update only the inventory field using UPDATE statement
+            c.execute('UPDATE user_balances SET inventory = ? WHERE user_id = ?', (inventory_json, user_id))
+            conn.commit()
+            conn.close()
+
+    except Exception as e:
+        print(f"Error removing item from inventory: {e}")
 
 
 def get_user_balance(user_id):
-    return user_balances.get(str(user_id), 0)
+    conn = sqlite3.connect(DATA_DB)
+    c = conn.cursor()
+    c.execute('SELECT balance FROM user_balances WHERE user_id = ?', (user_id,))
+    result = c.fetchone()
+    if result is None:
+        c.execute('INSERT INTO user_balances (user_id) VALUES (?)', (user_id,))
+        conn.commit()
+        result = (0,)
+    conn.close()
+    return result[0]
+
+
+def get_user_bank_balance(user_id):
+    conn = sqlite3.connect(DATA_DB)
+    c = conn.cursor()
+    c.execute('SELECT balance FROM user_bank_balances WHERE user_id = ?', (user_id,))
+    result = c.fetchone()
+    if result is None:
+        c.execute('INSERT INTO user_bank_balances (user_id) VALUES (?)', (user_id,))
+        conn.commit()
+        result = (0,)
+    conn.close()
+    return result[0]
 
 
 def update_user_balance(user_id, amount):
-    user_balances[str(user_id)] = get_user_balance(user_id) + amount
-    save_user_data()
+    # Retrieve the current balance and inventory
+    current_balance = get_user_balance(user_id)
+    current_inventory = get_user_inventory(user_id)
 
+    # Calculate the new balance
+    new_balance = current_balance + amount
 
-def get_bank_balance(user_id):
-    return user_bank_balances.get(str(user_id), 0)
+    # Open connection to the database
+    conn = sqlite3.connect(DATA_DB)
+    c = conn.cursor()
+
+    try:
+        # Use REPLACE INTO to update the user's balance and inventory
+        c.execute('REPLACE INTO user_balances (user_id, balance, inventory) VALUES (?, ?, ?)',
+                  (user_id, new_balance, json.dumps(current_inventory)))
+
+        # Commit changes to the database
+        conn.commit()
+        
+    except Exception as e:
+        print(f"Error updating user balance: {e}")
+
+    finally:
+        # Close the database connection
+        conn.close()
 
 
 def update_bank_balance(user_id, amount):
-    user_bank_balances[str(user_id)] = get_bank_balance(user_id) + amount
-    save_user_data()
+    balance = get_user_bank_balance(user_id) + amount
+    conn = sqlite3.connect(DATA_DB)
+    c = conn.cursor()
+    c.execute('REPLACE INTO user_bank_balances (user_id, balance) VALUES (?, ?)', (user_id, balance))
+    conn.commit()
+    conn.close()
+
+
+def update_bank_balance(user_id, amount):
+    balance = get_user_bank_balance(user_id) + amount
+    conn = sqlite3.connect(DATA_DB)
+    c = conn.cursor()
+    c.execute('REPLACE INTO user_bank_balances (user_id, balance) VALUES (?, ?)', (user_id, balance))
+    conn.commit()
+    conn.close()
 
 
 # COOLDOWN FUNCTIONS
@@ -272,13 +457,9 @@ def get_current_time():
 
 
 def get_cooldown_remaining(user_id, action, cooldowns, cooldown_duration):
-    try:
-        last_action_time = cooldowns.get(f"{user_id}_{action}", 0)
-        current_time = get_current_time()
-
-        return current_time - last_action_time
-    except Exception as e:
-        print(e)
+    last_action_time = cooldowns.get(f"{user_id}_{action}", 0)
+    current_time = get_current_time()
+    return current_time - last_action_time
 
 
 def can_perform_action(user_id, action, cooldown_duration):
@@ -288,18 +469,9 @@ def can_perform_action(user_id, action, cooldown_duration):
 
 
 def update_last_action_time(user_id, action):
-    try:
-        cooldowns = load_cooldowns()
-        cooldowns[f"{user_id}_{action}"] = get_current_time()
-
-        save_cooldowns(cooldowns)
-    except Exception as e:
-        print(e)
-
-
-def can_sell_meth(user_id):
-    return can_perform_action(user_id, "sell", 1 * 3600)  # 1 hour in seconds
-
+    cooldowns = load_cooldowns()
+    cooldowns[f"{user_id}_{action}"] = get_current_time()
+    save_cooldowns(cooldowns)
 
 def can_rob(user_id):
     return can_perform_action(user_id, "rob", 1 * 3600)  # 1 hour in seconds
@@ -329,40 +501,14 @@ def can_plant(user_id):
     return can_perform_action(user_id, "plant", growth_duration * 3600)  # 12 hours in seconds
 
 
-def plant_carrots(user_id, amount):
-    total_cost = amount * cost_per_carrot
-
-    try:
-        # Update balance and record plantation details
-        update_user_balance(user_id, -total_cost)  # Deducting the cost for planting
-
-        user_plantations = load_user_plants()
-
-        # Store user's ID, planted amount, and time planted
-        user_plantations[str(user_id)] = {
-            'amount_planted': amount,
-            'time_planted': get_current_time(),
-        }
-
-        save_user_plants(user_plantations)
-    except Exception as e:
-        print(e)
-
-
 def set_last_claim_time(user_id):
     update_last_action_time(user_id, "claim")
 
 
-# Logs bought items
 def log_purchase(user_id, mode ,username , item_name, item_cost):
     if mode == 1:
-        with open("logs.txt", "a") as log_file:
-            log_file.write(f"User {user_id} | {username} bought {item_name} for {item_cost} coins.\n")
+        with open("src/databases/logs.txt", "a") as log_file:
+            log_file.write(f"User {user_id} | {username} bought {item_name} for {item_cost} Credits.\n")
     elif mode == 0:
-        with open("logs.txt", "a") as log_file:
-            log_file.write(f"User {user_id} | {username} sold {item_name} for {item_cost} coins.\n")
-
-# Logs sold items
-def log_sell(user_id, username , item_name, item_cost):
-    with open("sell_log.txt", "a") as log_file:
-        log_file.write(f"User {user_id} | {username} sell {item_name} for {item_cost} coins.\n")
+        with open("src/databases/logs.txt", "a") as log_file:
+            log_file.write(f"User {user_id} | {username} sold {item_name} for {item_cost} Credits.\n")

@@ -1,10 +1,18 @@
-from discord.ext import commands, tasks
+"""
+This file contains:
+ - Imports
+ - Variables
+ - Some functions
+"""
+
 from discord.ext.commands import BucketType
+from discord.ext import commands, tasks
 from typing import List, Tuple, Union
 from discord.ui import Button, View
 from PIL import Image, ImageDraw
 from discord import Interaction
 from collections import Counter
+from datetime import timedelta
 from datetime import datetime
 from colorama import Fore
 from pathlib import Path
@@ -14,6 +22,7 @@ from card import Card # blackjack game uses this
 
 import requests
 import discord
+import sqlite3
 import asyncio
 import random
 import bisect
@@ -30,23 +39,24 @@ button_storage = {}
 # embed colour (change it to discord.Color.{whatyouwant} or hex values)
 embed_colour = discord.Color.from_rgb(0, 255, 255)  # RGB values for cyan
 
-embed_error = discord.Color.red()
+embed_error = discord.Color.red() # error message for embeds
 
 # Just a cool logging variable
 t = f"{Fore.LIGHTYELLOW_EX}{ctime()}{Fore.RESET}"
 
 # Load the json file for locked channels
 try:
-    with open('locked_channels.json') as file:
+    with open('src/databases/locked_channels.json') as file:
         locked_channels = json.load(file)
 except FileNotFoundError:
     locked_channels = {}
 
-# Load onfiguration from JSON file
+# Load config from json file
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
 
-# LOAD VARIABLES FROM CONFIG.JSON
+# ---LOAD VARIABLES FROM CONFIG.JSON---
+
 token = config.get("TOKEN")
 
 # Bot invite
@@ -56,7 +66,6 @@ bot_invite = config.get("bot_invite_link")
 prefix = config.get('prefix')
 
 # Moderation
-
 link_ban = config.get('LINK_BAN')
 BANNED_LINKS = config.get('BANNED_LINKS', [])
 
@@ -107,7 +116,7 @@ async def unlock_channel_after_delay(channel, delay):
 
 # when a channel gets logs it is saved (so if the bot restarts or crashes the lock isnt lost/remoted)
 def save_locked_channels():
-    with open('locked_channels.json', 'w') as file:
+    with open('src/databases/locked_channels.json', 'w') as file:
         json.dump(locked_channels, file)
 
 

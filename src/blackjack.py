@@ -146,8 +146,7 @@ class Blackjack(commands.Cog):
         return total_sum
 
 
-
-    @commands.command(aliases=['bj', 'blackjacks'], brief="Play a simple game of blackjack.\nBet must be greater than $0", usage=f"blackjack <bet>")
+    @commands.command(aliases=['bj', 'blackjacks'], brief="Play a simple game of blackjack.\nBet must be greater than $0", usage="blackjack <bet>")
     async def blackjack(self, ctx: commands.Context, bet=None):
         """
         Play a simple game of blackjack.
@@ -169,180 +168,167 @@ class Blackjack(commands.Cog):
         Returns:
             None
         """
-        # Error handling for incorrect usage
-        if bet is None:
-            embed = discord.Embed(
-                title="Incorrect Usage",
-                description=f"Please specify an amount to gamble. Usage: `{prefix}blackjack <amount>`",
-                color=embed_error
-            )
-            
-            embed.set_footer(text=f"Made by mal023")
-
-            await ctx.send(embed=embed)
-            
-            return
-
-        # making it easier for us gamblers to gamble everything lmao
-        # (there isnt a blackjack bet limit LOL
-        if bet == 'max' or bet == 'all':
-            bet = get_user_balance(ctx.author.id)
-        else:
-            try:
-                amount = int(amount)
-            except ValueError:
+        try:
+            # Error handling for incorrect usage
+            if bet is None:
                 embed = discord.Embed(
-                    title="Invalid Withdraw amount",
-                    description=f"{ctx.author.mention}, Please enter a valid amount.",
-                    color=embed_error
+                    title="Incorrect Usage",
+                    description=f"Please specify an amount to gamble. Usage: `{ctx.prefix}blackjack <amount>`",
+                    color=discord.Color.red()
                 )
-
-                embed.set_footer(text=f"Need some help? Do {prefix}tutorial")
-
+                embed.set_footer(text="Made by mal023")
                 await ctx.send(embed=embed)
-                return 
+                return
 
-        # Check if the user has enough balance for the bet
-        if self.check_bet(ctx, bet) == False:
-            bal = get_user_balance(ctx.author.id)
+            # Making it easier for users to gamble everything
+            if bet == 'max' or bet == 'all':
+                bet = get_user_balance(ctx.author.id)
+            else:
+                try:
+                    bet = int(bet)
+                except ValueError:
+                    embed = discord.Embed(
+                        title="Invalid Bet Amount",
+                        description=f"{ctx.author.mention}, Please enter a valid amount.",
+                        color=discord.Color.red()
+                    )
+                    embed.set_footer(text=f"Need some help? Do {ctx.prefix}tutorial")
+                    await ctx.send(embed=embed)
+                    return 
 
-            embed = discord.Embed(
-                title="Brokie.",
-                description=f'Go get some money. **You have {bal} and you need {bet - bal} more.**',
-                color=embed_error
-            )
-
-            embed.set_footer(text=f"Made by mal023")
-            
-            await ctx.send(embed=embed)
-            return
-
-        # Initialize deck and shuffle it
-        deck = [Card(suit, num) for num in range(2,15) for suit in Card.suits]
-        random.shuffle(deck)
-
-        # Initialize player and dealer hands
-        player_hand: List[Card] = []
-        dealer_hand: List[Card] = []
-
-        # Initial card dealing
-        player_hand.append(deck.pop())
-        dealer_hand.append(deck.pop())
-        player_hand.append(deck.pop())
-        dealer_hand.append(deck.pop().flip())
-
-        player_score = self.calc_hand(player_hand)
-        dealer_score = self.calc_hand(dealer_hand)
-
-        async def out_table(**kwargs) -> discord.Message:
-            """Sends a picture of the current table"""
-            self.output(ctx.author.id, dealer_hand, player_hand)
-            embed = make_embed(**kwargs)
-            file = discord.File(
-                f"{ctx.author.id}.png", filename=f"{ctx.author.id}.png"
-            )
-            embed.set_image(url=f"attachment://{ctx.author.id}.png")
-            msg: discord.Message = await ctx.send(file=file, embed=embed)
-            return msg
-
-        # Reaction check function
-        def check(
-            reaction: discord.Reaction,
-            user: Union[discord.Member, discord.User]
-        ) -> bool:
-            return all((
-                str(reaction.emoji) in ("🇸", "🇭"),  # correct emoji
-                user == ctx.author,                  # correct user
-                user != self.bot.user,           # isn't the bot
-                reaction.message == msg            # correct message
-            ))
-
-        standing = False
-
-        while True:
-            player_score = self.calc_hand(player_hand)
-            dealer_score = self.calc_hand(dealer_hand)
-
-            if player_score == 21:  # win condition
-                bet = int(bet*1.5)
-                update_user_balance(ctx.author.id, bet)
-                result = ("Blackjack!", 'won')
-                break
-            
-            elif player_score > 21:  # losing condition
-                update_user_balance(ctx.author.id, bet*-1)
-                result = ("Player busts", 'lost')
-                break
-            
-            msg = await out_table(
-                title="Your Turn",
-                description=f"Your hand: {player_score}\n" \
-                    f"Dealer's hand: {dealer_score}"
-            )
-
-            await msg.add_reaction("🇭")
-            await msg.add_reaction("🇸")
-            
-            try:  # reaction command
-                reaction, _ = await self.bot.wait_for(
-                    'reaction_add', timeout=60, check=check
+            # Check if the user has enough balance for the bet
+            if not self.check_bet(ctx, bet):
+                bal = get_user_balance(ctx.author.id)
+                embed = discord.Embed(
+                    title="Insufficient Balance",
+                    description=f"Go get some money. **You have {bal} and you need {bet - bal} more.**",
+                    color=discord.Color.red()
                 )
+                embed.set_footer(text="Made by mal023")
+                await ctx.send(embed=embed)
+                return
 
-            except asyncio.TimeoutError:
-                await msg.delete()
+            # Initialize deck and shuffle it
+            deck = [Card(suit, num) for num in range(2, 15) for suit in Card.suits]
+            random.shuffle(deck)
 
-            if str(reaction.emoji) == "🇭":
-                player_hand.append(deck.pop())
-                await msg.delete()
-                continue
+            # Initialize player and dealer hands
+            player_hand: List[Card] = []
+            dealer_hand: List[Card] = []
 
-            elif str(reaction.emoji) == "🇸":
-                standing = True
-                break
+            # Initial card dealing
+            player_hand.append(deck.pop())
+            dealer_hand.append(deck.pop())
+            player_hand.append(deck.pop())
+            dealer_hand.append(deck.pop())
 
-        if standing:
-            dealer_hand[1].flip()
+            dealer_hand[1] = dealer_hand[1]  # Flip dealer's second card
+
             player_score = self.calc_hand(player_hand)
             dealer_score = self.calc_hand(dealer_hand)
 
-            while dealer_score < 17:  # dealer draws until 17 or greater
-                dealer_hand.append(deck.pop())
+            async def out_table(**kwargs) -> discord.Message:
+                """Sends a picture of the current table"""
+                self.output(ctx.author.id, dealer_hand, player_hand)
+                embed = discord.Embed(**kwargs)
+                file = discord.File(f"{ctx.author.id}.png", filename=f"{ctx.author.id}.png")
+                embed.set_image(url=f"attachment://{ctx.author.id}.png")
+                msg: discord.Message = await ctx.send(file=file, embed=embed)
+                return msg
+
+            # Reaction check function
+            def check(reaction: discord.Reaction, user: Union[discord.Member, discord.User]) -> bool:
+                return all((
+                    str(reaction.emoji) in ("🇸", "🇭"),  # correct emoji
+                    user == ctx.author,                  # correct user
+                    user != self.bot.user,               # isn't the bot
+                    reaction.message == msg              # correct message
+                ))
+
+            standing = False
+
+            while True:
+                player_score = self.calc_hand(player_hand)
                 dealer_score = self.calc_hand(dealer_hand)
 
-            if dealer_score == 21:  # winning/losing conditions
-                update_user_balance(ctx.author.id, bet*-1)
-                result = ('Dealer blackjack', 'lost')
-            elif dealer_score > 21:
-                update_user_balance(ctx.author.id, bet*1)
-                result = ("Dealer busts", 'won')
-            elif dealer_score == player_score:
-                result = ("Tie!", 'kept')
-            elif dealer_score > player_score:
-                update_user_balance(ctx.author.id, bet*-1)
-                result = ("You lose!", 'lost')
-            elif dealer_score < player_score:
-                update_user_balance(ctx.author.id, bet*1)
-                result = ("You win!", 'won')
+                if player_score == 21:  # win condition
+                    bet = int(bet * 1.5)
+                    update_user_balance(ctx.author.id, bet)
+                    result = ("Blackjack!", 'won')
+                    break
 
-        color = (
-            discord.Color.red() if result[1] == 'lost'
-            else discord.Color.green() if result[1] == 'won'
-            else discord.Color.blue()
-        )
-        try:
-            await msg.delete()
-        except:
-            pass
-        msg = await out_table(
-            title=result[0],
-            color=color,
-            description=(
-                f"**You {result[1]} ${bet}**\nYour hand: {player_score}\n" +
-                f"Dealer's hand: {dealer_score}"
+                elif player_score > 21:  # losing condition
+                    update_user_balance(ctx.author.id, bet * -1)
+                    result = ("Player busts", 'lost')
+                    break
+
+                msg = await out_table(
+                    title="Your Turn",
+                    description=f"Your hand: {player_score}\nDealer's hand: {dealer_score}"
+                )
+
+                await msg.add_reaction("🇭")
+                await msg.add_reaction("🇸")
+
+                try:  # reaction command
+                    reaction, _ = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+                except asyncio.TimeoutError:
+                    await msg.delete()
+                    return
+
+                if str(reaction.emoji) == "🇭":
+                    player_hand.append(deck.pop())
+                    await msg.delete()
+                    continue
+
+                elif str(reaction.emoji) == "🇸":
+                    standing = True
+                    break
+
+            if standing:
+                dealer_hand[1] = dealer_hand[1]  # Flip dealer's second card
+                player_score = self.calc_hand(player_hand)
+                dealer_score = self.calc_hand(dealer_hand)
+
+                while dealer_score < 17:  # dealer draws until 17 or greater
+                    dealer_hand.append(deck.pop())
+                    dealer_score = self.calc_hand(dealer_hand)
+
+                if dealer_score == 21:  # winning/losing conditions
+                    update_user_balance(ctx.author.id, bet * -1)
+                    result = ('Dealer blackjack', 'lost')
+                elif dealer_score > 21:
+                    update_user_balance(ctx.author.id, bet * 1)
+                    result = ("Dealer busts", 'won')
+                elif dealer_score == player_score:
+                    result = ("Tie!", 'kept')
+                elif dealer_score > player_score:
+                    update_user_balance(ctx.author.id, bet * -1)
+                    result = ("You lose!", 'lost')
+                elif dealer_score < player_score:
+                    update_user_balance(ctx.author.id, bet * 1)
+                    result = ("You win!", 'won')
+
+            color = (
+                discord.Color.red() if result[1] == 'lost'
+                else discord.Color.green() if result[1] == 'won'
+                else discord.Color.blue()
             )
-        )
-        os.remove(f'./{ctx.author.id}.png')
-
+            try:
+                await msg.delete()
+            except:
+                pass
+            msg = await out_table(
+                title=result[0],
+                color=color,
+                description=(
+                    f"**You {result[1]} ${bet}**\nYour hand: {player_score}\n" +
+                    f"Dealer's hand: {dealer_score}"
+                )
+            )
+            os.remove(f'./{ctx.author.id}.png')
+        except Exception as e:
+            print(e)
 
 
     @commands.Cog.listener()

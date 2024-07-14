@@ -3,7 +3,6 @@ Just random commands
 e.g ping, say, dice etc
 """
 
-from installation import *
 from utilities import *
 
 

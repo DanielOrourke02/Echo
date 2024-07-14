@@ -34,6 +34,8 @@ economy_command_descriptions = {
     "gamble <amount>": f"Gamble your money with 1/3 chance of winning (max {max_bet})",
     "shoot <@user>": "Shoot someone (gun/m4a1 needed)",
     "bomb <@user>": "Bomb someone (c4 needed)",
+    "cook": "Cook 5 Crystal Meth",
+    "streets": "Sell 5 bags of cystal Meth for 4k each. NOTE: Police exist",
 }
 
 
@@ -151,18 +153,48 @@ class Help(commands.Cog):
 
     @commands.command()
     async def shop(self, ctx):
-        embed = discord.Embed(
-            title="Item Shop",
-            description="Here are the items you can buy:",
-            color=embed_colour
-        )
+        try:
+            embed = discord.Embed(
+                title="Item Shop",
+                description="Here are the items you can buy:",
+                color=discord.Color.blue()
+            )
 
-        for item_id, item_info in shop_items.items():
-            embed.add_field(name=f"{item_info['name']} (ID: {item_id})", value=f"Cost: {item_info['cost']} coins", inline=False)
+            conn = sqlite3.connect(ITEMS_DB)
+            c = conn.cursor()
 
-        embed.set_footer(text=f"Made by mal023")
-        
-        await ctx.send(embed=embed)
+            # Fetch items from the database
+            c.execute("SELECT item_name, desc, cost FROM items")
+            rows = c.fetchall()
+
+            if rows:
+                for row in rows:
+                    item_id = row[0]
+                    desc = row[1]
+                    item_cost = row[2]
+                    #embed.add_field(name=f"{item_id}", value=f"Cost: {item_cost} Credits", inline=True)
+                    embed.add_field(
+                        name=f"**{item_id}**",
+                        value=f"{desc}\n{item_cost} Credits",
+                        inline=False
+                    )
+            else:
+                embed.add_field(name="No Items Found", value="There are currently no items available in the shop.", inline=False)
+
+            conn.close()
+
+            embed.set_footer(text=f"Made by mal023")
+            await ctx.send(embed=embed)
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            embed = discord.Embed(
+                title="Error",
+                description=f"An error occurred while fetching item data from the database. Please try again later.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text=f"Need some help? Do {ctx.prefix}tutorial")
+            await ctx.send(embed=embed)
 
 
     @commands.command(aliases=['cosmos', 'cos', 'cosmetic'])
@@ -227,7 +259,7 @@ class Help(commands.Cog):
             async def economy_tutorial(ctx, guild, member):
                 embed = discord.Embed(
                     title="Economy Game Tutorial",
-                    description=f"This will be a short tutorial on how to make money with my extensive and addictive economy game. Please read this atleast twice!\n\n**1. How to make money**\n Making money in this game is actually very simple, there is a range of commands and methods to do this. (`{prefix}beg, {prefix}scrap, {prefix}dig, {prefix}hunt`). These are just a few, for some commands you will need an item to run it e.g to run the `{prefix}dig` command. You need to buy or find a shovel using `{prefix}scrap`. **AND REMEMBER, if you dont store your money in assets (items) or store it in the bank, you can and WILL get robbed.**.\n\n**2. Crafting**\nIf you run commands like {prefix}dig, {prefix}hunt or {prefix}scrap. You will be awarded zesty coins and items. With these items you can craft items that sell for more e.g `{prefix}craft complete_gauntlet` this items sells for 60K. Use `{prefix}recipes` for the list of craftable items and `{prefix}cosmetics` for the list of findable items.\n\n**3. Farming**\nWith money that you now have, you can plant crops, wait for them to grow, then sell them for profit (`{prefix}plant` and `{prefix}harvest`). Each plant costs {cost_per_carrot}, and they each sell for {carrot_sell}, you can plant a max of {max_carrot_planted} crops and they all take {growth_duration/3600} hours to grow.\n\n**4. Gambling**\nPlaying games like `{prefix}blackjack` (`{prefix}bj` for short) or `{prefix}gamble` is a HORRIBLE way to make money, but if you like gambling, go ahead. **'If you wanna put your entire networth on black, then thats gonna be some rags to richest story or the opposite :skull:.' - Wise words of mal (the creator)**\n\n**For a list of all the economy commands run `economy`**\n**For a list of all the findable items run `cosmetics`**",
+                    description=f"This will be a short tutorial on how to make money with my extensive and addictive economy game. Please read this atleast twice!\n\n**1. How to make money**\n Making money in this game is actually very simple, there is a range of commands and methods to do this. (`{prefix}beg, {prefix}scrap, {prefix}dig, {prefix}hunt`). These are just a few, for some commands you will need an item to run it e.g to run the `{prefix}dig` command. You need to buy or find a shovel using `{prefix}scrap`. **AND REMEMBER, if you dont store your money in assets (items) or store it in the bank, you can and WILL get robbed.**\n\n**2. Crafting**\nIf you run commands like {prefix}dig, {prefix}hunt or {prefix}scrap. You will be awarded credits and items. With these items you can craft items that sell for more e.g `{prefix}craft complete_gauntlet` this items sells for 60K. Use `{prefix}recipes` for the list of craftable items and `{prefix}cosmetics` for the list of findable items.\n\n**3. Farming**\nWith money that you now have, you can plant crops, wait for them to grow, then sell them for profit (`{prefix}plant` and `{prefix}harvest`). Each plant costs {cost_per_carrot}, and they each sell for {carrot_sell}, you can plant a max of {max_carrot_planted} crops and they all take {growth_duration/3600} hours to grow.\n\n**4. Gambling**\nPlaying games like `{prefix}blackjack` (`{prefix}bj` for short) or `{prefix}gamble` is a HORRIBLE way to make money, but if you like gambling, go ahead. **'If you wanna put your entire networth on black, then thats gonna be some rags to richest story or the opposite :skull:.' - Wise words of mal (the creator)**\n\n**For a list of all the economy commands run `economy`**\n**For a list of all the findable items run `cosmetics`**",
                     color=discord.Color.gold(),
                 )
                 
