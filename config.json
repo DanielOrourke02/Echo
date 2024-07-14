@@ -10,7 +10,7 @@
     "skip_installtion": "false",
     "show_guilds": "true",
     "daily_reward": 15000,
-    "carrot_plant_price": 100,s
+    "carrot_plant_price": 100,
     "carrot_sell_price": 125,
     "max_carrots_planted": 1000,
     "carrot_growth_duration": 12,
