@@ -22,7 +22,13 @@
 
 <br>
 
-# MAJOR UPDATE, MOVED TO SQL DATABASES
+~~# MAJOR UPDATE, MOVED TO SQL DATABASES~~
+
+## ⭐Plans for the next major update⭐
+
+- Move to slash commands (pycord)
+- UI interactions (buttons)
+- Interactive tutorial/better tutorial
 
 ## 🔗 Resource Links
 
