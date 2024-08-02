@@ -54,7 +54,7 @@
 - Open command prompt (cmd.exe) and run the following commands
 
 ```
-git clone https://github.com/DanielJones02/Echo
+git clone https://github.com/DanielOrourke02/Echo
 cd Echo
 python -m venv venv
 venv\Scripts\activate
