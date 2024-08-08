@@ -4,11 +4,11 @@
 
 <h1 align="center">
   <br>
-  Echo Bot v4
+  Echo Bot v5
   <br>
 </h1>
 
-<p align="center">Admin, AutoMod, Economy, Fun, Invite, Information, Moderation, Owner, Social, Suggestion, Ticket, Utility and More...</p>
+<p align="center">Admin, AutoMod, Economy, Fun, Invite, Information, Moderation, Owner, Social, Suggestion, Tickets, verify, Utility and More...</p>
 
 <br>
 
@@ -22,11 +22,17 @@
 
 <br>
 
-# MAJOR UPDATE, MOVED TO SQL DATABASES
+~~# MAJOR UPDATE, MOVED TO SQL DATABASES~~
+
+## ⭐Plans for the next major update⭐
+
+- Move to slash commands (pycord)
+- UI interactions (buttons)
+- Interactive tutorial/better tutorial
 
 ## 🔗 Resource Links
 
-- 🤖 Demo Bot: [Echo](https://top.gg/bot/1075434463217066014) Now on Top.gg!
+- 🤖 LIVE BOT: [Echo](https://top.gg/bot/1075434463217066014) Now on Top.gg!
 - 🤝 Support Server: [Join Here](https://discord.gg/kNWkT8xWg6)
 - 🤝 Hire me: [Join Here](https://discord.gg/kNWkT8xWg6) or dm `mal023`
 - 📂 Documentation URL: comming soon
@@ -48,7 +54,7 @@
 - Open command prompt (cmd.exe) and run the following commands
 
 ```
-git clone https://github.com/DanielJones02/Echo
+git clone https://github.com/DanielOrourke02/Echo
 cd Echo
 python -m venv venv
 venv\Scripts\activate
