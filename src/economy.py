@@ -39,7 +39,7 @@ class Economy(commands.Cog):
             print(f"Error in inventory command: {e}")
 
     
-    # Command to give money to a user (TO REMOVE DO /GIVE <USER> -<amount>)
+    # Command to give money to a user (TO REMOVE DO .GIVE <USER> -<amount>)
     @commands.command()
     @commands.check(is_admin) # Only one user can do this (put the id in config.json)
     async def give(self, ctx, user: commands.MemberConverter, amount: int):
