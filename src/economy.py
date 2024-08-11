@@ -343,7 +343,7 @@ class Economy(commands.Cog):
         if not can_dig(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
-                description=f"{ctx.author.mention}, You're on a **15min break** buddy 🤫 don't chat to me.",
+                description=f"{ctx.author.mention}, You're on a **1min break** buddy 🤫 don't chat to me.",
                 color=embed_error
             )
             
@@ -410,7 +410,7 @@ class Economy(commands.Cog):
         if not can_hunt(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
-                description=f"{ctx.author.mention}, You're on a **15min break. Go away**.",
+                description=f"{ctx.author.mention}, You're on a **1min break. Go away**.",
                 color=embed_error
             )
             
@@ -463,7 +463,7 @@ class Economy(commands.Cog):
             if not can_scavenge(user_id):
                 embed = discord.Embed(
                     title="Cooldown Active",
-                    description=f"{ctx.author.mention}, **5min cooldown** lmao.",
+                    description=f"{ctx.author.mention}, **1min cooldown** lmao.",
                     color=embed_error
                 )
                 
@@ -517,7 +517,7 @@ class Economy(commands.Cog):
         if not can_beg(user_id):
             embed = discord.Embed(
                 title="Cooldown Active",
-                description=f"{ctx.author.mention}, You begged in the past **30s. Wait the cooldown**.",
+                description=f"{ctx.author.mention}, You begged in the past **15s. Wait the cooldown**.",
                 color=embed_error
             )
             
