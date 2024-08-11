@@ -482,19 +482,19 @@ def can_claim_daily(user_id):
 
 
 def can_dig(user_id):
-    return can_perform_action(user_id, "dig", 15 * 60)  # 15 minutes in seconds
+    return can_perform_action(user_id, "dig", 1 * 60)
 
 
 def can_hunt(user_id):
-    return can_perform_action(user_id, "hunt", 10 * 60)  # 10 minutes in seconds
+    return can_perform_action(user_id, "hunt", 1 * 60)
 
 
 def can_scavenge(user_id):
-    return can_perform_action(user_id, "scavenge", 5 * 60)  # 5 minutes in seconds
+    return can_perform_action(user_id, "scavenge", 1 * 60)
 
 
 def can_beg(user_id):
-    return can_perform_action(user_id, "beg", 30)  # 30 seconds
+    return can_perform_action(user_id, "beg", 15)  # 30 seconds
 
 
 def can_plant(user_id):
