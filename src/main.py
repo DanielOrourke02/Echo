@@ -3,7 +3,6 @@
 from utilities import *
 from eco_support import *
 
-# Import cogs
 from blackjack import Blackjack
 from economy import Economy
 from moderation import Moderation
@@ -14,12 +13,10 @@ from fun import Fun
 # Import extensions
 from extensions import Crafting
 from extensions import Farming
-from extensions import Jobs # In development
+from extensions import Jobs
 
 
 intents = discord.Intents.all()
-
-# Create Bot instance with intents
 bot = commands.Bot(command_prefix=config.get('prefix'), intents=intents, help_command=None)
 
 
@@ -43,16 +40,16 @@ async def setup_bot():
 async def on_ready():
     await lock_function(bot, save_locked_channels, unlock_channel_after_delay)
 
-    print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}")  # Show login message
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help"))  # set presence to 'Listening to .help'
+    print(f"{t}{Fore.LIGHTBLUE_EX} | Ready and online - {bot.user.display_name}\n{Fore.RESET}")
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{prefix}help")) 
 
-    guilds(bot)  # call guilds function, this will output what guilds the bot is in (if enabled in config)
+    guilds(bot)
     
 
 @bot.event
 async def on_message(message):
-    if link_ban == 'true': # only runs if enabled in config
-        if any(link in message.content for link in BANNED_LINKS): # if any of the banned links are in the message it runs the following code
+    if link_ban == 'true':
+        if any(link in message.content for link in BANNED_LINKS):
             await message.delete() # deletes message
 
             embed = discord.Embed(
@@ -68,11 +65,8 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-# Use an asynchronous function to run the setup and the bot
 async def run_bot():
-    await setup_bot() # load cogs
+    await setup_bot()
     await bot.start(token)
 
-
-# Run the bot using the asynchronous function
 asyncio.run(run_bot())
