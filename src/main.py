@@ -3,6 +3,7 @@
 from utilities import *
 from eco_support import *
 
+# cogs
 from blackjack import Blackjack
 from economy import Economy
 from moderation import Moderation
