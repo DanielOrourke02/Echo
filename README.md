@@ -22,17 +22,17 @@
 
 <br>
 
-~~# MAJOR UPDATE, MOVED TO SQL DATABASES~~
+# DISCONTINUED - NO LONGER MAINTAINED
 
-## ⭐Plans for the next major update⭐
+### I'm pretty sure this is full of bugs and I don't want to maintain this project anymore since I am focusing on other projects. (My casino bot, its propiatery)
 
-- Move to slash commands (pycord)
-- UI interactions (buttons)
-- Interactive tutorial/better tutorial
+### If anyone opens an issue it will be looked into. But again, I am not looking to do any future updates.
+
+#### Feel free to contact me on discord! [my server](https://discord.gg/kNWkT8xWg6) or add me `mal023`
 
 ## 🔗 Resource Links
 
-- 🤖 LIVE BOT: [Echo](https://top.gg/bot/1075434463217066014) Now on Top.gg!
+~~- 🤖 LIVE BOT: [Echo](https://top.gg/bot/1075434463217066014) Now on Top.gg! BOT IS OFFLINE~~
 - 🤝 Support Server: [Join Here](https://discord.gg/kNWkT8xWg6)
 - 🤝 Hire me: [Join Here](https://discord.gg/kNWkT8xWg6) or dm `mal023`
 - 📂 Documentation URL: comming soon
