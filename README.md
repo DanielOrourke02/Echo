@@ -22,7 +22,7 @@
 
 <br>
 
-# DISCONTINUED - NO LONGER MAINTAINED
+# DEPRICATED - NO LONGER MAINTAINED
 
 ### I'm pretty sure this is full of bugs and I don't want to maintain this project anymore since I am focusing on other projects. (My casino bot, its propiatery)
 
